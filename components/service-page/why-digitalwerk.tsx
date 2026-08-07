@@ -2,13 +2,26 @@ import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
+import { cn } from "@/lib/cn";
 import type { ServicePageContent } from "./types";
+
+// Column layout adapts to the number of points so any page using this
+// section gets a balanced grid, not just the 3-item case it was built for.
+const GRID_COLUMNS_BY_COUNT: Record<number, string> = {
+  3: "md:grid-cols-3",
+  4: "sm:grid-cols-2 lg:grid-cols-4",
+};
+const DEFAULT_GRID_COLUMNS = "md:grid-cols-3";
 
 export function ServiceWhyDigitalWerk({
   whyDigitalWerk,
 }: {
   whyDigitalWerk: ServicePageContent["whyDigitalWerk"];
 }) {
+  const gridColumns =
+    GRID_COLUMNS_BY_COUNT[whyDigitalWerk.points.length] ??
+    DEFAULT_GRID_COLUMNS;
+
   return (
     <Section tone="muted">
       <Container className="flex flex-col items-center gap-12">
@@ -21,7 +34,7 @@ export function ServiceWhyDigitalWerk({
           ) : null}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className={cn("grid gap-6", gridColumns)}>
           {whyDigitalWerk.points.map((point) => (
             <Card key={point.title}>
               <Heading level={4}>{point.title}</Heading>
