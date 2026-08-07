@@ -1,0 +1,125 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { primaryNav } from "@/lib/navigation";
+import { Button } from "@/components/ui/button";
+import { ctaLabels } from "@/lib/site-config";
+
+export function MobileNav() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  function close() {
+    setIsOpen(false);
+    setExpanded(null);
+  }
+
+  return (
+    <div className="lg:hidden">
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        aria-expanded={isOpen}
+        aria-controls="mobile-nav-panel"
+        aria-label="Menü öffnen"
+        className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-primary-50"
+      >
+        <Menu className="h-6 w-6" aria-hidden="true" />
+      </button>
+
+      {isOpen ? (
+        <div
+          id="mobile-nav-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Hauptnavigation"
+          className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-white"
+        >
+          <div className="flex items-center justify-between border-b border-primary-100 px-6 py-4">
+            <span className="text-lg font-semibold text-primary-900">
+              DigitalWerk
+            </span>
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Menü schließen"
+              className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-primary-50"
+            >
+              <X className="h-6 w-6" aria-hidden="true" />
+            </button>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto px-6 py-4">
+            <ul className="flex flex-col gap-1">
+              {primaryNav.map((item) => (
+                <li
+                  key={item.href}
+                  className="border-b border-primary-50 last:border-none"
+                >
+                  {item.children ? (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpanded(expanded === item.href ? null : item.href)
+                        }
+                        aria-expanded={expanded === item.href}
+                        className="flex w-full items-center justify-between py-3 text-left text-base font-medium text-foreground"
+                      >
+                        {item.label}
+                        <ChevronDown
+                          className={`h-5 w-5 text-primary-400 transition-transform duration-150 ${
+                            expanded === item.href ? "rotate-180" : ""
+                          }`}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {expanded === item.href ? (
+                        <ul className="flex flex-col gap-1 pb-3 pl-4">
+                          {item.children.map((child) => (
+                            <li key={child.href}>
+                              <Link
+                                href={child.href}
+                                onClick={close}
+                                className="block py-2 text-sm text-primary-700"
+                              >
+                                {child.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={close}
+                      className="block py-3 text-base font-medium text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="border-t border-primary-100 px-6 py-4">
+            <Button href="/kontakt" onClick={close} className="w-full">
+              {ctaLabels.primary}
+            </Button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
