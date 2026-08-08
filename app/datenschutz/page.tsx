@@ -18,7 +18,7 @@ export default function Page() {
   return (
     <LegalPage
       title="Datenschutzerklärung"
-      notice="Diese Datenschutzerklärung wurde auf Basis der aktuellen technischen Umsetzung dieser Website erstellt. Bitte ergänzen Sie die als Platzhalter gekennzeichneten Angaben (z. B. vollständiger Firmenname und Anschrift, ggf. Datenschutzbeauftragter) und lassen Sie den Inhalt vor Veröffentlichung rechtlich prüfen."
+      notice="Diese Datenschutzerklärung wurde auf Basis der aktuellen technischen Umsetzung dieser Website erstellt. Bitte ergänzen Sie die als Platzhalter gekennzeichneten Angaben (z. B. Rechtsform, ggf. Datenschutzbeauftragter) und lassen Sie den Inhalt vor Veröffentlichung rechtlich prüfen."
       sections={[
         {
           heading: "1. Verantwortlicher",

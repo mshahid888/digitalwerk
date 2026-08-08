@@ -28,7 +28,7 @@ export default function Error({
           Bitte versuchen Sie es erneut oder kontaktieren Sie uns, falls das
           Problem weiterhin besteht.
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <Button onClick={() => retry()}>Erneut versuchen</Button>
           <Button href="/kontakt" variant="secondary">
             Kontakt aufnehmen
