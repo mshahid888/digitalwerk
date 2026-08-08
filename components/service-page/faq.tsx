@@ -5,8 +5,27 @@ import { Section } from "@/components/ui/section";
 import type { ServicePageContent } from "./types";
 
 export function ServiceFAQ({ faq }: { faq: ServicePageContent["faq"] }) {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
     <Section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Container className="flex flex-col items-center gap-12">
         <div className="max-w-2xl text-center">
           <Heading level={2}>{faq.title}</Heading>

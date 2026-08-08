@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { Badge } from "@/components/ui/badge";
-import { Container } from "@/components/ui/container";
-import { Heading } from "@/components/ui/heading";
-import { Section } from "@/components/ui/section";
 import { CTA } from "@/components/ui/cta";
+import { PageIntro } from "@/components/shared/page-intro";
 import {
   ComparisonList,
   type ComparisonItem,
@@ -46,21 +43,11 @@ const channels: ComparisonItem[] = [
 export default function Page() {
   return (
     <>
-      <Section tone="muted" className="pb-16 pt-16 md:pt-24">
-        <Container className="flex flex-col items-center gap-6 text-center">
-          <Badge tone="primary">Werbeanzeigen</Badge>
-          <Heading level={1} className="max-w-3xl text-primary-950">
-            Werbung, die sich an Ergebnissen messen lässt
-          </Heading>
-          <p className="max-w-2xl text-lg text-slate-600">
-            Google Ads, Meta Ads und TikTok Ads bringen Ihr Unternehmen vor
-            die richtige Zielgruppe – mit klaren Kennzahlen statt vager
-            Versprechen. Wir empfehlen jeden Kanal nur dann, wenn er wirklich
-            zu Ihrem Unternehmen passt, und verzichten bewusst auf
-            übertriebene ROI-Zusagen.
-          </p>
-        </Container>
-      </Section>
+      <PageIntro
+        badge="Werbeanzeigen"
+        title="Werbung, die sich an Ergebnissen messen lässt"
+        description="Google Ads, Meta Ads und TikTok Ads bringen Ihr Unternehmen vor die richtige Zielgruppe – mit klaren Kennzahlen statt vager Versprechen. Wir empfehlen jeden Kanal nur dann, wenn er wirklich zu Ihrem Unternehmen passt, und verzichten bewusst auf übertriebene ROI-Zusagen."
+      />
 
       <ComparisonList
         title="Welcher Kanal passt zu Ihnen?"

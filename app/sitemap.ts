@@ -24,8 +24,9 @@ const routes: SitemapRoute[] = [
   { path: "/e-commerce", priority: 0.8, changeFrequency: "monthly" },
   { path: "/referenzen", priority: 0.7, changeFrequency: "weekly" },
   { path: "/kontakt", priority: 0.8, changeFrequency: "yearly" },
-  { path: "/impressum", priority: 0.2, changeFrequency: "yearly" },
-  { path: "/datenschutz", priority: 0.2, changeFrequency: "yearly" },
+  // Impressum and Datenschutz are intentionally excluded: both are set to
+  // noindex, and listing noindex pages in the sitemap sends crawlers a
+  // contradictory signal.
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

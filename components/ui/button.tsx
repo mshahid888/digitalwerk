@@ -57,8 +57,21 @@ export function Button(props: ButtonProps) {
   const classes = cn(baseStyles, variantStyles[variant], sizeStyles[size], className);
 
   if (rest.href !== undefined) {
+    // External http(s) links (URL instances) open safely in a new tab by
+    // default; internal Route links and non-browsing schemes (tel:, mailto:)
+    // are untouched. Callers can still override target/rel explicitly.
+    const isExternalPage =
+      rest.href instanceof URL &&
+      (rest.href.protocol === "http:" || rest.href.protocol === "https:");
+
     return (
-      <Link {...rest} href={rest.href} className={classes}>
+      <Link
+        {...rest}
+        href={rest.href}
+        target={rest.target ?? (isExternalPage ? "_blank" : undefined)}
+        rel={rest.rel ?? (isExternalPage ? "noopener noreferrer" : undefined)}
+        className={classes}
+      >
         {children}
       </Link>
     );

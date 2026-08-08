@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
 import { CTA } from "@/components/ui/cta";
+import { PageIntro } from "@/components/shared/page-intro";
 import { ServiceFAQ } from "@/components/service-page/faq";
 import { ContactForm } from "@/components/kontakt/contact-form";
 import { ContactInfo } from "@/components/kontakt/contact-info";
@@ -51,19 +51,12 @@ const faq = {
 export default function Page() {
   return (
     <>
-      <Section className="pb-16 pt-16 md:pt-24">
-        <Container className="flex flex-col items-center gap-6 text-center">
-          <Badge tone="primary">Kontakt</Badge>
-          <Heading level={1} className="max-w-3xl text-primary-950">
-            Lassen Sie uns ins Gespräch kommen
-          </Heading>
-          <p className="max-w-2xl text-lg text-slate-600">
-            Ob Formular, Telefon, E-Mail oder WhatsApp – schreiben Sie uns auf
-            dem Weg, der Ihnen am liebsten ist. Wir melden uns zeitnah mit
-            einem kostenlosen, unverbindlichen Erstgespräch zurück.
-          </p>
-        </Container>
-      </Section>
+      <PageIntro
+        tone="default"
+        badge="Kontakt"
+        title="Lassen Sie uns ins Gespräch kommen"
+        description="Ob Formular, Telefon, E-Mail oder WhatsApp – schreiben Sie uns auf dem Weg, der Ihnen am liebsten ist. Wir melden uns zeitnah mit einem kostenlosen, unverbindlichen Erstgespräch zurück."
+      />
 
       <Section tone="muted">
         <Container className="flex flex-col gap-12">
