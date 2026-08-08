@@ -3,13 +3,20 @@ export const siteConfig = {
   tagline: "Ihr digitaler Wachstumspartner",
   description:
     "DigitalWerk ist die digitale Wachstumspartnerschaft für deutsche Unternehmen — Webentwicklung, lokales SEO, Google Unternehmensprofil, Content, Werbeanzeigen, KI-Automatisierung und E-Commerce aus einer Hand.",
-  // Placeholder until a production domain is assigned — update before launch.
-  url: "https://digitalwerk.de",
+  // Reads the real domain from NEXT_PUBLIC_SITE_URL once it's set (e.g. in
+  // Vercel project settings). Falls back to a placeholder so local builds
+  // keep working without it — update the fallback or set the env var
+  // before launch, not both.
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalwerk.de",
   locale: "de_DE",
   contact: {
     email: "info@digitalwerk.de",
     phone: "+49 000 0000000",
     address: "Musterstraße 1, 00000 Musterstadt, Deutschland",
+    // Flip to true only once the address above is the real, confirmed
+    // business address — this gates the Google Maps embed and
+    // LocalBusiness structured data so neither ships with placeholder NAP.
+    addressConfirmed: false,
   },
   social: {
     instagram: "https://instagram.com/digitalwerk",

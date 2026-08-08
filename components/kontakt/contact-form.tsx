@@ -7,38 +7,70 @@ import { siteConfig } from "@/lib/site-config";
 const fieldClasses =
   "w-full rounded-md border border-primary-200 bg-white px-4 py-2.5 text-sm text-foreground placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2";
 
-// Submits via mailto: since no backend/email-provider is configured yet.
-// To switch to server-side delivery: replace handleSubmit with a POST to a
-// Route Handler (e.g. app/api/kontakt/route.ts) that calls an email
-// provider (Resend, Postmark, etc.) using an API key from an env var —
-// field names below (name/email/phone/message) already match what such a
-// handler would need.
-export function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+type SubmitState = "idle" | "sending" | "sent" | "sent-via-mailto";
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+function buildMailtoUrl(
+  name: string,
+  email: string,
+  phone: string,
+  message: string
+): string {
+  const subject = `Anfrage von ${name}`;
+  const body = [
+    `Name: ${name}`,
+    `E-Mail: ${email}`,
+    phone ? `Telefon: ${phone}` : null,
+    "",
+    message,
+  ]
+    .filter((line): line is string => line !== null)
+    .join("\n");
+
+  return `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;
+}
+
+// Tries server-side delivery via app/api/kontakt/route.ts first. That route
+// returns a non-ok response until RESEND_API_KEY is configured, in which
+// case this falls back to the mailto: link — today, with no key set, every
+// submission takes the fallback path, identical to the previous behavior.
+export function ContactForm() {
+  const [state, setState] = useState<SubmitState>("idle");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const name = String(formData.get("name") ?? "");
     const email = String(formData.get("email") ?? "");
     const phone = String(formData.get("phone") ?? "");
     const message = String(formData.get("message") ?? "");
 
-    const subject = `Anfrage von ${name}`;
-    const body = [
-      `Name: ${name}`,
-      `E-Mail: ${email}`,
-      phone ? `Telefon: ${phone}` : null,
-      "",
-      message,
-    ]
-      .filter((line) => line !== null)
-      .join("\n");
+    setState("sending");
 
-    window.location.href = `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/kontakt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          phone: phone || undefined,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("contact-api-unavailable");
+      }
+
+      form.reset();
+      setState("sent");
+    } catch {
+      window.location.href = buildMailtoUrl(name, email, phone, message);
+      setState("sent-via-mailto");
+    }
   }
 
   return (
@@ -109,14 +141,22 @@ export function ContactForm() {
         />
       </div>
 
-      <Button type="submit" size="lg" className="w-full sm:w-auto">
-        Nachricht senden
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full sm:w-auto"
+        disabled={state === "sending"}
+      >
+        {state === "sending" ? "Wird gesendet …" : "Nachricht senden"}
       </Button>
 
       <p className="text-xs text-slate-500" role="status">
-        {submitted
-          ? "Ihr E-Mail-Programm öffnet sich mit den ausgefüllten Angaben — bitte senden Sie die E-Mail von dort aus ab."
-          : "Beim Absenden öffnet sich Ihr E-Mail-Programm mit den ausgefüllten Angaben."}
+        {state === "sent" &&
+          "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet."}
+        {state === "sent-via-mailto" &&
+          "Ihr E-Mail-Programm öffnet sich mit den ausgefüllten Angaben — bitte senden Sie die E-Mail von dort aus ab."}
+        {(state === "idle" || state === "sending") &&
+          "Beim Absenden versuchen wir, Ihre Nachricht direkt zu übermitteln — falls das nicht möglich ist, öffnet sich stattdessen Ihr E-Mail-Programm."}
       </p>
     </form>
   );

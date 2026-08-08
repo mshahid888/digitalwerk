@@ -51,9 +51,22 @@ const faq = {
   ],
 };
 
+const contactPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: `Kontakt | ${siteConfig.name}`,
+  url: `${siteConfig.url}/kontakt`,
+};
+
 export default function Page() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(contactPageJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <PageIntro
         tone="default"
         badge="Kontakt"

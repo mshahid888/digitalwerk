@@ -45,13 +45,22 @@ export default function Page() {
         {
           heading: "Was sich künftig ändert",
           content: (
-            <p>
-              Sobald wir Tools wie Google Analytics, Google Maps,
-              Werbe-Pixel oder ähnliche Dienste einbinden, aktualisieren wir
-              diese Seite entsprechend und führen – soweit gesetzlich
-              erforderlich – einen Cookie-Consent-Banner ein, über den Sie
-              Ihre Einwilligung erteilen oder jederzeit widerrufen können.
-            </p>
+            <>
+              <p>
+                Sobald wir Tools wie Google Analytics, Google Tag Manager,
+                Meta- oder TikTok-Werbe-Pixel, Microsoft Clarity oder eine
+                Kartenansicht aktiv einbinden, aktualisieren wir diese Seite
+                entsprechend und führen – soweit gesetzlich erforderlich –
+                einen Cookie-Consent-Banner ein.
+              </p>
+              <p>
+                Ein solcher Banner wird dann klar zwischen technisch
+                notwendigen Funktionen, Analyse-Tools und Marketing-/
+                Werbe-Tracking unterscheiden, sodass Sie Ihre Einwilligung
+                für jede Kategorie einzeln erteilen oder jederzeit
+                widerrufen können.
+              </p>
+            </>
           ),
         },
         {
