@@ -12,9 +12,18 @@ export default function NotFound() {
         </span>
         <Heading level={1}>Seite nicht gefunden</Heading>
         <p className="max-w-xl text-lg text-slate-600">
-          Die gesuchte Seite existiert nicht oder wurde verschoben.
+          Die gesuchte Seite existiert nicht oder wurde verschoben. Nutzen
+          Sie einen der folgenden Links, um weiterzukommen.
         </p>
-        <Button href="/">Zur Startseite</Button>
+        <div className="flex flex-col flex-wrap gap-4 sm:flex-row">
+          <Button href="/">Zur Startseite</Button>
+          <Button href="/loesungen" variant="secondary">
+            Unsere Lösungen
+          </Button>
+          <Button href="/kontakt" variant="secondary">
+            Kontakt aufnehmen
+          </Button>
+        </div>
       </Container>
     </Section>
   );

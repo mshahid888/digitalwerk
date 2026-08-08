@@ -34,6 +34,7 @@ export const primaryNav: NavItem[] = [
     ],
   },
   { label: "E-Commerce", href: "/e-commerce" },
+  { label: "Branchen", href: "/branchen" },
   { label: "Referenzen", href: "/referenzen" },
   { label: "Kontakt", href: "/kontakt" },
 ];
@@ -58,4 +59,5 @@ export const footerQuickLinks: NavLink[] = [
 export const footerLegalLinks: NavLink[] = [
   { label: "Impressum", href: "/impressum" },
   { label: "Datenschutz", href: "/datenschutz" },
+  { label: "Cookie-Richtlinie", href: "/cookie-richtlinie" },
 ];

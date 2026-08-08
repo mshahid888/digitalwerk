@@ -22,6 +22,7 @@ const routes: SitemapRoute[] = [
   { path: "/werbeanzeigen/meta-ads", priority: 0.6, changeFrequency: "monthly" },
   { path: "/werbeanzeigen/tiktok-ads", priority: 0.6, changeFrequency: "monthly" },
   { path: "/e-commerce", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/branchen", priority: 0.7, changeFrequency: "monthly" },
   { path: "/referenzen", priority: 0.7, changeFrequency: "weekly" },
   { path: "/kontakt", priority: 0.8, changeFrequency: "yearly" },
   // Impressum and Datenschutz are intentionally excluded: both are set to
