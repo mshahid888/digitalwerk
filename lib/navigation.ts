@@ -10,8 +10,7 @@ export type NavItem = NavLink & {
 };
 
 export const primaryNav: NavItem[] = [
-  { label: "Startseite", href: "/" },
-  { label: "Über uns", href: "/ueber-uns" },
+  { label: "Home", href: "/" },
   {
     label: "Lösungen",
     href: "/loesungen",
@@ -35,6 +34,7 @@ export const primaryNav: NavItem[] = [
   },
   { label: "E-Commerce", href: "/e-commerce" },
   { label: "Branchen", href: "/branchen" },
+  { label: "Über uns", href: "/ueber-uns" },
   { label: "Referenzen", href: "/referenzen" },
   { label: "Kontakt", href: "/kontakt" },
 ];
