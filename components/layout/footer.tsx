@@ -1,11 +1,17 @@
+"use client";
+
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, siteConfigEn } from "@/lib/site-config";
 import {
   footerLegalLinks,
+  footerLegalLinksEn,
   footerQuickLinks,
+  footerQuickLinksEn,
   footerServiceLinks,
+  footerServiceLinksEn,
 } from "@/lib/navigation";
+import { useLocale } from "@/lib/use-locale";
 import { ActiveLink } from "./active-link";
 
 const socialLinks = [
@@ -15,7 +21,30 @@ const socialLinks = [
   { label: "WhatsApp", href: siteConfig.social.whatsapp },
 ];
 
+const STRINGS = {
+  de: {
+    tagline: siteConfig.tagline,
+    services: "Leistungen",
+    company: "Unternehmen",
+    contact: "Kontakt",
+    rights: "Alle Rechte vorbehalten.",
+  },
+  en: {
+    tagline: siteConfigEn.tagline,
+    services: "Services",
+    company: "Company",
+    contact: "Contact",
+    rights: "All rights reserved.",
+  },
+};
+
 export function Footer() {
+  const locale = useLocale();
+  const t = STRINGS[locale];
+  const serviceLinks = locale === "en" ? footerServiceLinksEn : footerServiceLinks;
+  const quickLinks = locale === "en" ? footerQuickLinksEn : footerQuickLinks;
+  const legalLinks = locale === "en" ? footerLegalLinksEn : footerLegalLinks;
+
   return (
     <footer className="border-t border-primary-100 bg-primary-950 text-primary-100">
       <Container className="grid gap-12 py-16 md:grid-cols-4">
@@ -23,15 +52,15 @@ export function Footer() {
           <span className="text-lg font-semibold text-white">
             {siteConfig.name}
           </span>
-          <p className="mt-4 text-sm text-primary-200">{siteConfig.tagline}</p>
+          <p className="mt-4 text-sm text-primary-200">{t.tagline}</p>
         </div>
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
-            Leistungen
+            {t.services}
           </h3>
           <ul className="mt-4 flex flex-col gap-2">
-            {footerServiceLinks.map((link) => (
+            {serviceLinks.map((link) => (
               <li key={link.href}>
                 <ActiveLink
                   href={link.href}
@@ -46,10 +75,10 @@ export function Footer() {
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
-            Unternehmen
+            {t.company}
           </h3>
           <ul className="mt-4 flex flex-col gap-2">
-            {footerQuickLinks.map((link) => (
+            {quickLinks.map((link) => (
               <li key={link.href}>
                 <ActiveLink
                   href={link.href}
@@ -64,7 +93,7 @@ export function Footer() {
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
-            Kontakt
+            {t.contact}
           </h3>
           <ul className="mt-4 flex flex-col gap-3 text-sm text-primary-200">
             <li className="flex items-start gap-2">
@@ -110,11 +139,10 @@ export function Footer() {
       <div className="border-t border-primary-900">
         <Container className="flex flex-col items-center justify-between gap-4 py-6 text-xs text-primary-300 md:flex-row">
           <span>
-            © {new Date().getFullYear()} {siteConfig.name}. Alle Rechte
-            vorbehalten.
+            © {new Date().getFullYear()} {siteConfig.name}. {t.rights}
           </span>
           <div className="flex gap-6">
-            {footerLegalLinks.map((link) => (
+            {legalLinks.map((link) => (
               <ActiveLink
                 key={link.href}
                 href={link.href}

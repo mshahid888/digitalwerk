@@ -47,7 +47,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Website, SEO, Google Unternehmensprofil und Content Creation – einzeln buchbar oder als Komplettlösung. Finden Sie die passende Lösung für Ihr Unternehmen.",
   },
-  "/loesungen"
+  "/loesungen",
+  { hreflang: { de: "/loesungen", en: "/en/solutions" } }
 );
 
 export default function Page() {

@@ -31,6 +31,21 @@ export const ctaLabels = {
   secondary: "Projekt anfragen",
 } as const;
 
+// English site copy. Shared facts (name, contact, social, url) stay in
+// siteConfig above — only marketing copy that genuinely differs by
+// language lives here.
+export const siteConfigEn = {
+  tagline: "Your Digital Growth Partner",
+  description:
+    "DigitalWerk is the digital growth partnership for businesses in Germany — web development, local SEO, Google Business Profile, content, advertising, AI automation, and e-commerce, all from one partner.",
+  locale: "en_US",
+} as const;
+
+export const ctaLabelsEn = {
+  primary: "Free Consultation",
+  secondary: "Request a Project",
+} as const;
+
 // Legally required facts for Impressum & Datenschutz that we do not have
 // verified values for yet. Left as `null` intentionally — do not invent
 // values here. Fill in with real, confirmed data before launch; both

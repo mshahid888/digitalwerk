@@ -13,41 +13,40 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "Kontakt",
+    title: "Contact",
     description:
-      "Kontaktieren Sie DigitalWerk per Formular, Telefon, E-Mail oder WhatsApp. Kostenloses Erstgespräch – wir melden uns zeitnah zurück.",
+      "Contact DigitalWerk by form, phone, email, or WhatsApp. Free introductory call — we get back to you promptly.",
   },
-  "/kontakt",
-  { hreflang: { de: "/kontakt", en: "/en/contact" } }
+  "/en/contact",
+  { hreflang: { de: "/kontakt", en: "/en/contact" }, locale: "en_US" }
 );
 
 const faq = {
-  title: "Häufige Fragen zur Kontaktaufnahme",
+  title: "Frequently asked questions about getting in touch",
   items: [
     {
-      question: "Wie schnell erhalte ich eine Antwort?",
-      answer: "In der Regel antworten wir innerhalb eines Werktages.",
+      question: "How quickly will I hear back?",
+      answer: "We typically reply within one business day.",
     },
     {
-      question: "Ist das Erstgespräch wirklich kostenlos und unverbindlich?",
+      question: "Is the introductory call really free and no-obligation?",
       answer:
-        "Ja, das Erstgespräch ist für Sie komplett kostenlos und unverbindlich.",
+        "Yes — the introductory call is completely free and non-binding.",
     },
     {
-      question: "Muss ich mich vorbereiten?",
+      question: "Do I need to prepare anything?",
       answer:
-        "Nein, es reicht, wenn Sie kurz schildern, worum es geht – den Rest besprechen wir gemeinsam.",
+        "No — a short description of what you're looking for is enough. We'll work out the rest together.",
     },
     {
-      question: "Kann ich auch über WhatsApp Kontakt aufnehmen?",
+      question: "Can I contact you via WhatsApp?",
       answer:
-        "Ja, schreiben Sie uns gerne direkt über WhatsApp – wir antworten dort genauso zuverlässig.",
+        "Yes, feel free to message us directly on WhatsApp — we reply there just as reliably.",
     },
     {
-      question:
-        "An wen wende ich mich bei Fragen zu einem laufenden Projekt?",
+      question: "Do you work with English-speaking clients?",
       answer:
-        "Ihr fester Ansprechpartner meldet sich direkt bei Ihnen – nutzen Sie einfach das Kontaktformular oder rufen Sie an.",
+        "Yes — we're happy to run the entire process in English, from the first call to ongoing support.",
     },
   ],
 };
@@ -55,8 +54,8 @@ const faq = {
 const contactPageJsonLd = {
   "@context": "https://schema.org",
   "@type": "ContactPage",
-  name: `Kontakt | ${siteConfig.name}`,
-  url: `${siteConfig.url}/kontakt`,
+  name: `Contact | ${siteConfig.name}`,
+  url: `${siteConfig.url}/en/contact`,
 };
 
 export default function Page() {
@@ -70,32 +69,32 @@ export default function Page() {
       />
       <PageIntro
         tone="default"
-        badge="Kontakt"
-        title="Lassen Sie uns ins Gespräch kommen"
-        description="Ob Formular, Telefon, E-Mail oder WhatsApp – schreiben Sie uns auf dem Weg, der Ihnen am liebsten ist. Wir melden uns zeitnah mit einem kostenlosen, unverbindlichen Erstgespräch zurück."
+        badge="Contact"
+        title="Let's start a conversation"
+        description="Form, phone, email, or WhatsApp — reach out however suits you best. We'll get back to you promptly with a free, no-obligation introductory call."
       />
 
       <Section tone="muted">
         <Container className="flex flex-col gap-12">
           <div className="grid gap-12 lg:grid-cols-2">
             <div className="rounded-card border border-primary-100 bg-white p-6 shadow-card md:p-8">
-              <Heading level={2}>Schreiben Sie uns</Heading>
+              <Heading level={2}>Send us a message</Heading>
               <p className="mt-2 mb-6 text-sm text-slate-600">
-                Füllen Sie das Formular aus, wir melden uns zeitnah zurück.
+                Fill out the form and we&apos;ll get back to you promptly.
               </p>
-              <ContactForm />
+              <ContactForm locale="en" />
             </div>
 
             <div className="rounded-card border border-primary-100 bg-white p-6 shadow-card md:p-8">
-              <Heading level={2}>Direkter Kontakt</Heading>
+              <Heading level={2}>Direct contact</Heading>
               <p className="mt-2 mb-6 text-sm text-slate-600">
-                Erreichen Sie uns auch direkt über einen dieser Wege.
+                You can also reach us directly through one of these channels.
               </p>
-              <ContactInfo />
+              <ContactInfo locale="en" />
             </div>
           </div>
 
-          <MapPlaceholder />
+          <MapPlaceholder locale="en" />
         </Container>
       </Section>
 
@@ -103,13 +102,13 @@ export default function Page() {
 
       <div className="py-16 md:py-24">
         <CTA
-          eyebrow="Wir freuen uns auf Sie"
-          title="Starten wir Ihr Projekt"
-          description="Am schnellsten erreichen Sie uns direkt per WhatsApp oder Telefon."
+          eyebrow="We look forward to hearing from you"
+          title="Let's start your project"
+          description="The fastest way to reach us is directly via WhatsApp or phone."
           primaryHref={new URL(siteConfig.social.whatsapp)}
-          primaryLabel="Per WhatsApp schreiben"
+          primaryLabel="Message us on WhatsApp"
           secondaryHref={new URL(`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`)}
-          secondaryLabel="Jetzt anrufen"
+          secondaryLabel="Call now"
         />
       </div>
     </>

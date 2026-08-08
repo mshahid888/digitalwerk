@@ -18,7 +18,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Mehr Kunden, mehr Sichtbarkeit, mehr Wachstum: Website, SEO, Werbeanzeigen und KI-Automatisierung aus einer Hand – für Unternehmen in ganz Deutschland.",
   },
-  "/"
+  "/",
+  { hreflang: { de: "/", en: "/en" } }
 );
 
 const organizationJsonLd = {

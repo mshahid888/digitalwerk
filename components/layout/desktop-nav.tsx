@@ -1,11 +1,18 @@
+"use client";
+
 import { ChevronDown } from "lucide-react";
-import { primaryNav } from "@/lib/navigation";
+import { primaryNav, primaryNavEn } from "@/lib/navigation";
+import { useLocale } from "@/lib/use-locale";
 import { ActiveLink } from "./active-link";
 
 export function DesktopNav() {
+  const locale = useLocale();
+  const items = locale === "en" ? primaryNavEn : primaryNav;
+  const navLabel = locale === "en" ? "Main navigation" : "Hauptnavigation";
+
   return (
-    <nav aria-label="Hauptnavigation" className="hidden lg:flex lg:items-center lg:gap-1">
-      {primaryNav.map((item) => (
+    <nav aria-label={navLabel} className="hidden lg:flex lg:items-center lg:gap-1">
+      {items.map((item) => (
         <div key={item.href} className="group relative">
           <ActiveLink
             href={item.href}

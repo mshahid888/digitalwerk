@@ -2,15 +2,35 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { primaryNav } from "@/lib/navigation";
+import { primaryNav, primaryNavEn } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
-import { ctaLabels } from "@/lib/site-config";
+import { ctaLabels, ctaLabelsEn } from "@/lib/site-config";
+import { useLocale } from "@/lib/use-locale";
 import { ActiveLink } from "./active-link";
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+const STRINGS = {
+  de: {
+    openMenu: "Menü öffnen",
+    closeMenu: "Menü schließen",
+    navLabel: "Hauptnavigation",
+    contactHref: "/kontakt" as const,
+  },
+  en: {
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    navLabel: "Main navigation",
+    contactHref: "/en/contact" as const,
+  },
+};
+
 export function MobileNav() {
+  const locale = useLocale();
+  const items = locale === "en" ? primaryNavEn : primaryNav;
+  const cta = locale === "en" ? ctaLabelsEn : ctaLabels;
+  const t = STRINGS[locale];
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -77,7 +97,7 @@ export function MobileNav() {
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
         aria-controls="mobile-nav-panel"
-        aria-label="Menü öffnen"
+        aria-label={t.openMenu}
         className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-primary-50"
       >
         <Menu className="h-6 w-6" aria-hidden="true" />
@@ -89,7 +109,7 @@ export function MobileNav() {
           id="mobile-nav-panel"
           role="dialog"
           aria-modal="true"
-          aria-label="Hauptnavigation"
+          aria-label={t.navLabel}
           className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-white"
         >
           <div className="flex items-center justify-between border-b border-primary-100 px-6 py-4">
@@ -100,7 +120,7 @@ export function MobileNav() {
               ref={closeButtonRef}
               type="button"
               onClick={close}
-              aria-label="Menü schließen"
+              aria-label={t.closeMenu}
               className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-primary-50"
             >
               <X className="h-6 w-6" aria-hidden="true" />
@@ -109,7 +129,7 @@ export function MobileNav() {
 
           <nav className="flex-1 overflow-y-auto px-6 py-4">
             <ul className="flex flex-col gap-1">
-              {primaryNav.map((item) => (
+              {items.map((item) => (
                 <li
                   key={item.href}
                   className="border-b border-primary-50 last:border-none"
@@ -163,8 +183,8 @@ export function MobileNav() {
           </nav>
 
           <div className="border-t border-primary-100 px-6 py-4">
-            <Button href="/kontakt" onClick={close} className="w-full">
-              {ctaLabels.primary}
+            <Button href={t.contactHref} onClick={close} className="w-full">
+              {cta.primary}
             </Button>
           </div>
         </div>

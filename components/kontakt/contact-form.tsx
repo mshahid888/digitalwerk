@@ -8,18 +8,57 @@ const fieldClasses =
   "w-full rounded-md border border-primary-200 bg-white px-4 py-2.5 text-sm text-foreground placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2";
 
 type SubmitState = "idle" | "sending" | "sent" | "sent-via-mailto";
+type Locale = "de" | "en";
+
+const STRINGS: Record<Locale, Record<string, string>> = {
+  de: {
+    nameLabel: "Name *",
+    emailLabel: "E-Mail *",
+    phoneLabel: "Telefon (optional)",
+    messageLabel: "Nachricht *",
+    sending: "Wird gesendet …",
+    send: "Nachricht senden",
+    sent: "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.",
+    sentViaMailto:
+      "Ihr E-Mail-Programm öffnet sich mit den ausgefüllten Angaben — bitte senden Sie die E-Mail von dort aus ab.",
+    idleHelper:
+      "Beim Absenden versuchen wir, Ihre Nachricht direkt zu übermitteln — falls das nicht möglich ist, öffnet sich stattdessen Ihr E-Mail-Programm.",
+    mailtoSubject: "Anfrage von",
+    mailtoName: "Name",
+    mailtoEmail: "E-Mail",
+    mailtoPhone: "Telefon",
+  },
+  en: {
+    nameLabel: "Name *",
+    emailLabel: "Email *",
+    phoneLabel: "Phone (optional)",
+    messageLabel: "Message *",
+    sending: "Sending…",
+    send: "Send message",
+    sent: "Thank you! Your message was sent successfully.",
+    sentViaMailto:
+      "Your email program will open with your details filled in — please send the email from there.",
+    idleHelper:
+      "When you submit, we try to deliver your message directly — if that isn't possible, your email program opens instead.",
+    mailtoSubject: "Inquiry from",
+    mailtoName: "Name",
+    mailtoEmail: "Email",
+    mailtoPhone: "Phone",
+  },
+};
 
 function buildMailtoUrl(
+  strings: Record<string, string>,
   name: string,
   email: string,
   phone: string,
   message: string
 ): string {
-  const subject = `Anfrage von ${name}`;
+  const subject = `${strings.mailtoSubject} ${name}`;
   const body = [
-    `Name: ${name}`,
-    `E-Mail: ${email}`,
-    phone ? `Telefon: ${phone}` : null,
+    `${strings.mailtoName}: ${name}`,
+    `${strings.mailtoEmail}: ${email}`,
+    phone ? `${strings.mailtoPhone}: ${phone}` : null,
     "",
     message,
   ]
@@ -35,7 +74,8 @@ function buildMailtoUrl(
 // returns a non-ok response until RESEND_API_KEY is configured, in which
 // case this falls back to the mailto: link — today, with no key set, every
 // submission takes the fallback path, identical to the previous behavior.
-export function ContactForm() {
+export function ContactForm({ locale = "de" }: { locale?: Locale }) {
+  const t = STRINGS[locale];
   const [state, setState] = useState<SubmitState>("idle");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -68,7 +108,7 @@ export function ContactForm() {
       form.reset();
       setState("sent");
     } catch {
-      window.location.href = buildMailtoUrl(name, email, phone, message);
+      window.location.href = buildMailtoUrl(t, name, email, phone, message);
       setState("sent-via-mailto");
     }
   }
@@ -80,7 +120,7 @@ export function ContactForm() {
           htmlFor="name"
           className="mb-1.5 block text-sm font-medium text-primary-900"
         >
-          Name *
+          {t.nameLabel}
         </label>
         <input
           id="name"
@@ -97,7 +137,7 @@ export function ContactForm() {
           htmlFor="email"
           className="mb-1.5 block text-sm font-medium text-primary-900"
         >
-          E-Mail *
+          {t.emailLabel}
         </label>
         <input
           id="email"
@@ -114,7 +154,7 @@ export function ContactForm() {
           htmlFor="phone"
           className="mb-1.5 block text-sm font-medium text-primary-900"
         >
-          Telefon (optional)
+          {t.phoneLabel}
         </label>
         <input
           id="phone"
@@ -130,7 +170,7 @@ export function ContactForm() {
           htmlFor="message"
           className="mb-1.5 block text-sm font-medium text-primary-900"
         >
-          Nachricht *
+          {t.messageLabel}
         </label>
         <textarea
           id="message"
@@ -147,16 +187,13 @@ export function ContactForm() {
         className="w-full sm:w-auto"
         disabled={state === "sending"}
       >
-        {state === "sending" ? "Wird gesendet …" : "Nachricht senden"}
+        {state === "sending" ? t.sending : t.send}
       </Button>
 
       <p className="text-xs text-slate-500" role="status">
-        {state === "sent" &&
-          "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet."}
-        {state === "sent-via-mailto" &&
-          "Ihr E-Mail-Programm öffnet sich mit den ausgefüllten Angaben — bitte senden Sie die E-Mail von dort aus ab."}
-        {(state === "idle" || state === "sending") &&
-          "Beim Absenden versuchen wir, Ihre Nachricht direkt zu übermitteln — falls das nicht möglich ist, öffnet sich stattdessen Ihr E-Mail-Programm."}
+        {state === "sent" && t.sent}
+        {state === "sent-via-mailto" && t.sentViaMailto}
+        {(state === "idle" || state === "sending") && t.idleHelper}
       </p>
     </form>
   );
