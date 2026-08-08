@@ -8,7 +8,7 @@ import { ServiceBenefits } from "@/components/service-page/benefits";
 import { ServiceProcess } from "@/components/service-page/process";
 import { ServiceWhyDigitalWerk } from "@/components/service-page/why-digitalwerk";
 import { ServiceFAQ } from "@/components/service-page/faq";
-import { SolutionsGrid, type AISolution } from "@/components/ki-agenten/solutions-grid";
+import { CapabilityGrid, type Capability } from "@/components/shared/capability-grid";
 import { PrivacyTrust } from "@/components/ki-agenten/privacy-trust";
 import type { ServicePageContent } from "@/components/service-page/types";
 
@@ -169,7 +169,7 @@ const content: Omit<ServicePageContent, "included"> = {
   },
 };
 
-const aiSolutions: AISolution[] = [
+const aiSolutions: Capability[] = [
   {
     title: "AI Chatbots",
     description:
@@ -221,10 +221,10 @@ export default function Page() {
       <ServiceProblem problem={content.problem} />
       <ServiceSolution solution={content.solution} />
       <ServiceBenefits benefits={content.benefits} />
-      <SolutionsGrid
+      <CapabilityGrid
         title="Unsere KI-Lösungen im Überblick"
         intro="Jede Lösung löst ein konkretes Problem in Ihrem Tagesgeschäft – einzeln oder kombiniert einsetzbar."
-        solutions={aiSolutions}
+        capabilities={aiSolutions}
       />
       <PrivacyTrust />
       <ServiceProcess process={content.process} />

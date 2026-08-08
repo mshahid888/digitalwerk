@@ -4,20 +4,20 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
 
-export type AISolution = {
+export type Capability = {
   title: string;
   description: string;
   outcome: string;
 };
 
-export function SolutionsGrid({
+export function CapabilityGrid({
   title,
   intro,
-  solutions,
+  capabilities,
 }: {
   title: string;
   intro?: string;
-  solutions: AISolution[];
+  capabilities: Capability[];
 }) {
   return (
     <Section tone="muted">
@@ -30,14 +30,14 @@ export function SolutionsGrid({
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {solutions.map((solution) => (
-            <Card key={solution.title} hoverable className="flex flex-col">
-              <Heading level={4}>{solution.title}</Heading>
+          {capabilities.map((capability) => (
+            <Card key={capability.title} hoverable className="flex flex-col">
+              <Heading level={4}>{capability.title}</Heading>
               <p className="mt-3 flex-1 text-sm text-slate-600">
-                {solution.description}
+                {capability.description}
               </p>
               <Badge tone="accent" className="mt-4 self-start">
-                {solution.outcome}
+                {capability.outcome}
               </Badge>
             </Card>
           ))}
