@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Webentwicklung",
-  description:
-    "Moderne, schnelle und conversion-starke Websites, die Besucher in Kunden verwandeln. Handwerklich sauber entwickelt statt nur hübsch gestaltet.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Webentwicklung",
+    description:
+      "Moderne, schnelle und conversion-starke Websites, die Besucher in Kunden verwandeln. Handwerklich sauber entwickelt statt nur hübsch gestaltet.",
+  },
+  "/loesungen/webentwicklung"
+);
 
 const content: ServicePageContent = {
   hero: {

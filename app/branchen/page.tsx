@@ -7,11 +7,14 @@ import { CTA } from "@/components/ui/cta";
 import { PageIntro } from "@/components/shared/page-intro";
 import { CapabilityGrid, type Capability } from "@/components/shared/capability-grid";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Branchen",
-  description:
-    "Digitale Lösungen für Restaurants, Praxen, Hotels, Handwerk, Kanzleien und weitere Branchen – individuell angepasst statt Standardlösung.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Branchen",
+    description:
+      "Digitale Lösungen für Restaurants, Praxen, Hotels, Handwerk, Kanzleien und weitere Branchen – individuell angepasst statt Standardlösung.",
+  },
+  "/branchen"
+);
 
 const industries: Capability[] = [
   {

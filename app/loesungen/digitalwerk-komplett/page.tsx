@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "DigitalWerk Komplett",
-  description:
-    "Website, SEO, Google-Profil, Content und KI-Automatisierung aus einer Hand – mit einem festen Ansprechpartner statt fünf Dienstleistern.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "DigitalWerk Komplett",
+    description:
+      "Website, SEO, Google-Profil, Content und KI-Automatisierung aus einer Hand – mit einem festen Ansprechpartner statt fünf Dienstleistern.",
+  },
+  "/loesungen/digitalwerk-komplett"
+);
 
 const content: ServicePageContent = {
   hero: {

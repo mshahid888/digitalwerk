@@ -13,10 +13,13 @@ import { Process } from "@/components/home/process";
 import { ReferenzenTeaser } from "@/components/home/referenzen-teaser";
 import { FAQ } from "@/components/home/faq";
 
-export const metadata: Metadata = buildMetadata({
-  description:
-    "Mehr Kunden, mehr Sichtbarkeit, mehr Wachstum: Website, SEO, Werbeanzeigen und KI-Automatisierung aus einer Hand – für Unternehmen in ganz Deutschland.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    description:
+      "Mehr Kunden, mehr Sichtbarkeit, mehr Wachstum: Website, SEO, Werbeanzeigen und KI-Automatisierung aus einer Hand – für Unternehmen in ganz Deutschland.",
+  },
+  "/"
+);
 
 const organizationJsonLd = {
   "@context": "https://schema.org",

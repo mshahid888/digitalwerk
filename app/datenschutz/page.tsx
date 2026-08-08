@@ -2,14 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/legal-page";
-import { siteConfig } from "@/lib/site-config";
+import { legalFieldOrPlaceholder, legalInfo, siteConfig } from "@/lib/site-config";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Datenschutzerklärung",
-  description:
-    "Informationen zum Umgang mit personenbezogenen Daten auf dieser Website.",
-  robots: { index: false, follow: true },
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Datenschutzerklärung",
+    description:
+      "Informationen zum Umgang mit personenbezogenen Daten auf dieser Website.",
+    robots: { index: false, follow: true },
+  },
+  "/datenschutz"
+);
 
 export default function Page() {
   return (
@@ -26,7 +29,11 @@ export default function Page() {
                 ist:
               </p>
               <p>
-                [Vollständiger Firmenname und Rechtsform – bitte ergänzen]
+                {legalFieldOrPlaceholder(
+                  legalInfo.companyName,
+                  "Vollständiger Firmenname"
+                )}{" "}
+                {legalFieldOrPlaceholder(legalInfo.legalForm, "Rechtsform")}
                 <br />
                 {siteConfig.contact.address}
               </p>

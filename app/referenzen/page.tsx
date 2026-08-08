@@ -7,11 +7,14 @@ import { CTA } from "@/components/ui/cta";
 import { PageIntro } from "@/components/shared/page-intro";
 import { CapabilityGrid, type Capability } from "@/components/shared/capability-grid";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Referenzen",
-  description:
-    "Einblick in die Projektarten, die DigitalWerk umsetzt – von Website-Relaunches bis KI-Automatisierung. Echte Kundenreferenzen folgen in Kürze.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Referenzen",
+    description:
+      "Einblick in die Projektarten, die DigitalWerk umsetzt – von Website-Relaunches bis KI-Automatisierung. Echte Kundenreferenzen folgen in Kürze.",
+  },
+  "/referenzen"
+);
 
 const exampleProjects: Capability[] = [
   {

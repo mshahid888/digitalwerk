@@ -7,6 +7,12 @@ import { siteConfig } from "@/lib/site-config";
 const fieldClasses =
   "w-full rounded-md border border-primary-200 bg-white px-4 py-2.5 text-sm text-foreground placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2";
 
+// Submits via mailto: since no backend/email-provider is configured yet.
+// To switch to server-side delivery: replace handleSubmit with a POST to a
+// Route Handler (e.g. app/api/kontakt/route.ts) that calls an email
+// provider (Resend, Postmark, etc.) using an API key from an env var —
+// field names below (name/email/phone/message) already match what such a
+// handler would need.
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
 

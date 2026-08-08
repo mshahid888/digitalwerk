@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Content Creation",
-  description:
-    "Professionelle Website- und SEO-Inhalte, die überzeugen und bei Google ranken – verständlich geschrieben, individuell auf Ihre Branche zugeschnitten.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Content Creation",
+    description:
+      "Professionelle Website- und SEO-Inhalte, die überzeugen und bei Google ranken – verständlich geschrieben, individuell auf Ihre Branche zugeschnitten.",
+  },
+  "/loesungen/content-creation"
+);
 
 const content: ServicePageContent = {
   hero: {

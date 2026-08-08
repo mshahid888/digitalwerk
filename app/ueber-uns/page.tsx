@@ -9,11 +9,14 @@ import { ServiceBenefits } from "@/components/service-page/benefits";
 import { ServiceProcess } from "@/components/service-page/process";
 import { ServiceWhyDigitalWerk } from "@/components/service-page/why-digitalwerk";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Über uns",
-  description:
-    "DigitalWerk ist Ihr langfristiger digitaler Partner – erfahren Sie mehr über unsere Mission, unsere Werte und wie wir mit Unternehmen zusammenarbeiten.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Über uns",
+    description:
+      "DigitalWerk ist Ihr langfristiger digitaler Partner – erfahren Sie mehr über unsere Mission, unsere Werte und wie wir mit Unternehmen zusammenarbeiten.",
+  },
+  "/ueber-uns"
+);
 
 const hero = {
   badge: "Über uns",

@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Google Ads",
-  description:
-    "Google Ads-Kampagnen für Kunden, die bereits aktiv nach Ihrer Leistung suchen – ehrlich beraten, transparent abgerechnet, klar reportet.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Google Ads",
+    description:
+      "Google Ads-Kampagnen für Kunden, die bereits aktiv nach Ihrer Leistung suchen – ehrlich beraten, transparent abgerechnet, klar reportet.",
+  },
+  "/werbeanzeigen/google-ads"
+);
 
 const content: ServicePageContent = {
   hero: {

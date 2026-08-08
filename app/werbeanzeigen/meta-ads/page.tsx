@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Meta Ads",
-  description:
-    "Facebook- und Instagram-Kampagnen, die neue Zielgruppen erreichen, statt nur bestehende Nachfrage zu bedienen – ehrlich beraten, kreativ umgesetzt.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Meta Ads",
+    description:
+      "Facebook- und Instagram-Kampagnen, die neue Zielgruppen erreichen, statt nur bestehende Nachfrage zu bedienen – ehrlich beraten, kreativ umgesetzt.",
+  },
+  "/werbeanzeigen/meta-ads"
+);
 
 const content: ServicePageContent = {
   hero: {

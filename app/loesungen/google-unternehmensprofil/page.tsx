@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Google Unternehmensprofil",
-  description:
-    "Professionelle Optimierung Ihres Google Unternehmensprofils für bessere Rankings, mehr Bewertungen und mehr Anfragen aus Ihrer Region.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Google Unternehmensprofil",
+    description:
+      "Professionelle Optimierung Ihres Google Unternehmensprofils für bessere Rankings, mehr Bewertungen und mehr Anfragen aus Ihrer Region.",
+  },
+  "/loesungen/google-unternehmensprofil"
+);
 
 const content: ServicePageContent = {
   hero: {

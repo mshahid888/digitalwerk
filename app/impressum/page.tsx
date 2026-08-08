@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/legal-page";
-import { siteConfig } from "@/lib/site-config";
+import { legalFieldOrPlaceholder, legalInfo, siteConfig } from "@/lib/site-config";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Impressum",
-  description: "Rechtliche Angaben gemäß § 5 TMG.",
-  robots: { index: false, follow: true },
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Impressum",
+    description: "Rechtliche Angaben gemäß § 5 TMG.",
+    robots: { index: false, follow: true },
+  },
+  "/impressum"
+);
 
 export default function Page() {
   return (
@@ -19,7 +22,13 @@ export default function Page() {
           heading: "Angaben gemäß § 5 TMG",
           content: (
             <>
-              <p>[Vollständiger Firmenname und Rechtsform – bitte ergänzen]</p>
+              <p>
+                {legalFieldOrPlaceholder(
+                  legalInfo.companyName,
+                  "Vollständiger Firmenname"
+                )}{" "}
+                {legalFieldOrPlaceholder(legalInfo.legalForm, "Rechtsform")}
+              </p>
               <p>
                 {siteConfig.contact.address}
                 <br />
@@ -35,8 +44,10 @@ export default function Page() {
           heading: "Vertreten durch",
           content: (
             <p>
-              [Name der Geschäftsführung bzw. des/der vertretungsberechtigten
-              Inhaber:in – bitte ergänzen]
+              {legalFieldOrPlaceholder(
+                legalInfo.managingDirector,
+                "Name der Geschäftsführung bzw. des/der vertretungsberechtigten Inhaber:in"
+              )}
             </p>
           ),
         },
@@ -59,8 +70,17 @@ export default function Page() {
           heading: "Registereintrag",
           content: (
             <p>
-              [Eintragung im Handelsregister, Registergericht und
-              Registernummer – bitte ergänzen, sofern zutreffend]
+              Registergericht:{" "}
+              {legalFieldOrPlaceholder(
+                legalInfo.registerCourt,
+                "Registergericht, sofern zutreffend"
+              )}
+              <br />
+              Registernummer:{" "}
+              {legalFieldOrPlaceholder(
+                legalInfo.registerNumber,
+                "Registernummer, sofern zutreffend"
+              )}
             </p>
           ),
         },
@@ -68,8 +88,12 @@ export default function Page() {
           heading: "Umsatzsteuer-Identifikationsnummer",
           content: (
             <p>
-              [Umsatzsteuer-Identifikationsnummer gemäß § 27 a
-              Umsatzsteuergesetz – bitte ergänzen, sofern vorhanden]
+              Umsatzsteuer-Identifikationsnummer gemäß § 27 a
+              Umsatzsteuergesetz:{" "}
+              {legalFieldOrPlaceholder(
+                legalInfo.vatId,
+                "USt-IdNr., sofern vorhanden"
+              )}
             </p>
           ),
         },
@@ -83,7 +107,7 @@ export default function Page() {
                 href="https://ec.europa.eu/consumers/odr/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-600 hover:text-primary-700"
+                className="break-words text-primary-600 hover:text-primary-700"
               >
                 https://ec.europa.eu/consumers/odr/
               </a>

@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "SEO",
-  description:
-    "Lokales SEO für mehr Sichtbarkeit bei Google und Google Maps – ehrlich beraten, langfristig gedacht. Kostenlose Einschätzung für Ihr Unternehmen.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "SEO",
+    description:
+      "Lokales SEO für mehr Sichtbarkeit bei Google und Google Maps – ehrlich beraten, langfristig gedacht. Kostenlose Einschätzung für Ihr Unternehmen.",
+  },
+  "/loesungen/seo"
+);
 
 const content: ServicePageContent = {
   hero: {

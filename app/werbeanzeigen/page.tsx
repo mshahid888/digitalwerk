@@ -7,11 +7,14 @@ import {
   type ComparisonItem,
 } from "@/components/shared/comparison-list";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Werbeanzeigen",
-  description:
-    "Google Ads, Meta Ads und TikTok Ads für messbares Wachstum – ehrlich beraten, ohne übertriebene Versprechen.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Werbeanzeigen",
+    description:
+      "Google Ads, Meta Ads und TikTok Ads für messbares Wachstum – ehrlich beraten, ohne übertriebene Versprechen.",
+  },
+  "/werbeanzeigen"
+);
 
 const channels: ComparisonItem[] = [
   {

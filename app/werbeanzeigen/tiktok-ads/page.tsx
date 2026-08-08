@@ -3,11 +3,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { ServicePageTemplate } from "@/components/service-page/service-page-template";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "TikTok Ads",
-  description:
-    "Kreative Kurzvideo-Kampagnen für ein großes, aktives Publikum – ehrlich beraten, ob TikTok wirklich zu Ihrem Unternehmen passt.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "TikTok Ads",
+    description:
+      "Kreative Kurzvideo-Kampagnen für ein großes, aktives Publikum – ehrlich beraten, ob TikTok wirklich zu Ihrem Unternehmen passt.",
+  },
+  "/werbeanzeigen/tiktok-ads"
+);
 
 const content: ServicePageContent = {
   hero: {

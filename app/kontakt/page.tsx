@@ -11,11 +11,14 @@ import { ContactInfo } from "@/components/kontakt/contact-info";
 import { MapPlaceholder } from "@/components/kontakt/map-placeholder";
 import { siteConfig } from "@/lib/site-config";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Kontakt",
-  description:
-    "Kontaktieren Sie DigitalWerk per Formular, Telefon, E-Mail oder WhatsApp. Kostenloses Erstgespräch – wir melden uns zeitnah zurück.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Kontakt",
+    description:
+      "Kontaktieren Sie DigitalWerk per Formular, Telefon, E-Mail oder WhatsApp. Kostenloses Erstgespräch – wir melden uns zeitnah zurück.",
+  },
+  "/kontakt"
+);
 
 const faq = {
   title: "Häufige Fragen zur Kontaktaufnahme",

@@ -41,11 +41,14 @@ const services: ComparisonItem[] = [
   },
 ];
 
-export const metadata: Metadata = buildMetadata({
-  title: "Lösungen",
-  description:
-    "Website, SEO, Google Unternehmensprofil und Content Creation – einzeln buchbar oder als Komplettlösung. Finden Sie die passende Lösung für Ihr Unternehmen.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Lösungen",
+    description:
+      "Website, SEO, Google Unternehmensprofil und Content Creation – einzeln buchbar oder als Komplettlösung. Finden Sie die passende Lösung für Ihr Unternehmen.",
+  },
+  "/loesungen"
+);
 
 export default function Page() {
   return (

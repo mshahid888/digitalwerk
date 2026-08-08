@@ -11,11 +11,14 @@ import { ServiceFAQ } from "@/components/service-page/faq";
 import { CapabilityGrid, type Capability } from "@/components/shared/capability-grid";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "E-Commerce",
-  description:
-    "Online-Shop auf Shopify oder WooCommerce, verbunden mit Amazon, eBay und TikTok Shop – mehr verkaufen, weniger Verwaltungsaufwand.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "E-Commerce",
+    description:
+      "Online-Shop auf Shopify oder WooCommerce, verbunden mit Amazon, eBay und TikTok Shop – mehr verkaufen, weniger Verwaltungsaufwand.",
+  },
+  "/e-commerce"
+);
 
 const content: Omit<ServicePageContent, "included"> = {
   hero: {

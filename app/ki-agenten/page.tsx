@@ -12,11 +12,14 @@ import { CapabilityGrid, type Capability } from "@/components/shared/capability-
 import { PrivacyTrust } from "@/components/ki-agenten/privacy-trust";
 import type { ServicePageContent } from "@/components/service-page/types";
 
-export const metadata: Metadata = buildMetadata({
-  title: "KI-Agenten",
-  description:
-    "KI-Agenten für Restaurants, Praxen, Kanzleien und mehr: Anrufe, Terminbuchung und Kundenanfragen automatisch bearbeiten – Zeit und Kosten sparen.",
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "KI-Agenten",
+    description:
+      "KI-Agenten für Restaurants, Praxen, Kanzleien und mehr: Anrufe, Terminbuchung und Kundenanfragen automatisch bearbeiten – Zeit und Kosten sparen.",
+  },
+  "/ki-agenten"
+);
 
 const content: Omit<ServicePageContent, "included"> = {
   hero: {

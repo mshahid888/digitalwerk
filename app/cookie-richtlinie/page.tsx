@@ -3,12 +3,15 @@ import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { LegalPage } from "@/components/legal/legal-page";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Cookie-Richtlinie",
-  description:
-    "Informationen darüber, welche Cookies und ähnliche Technologien diese Website aktuell verwendet.",
-  robots: { index: false, follow: true },
-});
+export const metadata: Metadata = buildMetadata(
+  {
+    title: "Cookie-Richtlinie",
+    description:
+      "Informationen darüber, welche Cookies und ähnliche Technologien diese Website aktuell verwendet.",
+    robots: { index: false, follow: true },
+  },
+  "/cookie-richtlinie"
+);
 
 export default function Page() {
   return (
