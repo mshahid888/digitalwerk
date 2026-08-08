@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/lib/site-config";
@@ -7,6 +6,7 @@ import {
   footerQuickLinks,
   footerServiceLinks,
 } from "@/lib/navigation";
+import { ActiveLink } from "./active-link";
 
 const socialLinks = [
   { label: "Instagram", href: siteConfig.social.instagram },
@@ -33,12 +33,12 @@ export function Footer() {
           <ul className="mt-4 flex flex-col gap-2">
             {footerServiceLinks.map((link) => (
               <li key={link.href}>
-                <Link
+                <ActiveLink
                   href={link.href}
                   className="text-sm text-primary-200 hover:text-white"
                 >
                   {link.label}
-                </Link>
+                </ActiveLink>
               </li>
             ))}
           </ul>
@@ -51,12 +51,12 @@ export function Footer() {
           <ul className="mt-4 flex flex-col gap-2">
             {footerQuickLinks.map((link) => (
               <li key={link.href}>
-                <Link
+                <ActiveLink
                   href={link.href}
                   className="text-sm text-primary-200 hover:text-white"
                 >
                   {link.label}
-                </Link>
+                </ActiveLink>
               </li>
             ))}
           </ul>
@@ -115,13 +115,13 @@ export function Footer() {
           </span>
           <div className="flex gap-6">
             {footerLegalLinks.map((link) => (
-              <Link
+              <ActiveLink
                 key={link.href}
                 href={link.href}
                 className="hover:text-white"
               >
                 {link.label}
-              </Link>
+              </ActiveLink>
             ))}
           </div>
         </Container>

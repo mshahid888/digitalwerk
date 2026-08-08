@@ -40,7 +40,7 @@ export function RelatedServices() {
           {related.map((item) => (
             <Link key={item.href} href={item.href} className="group">
               <Card hoverable className="flex h-full flex-col">
-                <Heading level={4} className="group-hover:text-primary-600">
+                <Heading level={3} size={4} className="group-hover:text-primary-600">
                   {item.title}
                 </Heading>
                 <p className="mt-3 flex-1 text-sm text-slate-600">

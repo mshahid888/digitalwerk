@@ -32,7 +32,7 @@ export function CapabilityGrid({
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {capabilities.map((capability) => (
             <Card key={capability.title} hoverable className="flex flex-col">
-              <Heading level={4}>{capability.title}</Heading>
+              <Heading level={3} size={4}>{capability.title}</Heading>
               <p className="mt-3 flex-1 text-sm text-slate-600">
                 {capability.description}
               </p>

@@ -1,31 +1,78 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { primaryNav } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
 import { ctaLabels } from "@/lib/site-config";
+import { ActiveLink } from "./active-link";
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setExpanded(null);
+    triggerRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
+    if (isOpen) {
+      closeButtonRef.current?.focus();
+    }
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  function close() {
-    setIsOpen(false);
-    setExpanded(null);
-  }
+  // Keeps keyboard focus inside the open dialog (WAI-ARIA dialog pattern):
+  // Escape closes it, and Tab/Shift+Tab wrap at the panel's edges instead of
+  // escaping into the page content hidden behind the full-screen overlay.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
+
+      if (event.key !== "Tab" || !panelRef.current) return;
+
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, close]);
 
   return (
     <div className="lg:hidden">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
@@ -38,6 +85,7 @@ export function MobileNav() {
 
       {isOpen ? (
         <div
+          ref={panelRef}
           id="mobile-nav-panel"
           role="dialog"
           aria-modal="true"
@@ -49,6 +97,7 @@ export function MobileNav() {
               DigitalWerk
             </span>
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={close}
               aria-label="Menü schließen"
@@ -87,26 +136,26 @@ export function MobileNav() {
                         <ul className="flex flex-col gap-1 pb-3 pl-4">
                           {item.children.map((child) => (
                             <li key={child.href}>
-                              <Link
+                              <ActiveLink
                                 href={child.href}
                                 onClick={close}
                                 className="block py-2 text-sm text-primary-700"
                               >
                                 {child.label}
-                              </Link>
+                              </ActiveLink>
                             </li>
                           ))}
                         </ul>
                       ) : null}
                     </div>
                   ) : (
-                    <Link
+                    <ActiveLink
                       href={item.href}
                       onClick={close}
                       className="block py-3 text-base font-medium text-foreground"
                     >
                       {item.label}
-                    </Link>
+                    </ActiveLink>
                   )}
                 </li>
               ))}

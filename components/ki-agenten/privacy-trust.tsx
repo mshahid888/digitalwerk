@@ -61,7 +61,7 @@ export function PrivacyTrust() {
                 aria-hidden="true"
               />
               <div>
-                <Heading level={4}>{point.title}</Heading>
+                <Heading level={3} size={4}>{point.title}</Heading>
                 <p className="mt-2 text-sm text-slate-600">
                   {point.description}
                 </p>

@@ -24,7 +24,7 @@ export function ServiceBenefits({
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.items.map((item) => (
             <Card key={item.title} hoverable>
-              <Heading level={4}>{item.title}</Heading>
+              <Heading level={3} size={4}>{item.title}</Heading>
               <p className="mt-3 text-sm text-slate-600">
                 {item.description}
               </p>

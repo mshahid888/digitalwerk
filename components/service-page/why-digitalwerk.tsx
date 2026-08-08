@@ -37,7 +37,7 @@ export function ServiceWhyDigitalWerk({
         <div className={cn("grid gap-6", gridColumns)}>
           {whyDigitalWerk.points.map((point) => (
             <Card key={point.title}>
-              <Heading level={4}>{point.title}</Heading>
+              <Heading level={3} size={4}>{point.title}</Heading>
               <p className="mt-3 text-sm text-slate-600">
                 {point.description}
               </p>

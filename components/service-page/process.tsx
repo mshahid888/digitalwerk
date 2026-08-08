@@ -24,7 +24,7 @@ export function ServiceProcess({
               <span className="text-3xl font-semibold text-primary-400">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <Heading level={4}>{step.title}</Heading>
+              <Heading level={3} size={4}>{step.title}</Heading>
               <p className="text-sm text-slate-600">{step.description}</p>
             </li>
           ))}

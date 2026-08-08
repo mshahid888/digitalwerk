@@ -64,7 +64,7 @@ export function ServicesOverview() {
           {services.map((service) => (
             <Link key={service.href} href={service.href} className="group">
               <Card hoverable className="h-full">
-                <Heading level={4} className="group-hover:text-primary-600">
+                <Heading level={3} size={4} className="group-hover:text-primary-600">
                   {service.title}
                 </Heading>
                 <p className="mt-3 text-sm text-slate-600">
