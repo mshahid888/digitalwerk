@@ -6,11 +6,13 @@ import type { ServicePageContent } from "./types";
 
 export function ServiceBenefits({
   benefits,
+  tone = "default",
 }: {
   benefits: ServicePageContent["benefits"];
+  tone?: "default" | "muted";
 }) {
   return (
-    <Section>
+    <Section tone={tone}>
       <Container className="flex flex-col items-center gap-12">
         <div className="max-w-2xl text-center">
           <Heading level={2}>{benefits.title}</Heading>

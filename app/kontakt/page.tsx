@@ -1,17 +1,107 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { RoutePlaceholder } from "@/components/dev/route-placeholder";
+import { Badge } from "@/components/ui/badge";
+import { Container } from "@/components/ui/container";
+import { Heading } from "@/components/ui/heading";
+import { Section } from "@/components/ui/section";
+import { CTA } from "@/components/ui/cta";
+import { ServiceFAQ } from "@/components/service-page/faq";
+import { ContactForm } from "@/components/kontakt/contact-form";
+import { ContactInfo } from "@/components/kontakt/contact-info";
+import { MapPlaceholder } from "@/components/kontakt/map-placeholder";
+import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = buildMetadata({
   title: "Kontakt",
-  description: "Vereinbaren Sie Ihre kostenlose Beratung mit DigitalWerk.",
+  description:
+    "Kontaktieren Sie DigitalWerk per Formular, Telefon, E-Mail oder WhatsApp. Kostenloses Erstgespräch – wir melden uns zeitnah zurück.",
 });
+
+const faq = {
+  title: "Häufige Fragen zur Kontaktaufnahme",
+  items: [
+    {
+      question: "Wie schnell erhalte ich eine Antwort?",
+      answer: "In der Regel antworten wir innerhalb eines Werktages.",
+    },
+    {
+      question: "Ist das Erstgespräch wirklich kostenlos und unverbindlich?",
+      answer:
+        "Ja, das Erstgespräch ist für Sie komplett kostenlos und unverbindlich.",
+    },
+    {
+      question: "Muss ich mich vorbereiten?",
+      answer:
+        "Nein, es reicht, wenn Sie kurz schildern, worum es geht – den Rest besprechen wir gemeinsam.",
+    },
+    {
+      question: "Kann ich auch über WhatsApp Kontakt aufnehmen?",
+      answer:
+        "Ja, schreiben Sie uns gerne direkt über WhatsApp – wir antworten dort genauso zuverlässig.",
+    },
+    {
+      question:
+        "An wen wende ich mich bei Fragen zu einem laufenden Projekt?",
+      answer:
+        "Ihr fester Ansprechpartner meldet sich direkt bei Ihnen – nutzen Sie einfach das Kontaktformular oder rufen Sie an.",
+    },
+  ],
+};
 
 export default function Page() {
   return (
-    <RoutePlaceholder
-      title="Kontakt"
-      description="Diese Seite befindet sich in Entwicklung — hier finden Sie bald Kontaktformular, WhatsApp, E-Mail, Telefon und Anfahrt."
-    />
+    <>
+      <Section className="pb-16 pt-16 md:pt-24">
+        <Container className="flex flex-col items-center gap-6 text-center">
+          <Badge tone="primary">Kontakt</Badge>
+          <Heading level={1} className="max-w-3xl text-primary-950">
+            Lassen Sie uns ins Gespräch kommen
+          </Heading>
+          <p className="max-w-2xl text-lg text-slate-600">
+            Ob Formular, Telefon, E-Mail oder WhatsApp – schreiben Sie uns auf
+            dem Weg, der Ihnen am liebsten ist. Wir melden uns zeitnah mit
+            einem kostenlosen, unverbindlichen Erstgespräch zurück.
+          </p>
+        </Container>
+      </Section>
+
+      <Section tone="muted">
+        <Container className="flex flex-col gap-12">
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div className="rounded-card border border-primary-100 bg-white p-6 shadow-card md:p-8">
+              <Heading level={2}>Schreiben Sie uns</Heading>
+              <p className="mt-2 mb-6 text-sm text-slate-600">
+                Füllen Sie das Formular aus, wir melden uns zeitnah zurück.
+              </p>
+              <ContactForm />
+            </div>
+
+            <div className="rounded-card border border-primary-100 bg-white p-6 shadow-card md:p-8">
+              <Heading level={2}>Direkter Kontakt</Heading>
+              <p className="mt-2 mb-6 text-sm text-slate-600">
+                Erreichen Sie uns auch direkt über einen dieser Wege.
+              </p>
+              <ContactInfo />
+            </div>
+          </div>
+
+          <MapPlaceholder />
+        </Container>
+      </Section>
+
+      <ServiceFAQ faq={faq} />
+
+      <div className="py-16 md:py-24">
+        <CTA
+          eyebrow="Wir freuen uns auf Sie"
+          title="Starten wir Ihr Projekt"
+          description="Am schnellsten erreichen Sie uns direkt per WhatsApp oder Telefon."
+          primaryHref={new URL(siteConfig.social.whatsapp)}
+          primaryLabel="Per WhatsApp schreiben"
+          secondaryHref={new URL(`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`)}
+          secondaryLabel="Jetzt anrufen"
+        />
+      </div>
+    </>
   );
 }

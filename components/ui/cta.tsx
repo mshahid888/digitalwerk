@@ -9,9 +9,9 @@ type CTAProps = {
   eyebrow?: string;
   title: string;
   description?: string;
-  primaryHref?: Route;
+  primaryHref?: Route | URL;
   primaryLabel?: string;
-  secondaryHref?: Route;
+  secondaryHref?: Route | URL;
   secondaryLabel?: string;
   className?: string;
 };
