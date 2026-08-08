@@ -16,7 +16,7 @@ export default function Page() {
   return (
     <LegalPage
       title="Impressum"
-      notice="Diese Seite enthält Platzhalter für gesetzlich vorgeschriebene Angaben. Bitte ergänzen Sie die als Platzhalter gekennzeichneten Informationen (z. B. vollständiger Firmenname, Rechtsform, Geschäftsführung, Handelsregisternummer, USt-IdNr.) und lassen Sie den Inhalt vor Veröffentlichung rechtlich prüfen."
+      notice="Diese Seite enthält noch Platzhalter für einzelne gesetzlich vorgeschriebene Angaben (z. B. Rechtsform, Handelsregisternummer, USt-IdNr.). Bitte ergänzen Sie die verbleibenden Angaben und lassen Sie den Inhalt vor Veröffentlichung rechtlich prüfen."
       sections={[
         {
           heading: "Angaben gemäß § 5 TMG",
@@ -29,49 +29,26 @@ export default function Page() {
                 )}{" "}
                 {legalFieldOrPlaceholder(legalInfo.legalForm, "Rechtsform")}
               </p>
-              <p>
-                {siteConfig.contact.address}
-                <br />
-                <span className="text-sm text-slate-500">
-                  (Platzhalteradresse – bitte durch die tatsächliche
-                  Geschäftsadresse ersetzen)
-                </span>
-              </p>
+              <p>{siteConfig.contact.address}</p>
             </>
           ),
         },
         {
           heading: "Vertreten durch",
           content: (
-            <>
-              <p>
-                {legalFieldOrPlaceholder(
-                  legalInfo.managingDirector,
-                  "Name der Geschäftsführung bzw. des/der vertretungsberechtigten Inhaber:in"
-                )}
-              </p>
-              {legalInfo.managingDirector ? (
-                <p className="text-sm text-slate-500">
-                  (Bislang liegt nur ein Nachname vor – dies ist noch nicht
-                  der vollständige rechtliche Name. Bitte um Vornamen und
-                  ggf. weitere erforderliche Angaben ergänzen, bevor diese
-                  Seite veröffentlicht wird.)
-                </p>
-              ) : null}
-            </>
+            <p>
+              {legalFieldOrPlaceholder(
+                legalInfo.managingDirector,
+                "Name der Geschäftsführung bzw. des/der vertretungsberechtigten Inhaber:in"
+              )}
+            </p>
           ),
         },
         {
           heading: "Kontakt",
           content: (
             <>
-              <p>
-                Telefon: {siteConfig.contact.phone}{" "}
-                <span className="text-sm text-slate-500">
-                  (Platzhalter – bitte durch die tatsächliche Telefonnummer
-                  ersetzen)
-                </span>
-              </p>
+              <p>Telefon: {siteConfig.contact.phone}</p>
               <p>E-Mail: {siteConfig.contact.email}</p>
             </>
           ),

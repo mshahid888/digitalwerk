@@ -10,9 +10,9 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalwerk.de",
   locale: "de_DE",
   contact: {
-    email: "info@digitalwerk.de",
-    phone: "+49 000 0000000",
-    address: "Musterstraße 1, 00000 Musterstadt, Deutschland",
+    email: "mshahidnawz7742@gmail.com",
+    phone: "+49 160 5667490",
+    address: "Martin-Luther-Platz 14, 91522 Ansbach",
     // Flip to true only once the address above is the real, confirmed
     // business address — this gates the Google Maps embed and
     // LocalBusiness structured data so neither ships with placeholder NAP.
@@ -47,7 +47,7 @@ type LegalInfo = {
 export const legalInfo: LegalInfo = {
   companyName: "Digital Werk",
   legalForm: null,
-  managingDirector: "Ismailoglou",
+  managingDirector: "Mesioure Ismailoglou",
   registerCourt: null,
   registerNumber: null,
   vatId: null,
