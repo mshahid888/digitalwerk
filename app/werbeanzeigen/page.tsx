@@ -54,7 +54,7 @@ export default function Page() {
 
       <ComparisonList
         title="Welcher Kanal passt zu Ihnen?"
-        intro="Jeder Kanal erreicht Kunden auf eine andere Art. Oft ist eine Kombination sinnvoll."
+        intro="Jeder Kanal erreicht Kunden auf eine andere Art. Oft ist eine Kombination sinnvoll – ebenso wie die Verbindung mit Website, SEO und weiteren Leistungen über DigitalWerk Komplett."
         highlightLabel="Am besten, wenn"
         items={channels}
         tone="default"

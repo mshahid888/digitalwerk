@@ -103,7 +103,8 @@ const content: ServicePageContent = {
       },
       {
         title: "Umsetzung",
-        description: "Wir richten die Kampagnen ein und schalten sie live.",
+        description:
+          "Wir richten Kampagnen und Creatives ein und schalten alles live.",
       },
       {
         title: "Optimierung",

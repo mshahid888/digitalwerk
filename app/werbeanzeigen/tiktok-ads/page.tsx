@@ -48,7 +48,7 @@ const content: ServicePageContent = {
     points: [
       "Kampagnenstrategie für Ihre Zielgruppe",
       "Kurzvideo-Content, der zur Plattform passt",
-      "Zielgruppenansprache nach Interessen und Region",
+      "Ausspielung nach Interessen, Altersgruppe und Region",
       "Laufende Optimierung der Kampagnen",
     ],
   },
@@ -102,7 +102,8 @@ const content: ServicePageContent = {
       },
       {
         title: "Umsetzung",
-        description: "Wir richten die Kampagnen ein und schalten sie live.",
+        description:
+          "Wir richten die Kampagnen ein und veröffentlichen die ersten Videos.",
       },
       {
         title: "Optimierung",
@@ -127,7 +128,7 @@ const content: ServicePageContent = {
       {
         title: "Laufende Betreuung",
         description:
-          "Wir beobachten und optimieren Ihre Kampagnen kontinuierlich.",
+          "Wir passen Content und Zielgruppen laufend an aktuelle Trends auf der Plattform an.",
       },
     ],
   },
@@ -157,7 +158,7 @@ const content: ServicePageContent = {
       {
         question: "Wie schnell sehe ich Ergebnisse?",
         answer:
-          "Erste Daten liegen meist nach wenigen Tagen vor, aussagekräftige Ergebnisse nach zwei bis vier Wochen.",
+          "Erste Daten liegen meist nach wenigen Tagen vor. Da der Algorithmus Zeit braucht, um die passende Zielgruppe zu finden, sind belastbare Aussagen oft erst nach zwei bis drei Wochen möglich.",
       },
     ],
   },

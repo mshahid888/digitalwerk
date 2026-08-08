@@ -162,6 +162,11 @@ const content: Omit<ServicePageContent, "included"> = {
         answer:
           "Die Kosten richten sich nach Umfang und gewünschten Funktionen. Im kostenlosen Erstgespräch erhalten Sie ein transparentes Angebot.",
       },
+      {
+        question: "Sind KI-Agenten auch Teil von DigitalWerk Komplett?",
+        answer:
+          "Ja, KI-Agenten sind Bestandteil von DigitalWerk Komplett und zusätzlich einzeln buchbar.",
+      },
     ],
   },
   cta: {
