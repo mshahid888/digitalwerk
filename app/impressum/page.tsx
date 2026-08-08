@@ -43,12 +43,22 @@ export default function Page() {
         {
           heading: "Vertreten durch",
           content: (
-            <p>
-              {legalFieldOrPlaceholder(
-                legalInfo.managingDirector,
-                "Name der Geschäftsführung bzw. des/der vertretungsberechtigten Inhaber:in"
-              )}
-            </p>
+            <>
+              <p>
+                {legalFieldOrPlaceholder(
+                  legalInfo.managingDirector,
+                  "Name der Geschäftsführung bzw. des/der vertretungsberechtigten Inhaber:in"
+                )}
+              </p>
+              {legalInfo.managingDirector ? (
+                <p className="text-sm text-slate-500">
+                  (Bislang liegt nur ein Nachname vor – dies ist noch nicht
+                  der vollständige rechtliche Name. Bitte um Vornamen und
+                  ggf. weitere erforderliche Angaben ergänzen, bevor diese
+                  Seite veröffentlicht wird.)
+                </p>
+              ) : null}
+            </>
           ),
         },
         {

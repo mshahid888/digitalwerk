@@ -45,9 +45,9 @@ type LegalInfo = {
 };
 
 export const legalInfo: LegalInfo = {
-  companyName: null,
+  companyName: "Digital Werk",
   legalForm: null,
-  managingDirector: null,
+  managingDirector: "Ismailoglou",
   registerCourt: null,
   registerNumber: null,
   vatId: null,
