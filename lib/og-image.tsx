@@ -1,11 +1,14 @@
 import { ImageResponse } from "next/og";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig } from "./site-config";
 
-export const alt = siteConfig.name;
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+// Shared by app/(de)/opengraph-image.tsx and app/en/opengraph-image.tsx.
+// Next.js discovers opengraph-image.tsx by file location per locale root
+// (see those files), so the convention file itself can't be shared — only
+// the image-generation logic can, kept here to avoid duplicating it.
+export const ogImageSize = { width: 1200, height: 630 };
+export const ogImageContentType = "image/png";
 
-export default function Image() {
+export function buildOgImageResponse() {
   return new ImageResponse(
     (
       <div
@@ -53,6 +56,6 @@ export default function Image() {
         />
       </div>
     ),
-    { ...size }
+    { ...ogImageSize }
   );
 }
