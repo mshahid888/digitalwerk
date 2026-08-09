@@ -17,7 +17,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Online-Shop auf Shopify oder WooCommerce, verbunden mit Amazon, eBay und TikTok Shop – mehr verkaufen, weniger Verwaltungsaufwand.",
   },
-  "/e-commerce"
+  "/e-commerce",
+  { hreflang: { de: "/e-commerce", en: "/en/e-commerce" } }
 );
 
 const content: Omit<ServicePageContent, "included"> = {

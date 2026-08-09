@@ -13,7 +13,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Google Ads, Meta Ads und TikTok Ads für messbares Wachstum – ehrlich beraten, ohne übertriebene Versprechen.",
   },
-  "/werbeanzeigen"
+  "/werbeanzeigen",
+  { hreflang: { de: "/werbeanzeigen", en: "/en/advertising" } }
 );
 
 const channels: ComparisonItem[] = [

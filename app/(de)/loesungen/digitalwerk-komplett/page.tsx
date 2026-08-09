@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Website, SEO, Google-Profil, Content und KI-Automatisierung aus einer Hand – mit einem festen Ansprechpartner statt fünf Dienstleistern.",
   },
-  "/loesungen/digitalwerk-komplett"
+  "/loesungen/digitalwerk-komplett",
+  { hreflang: { de: "/loesungen/digitalwerk-komplett", en: "/en/solutions/complete" } }
 );
 
 const content: ServicePageContent = {

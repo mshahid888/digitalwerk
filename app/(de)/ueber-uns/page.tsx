@@ -15,7 +15,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "DigitalWerk ist Ihr langfristiger digitaler Partner – erfahren Sie mehr über unsere Mission, unsere Werte und wie wir mit Unternehmen zusammenarbeiten.",
   },
-  "/ueber-uns"
+  "/ueber-uns",
+  { hreflang: { de: "/ueber-uns", en: "/en/about" } }
 );
 
 const hero = {

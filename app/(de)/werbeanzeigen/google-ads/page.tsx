@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Google Ads-Kampagnen für Kunden, die bereits aktiv nach Ihrer Leistung suchen – ehrlich beraten, transparent abgerechnet, klar reportet.",
   },
-  "/werbeanzeigen/google-ads"
+  "/werbeanzeigen/google-ads",
+  { hreflang: { de: "/werbeanzeigen/google-ads", en: "/en/advertising/google-ads" } }
 );
 
 const content: ServicePageContent = {

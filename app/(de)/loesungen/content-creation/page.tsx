@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Professionelle Website- und SEO-Inhalte, die überzeugen und bei Google ranken – verständlich geschrieben, individuell auf Ihre Branche zugeschnitten.",
   },
-  "/loesungen/content-creation"
+  "/loesungen/content-creation",
+  { hreflang: { de: "/loesungen/content-creation", en: "/en/solutions/content-creation" } }
 );
 
 const content: ServicePageContent = {

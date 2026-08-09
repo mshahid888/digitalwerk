@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Lokales SEO für mehr Sichtbarkeit bei Google und Google Maps – ehrlich beraten, langfristig gedacht. Kostenlose Einschätzung für Ihr Unternehmen.",
   },
-  "/loesungen/seo"
+  "/loesungen/seo",
+  { hreflang: { de: "/loesungen/seo", en: "/en/solutions/seo" } }
 );
 
 const content: ServicePageContent = {

@@ -18,7 +18,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "KI-Agenten für Restaurants, Praxen, Kanzleien und mehr: Anrufe, Terminbuchung und Kundenanfragen automatisch bearbeiten – Zeit und Kosten sparen.",
   },
-  "/ki-agenten"
+  "/ki-agenten",
+  { hreflang: { de: "/ki-agenten", en: "/en/ai-agents" } }
 );
 
 const content: Omit<ServicePageContent, "included"> = {

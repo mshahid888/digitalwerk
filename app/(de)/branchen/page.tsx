@@ -13,7 +13,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Digitale Lösungen für Restaurants, Praxen, Hotels, Handwerk, Kanzleien und weitere Branchen – individuell angepasst statt Standardlösung.",
   },
-  "/branchen"
+  "/branchen",
+  { hreflang: { de: "/branchen", en: "/en/industries" } }
 );
 
 const industries: Capability[] = [

@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Moderne, schnelle und conversion-starke Websites, die Besucher in Kunden verwandeln. Handwerklich sauber entwickelt statt nur hübsch gestaltet.",
   },
-  "/loesungen/webentwicklung"
+  "/loesungen/webentwicklung",
+  { hreflang: { de: "/loesungen/webentwicklung", en: "/en/solutions/web-development" } }
 );
 
 const content: ServicePageContent = {

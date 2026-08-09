@@ -13,7 +13,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Einblick in die Projektarten, die DigitalWerk umsetzt – von Website-Relaunches bis KI-Automatisierung. Echte Kundenreferenzen folgen in Kürze.",
   },
-  "/referenzen"
+  "/referenzen",
+  { hreflang: { de: "/referenzen", en: "/en/references" } }
 );
 
 const exampleProjects: Capability[] = [

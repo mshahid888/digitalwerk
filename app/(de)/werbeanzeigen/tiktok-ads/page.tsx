@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Kreative Kurzvideo-Kampagnen für ein großes, aktives Publikum – ehrlich beraten, ob TikTok wirklich zu Ihrem Unternehmen passt.",
   },
-  "/werbeanzeigen/tiktok-ads"
+  "/werbeanzeigen/tiktok-ads",
+  { hreflang: { de: "/werbeanzeigen/tiktok-ads", en: "/en/advertising/tiktok-ads" } }
 );
 
 const content: ServicePageContent = {

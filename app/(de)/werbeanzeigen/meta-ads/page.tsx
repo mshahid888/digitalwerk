@@ -9,7 +9,8 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Facebook- und Instagram-Kampagnen, die neue Zielgruppen erreichen, statt nur bestehende Nachfrage zu bedienen – ehrlich beraten, kreativ umgesetzt.",
   },
-  "/werbeanzeigen/meta-ads"
+  "/werbeanzeigen/meta-ads",
+  { hreflang: { de: "/werbeanzeigen/meta-ads", en: "/en/advertising/meta-ads" } }
 );
 
 const content: ServicePageContent = {

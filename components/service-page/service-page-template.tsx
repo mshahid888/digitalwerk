@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import { CTA } from "@/components/ui/cta";
 import { ServiceHero } from "./hero";
 import { ServiceProblem } from "./problem";
@@ -13,8 +14,12 @@ import type { ServicePageContent } from "./types";
 // Hero, Problem, Solution, Benefits, Included, Process, Why DigitalWerk, FAQ, CTA.
 export function ServicePageTemplate({
   content,
+  contactHref = "/kontakt",
 }: {
   content: ServicePageContent;
+  // English pages must pass "/en/contact" — defaults to the German contact
+  // page so existing German callers don't need to change.
+  contactHref?: Route;
 }) {
   return (
     <>
@@ -31,7 +36,8 @@ export function ServicePageTemplate({
           eyebrow={content.cta.eyebrow}
           title={content.cta.title}
           description={content.cta.description}
-          secondaryHref="/kontakt"
+          primaryHref={contactHref}
+          secondaryHref={contactHref}
         />
       </div>
     </>

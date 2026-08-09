@@ -9,7 +9,13 @@ export const metadata: Metadata = buildMetadata(
     description:
       "Professionelle Optimierung Ihres Google Unternehmensprofils für bessere Rankings, mehr Bewertungen und mehr Anfragen aus Ihrer Region.",
   },
-  "/loesungen/google-unternehmensprofil"
+  "/loesungen/google-unternehmensprofil",
+  {
+    hreflang: {
+      de: "/loesungen/google-unternehmensprofil",
+      en: "/en/solutions/google-business-profile",
+    },
+  }
 );
 
 const content: ServicePageContent = {
