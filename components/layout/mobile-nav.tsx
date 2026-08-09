@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { primaryNav, primaryNavEn } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
@@ -103,92 +104,97 @@ export function MobileNav() {
         <Menu className="h-6 w-6" aria-hidden="true" />
       </button>
 
-      {isOpen ? (
-        <div
-          ref={panelRef}
-          id="mobile-nav-panel"
-          role="dialog"
-          aria-modal="true"
-          aria-label={t.navLabel}
-          className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-white"
-        >
-          <div className="flex items-center justify-between border-b border-primary-100 px-6 py-4">
-            <span className="text-lg font-semibold text-primary-900">
-              DigitalWerk
-            </span>
-            <button
-              ref={closeButtonRef}
-              type="button"
-              onClick={close}
-              aria-label={t.closeMenu}
-              className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-primary-50"
+      {isOpen && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              ref={panelRef}
+              id="mobile-nav-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label={t.navLabel}
+              className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-white"
             >
-              <X className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-
-          <nav className="flex-1 overflow-y-auto px-6 py-4">
-            <ul className="flex flex-col gap-1">
-              {items.map((item) => (
-                <li
-                  key={item.href}
-                  className="border-b border-primary-50 last:border-none"
+              <div className="flex items-center justify-between border-b border-primary-100 px-6 py-4">
+                <span className="text-lg font-semibold text-primary-900">
+                  DigitalWerk
+                </span>
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  onClick={close}
+                  aria-label={t.closeMenu}
+                  className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-primary-50"
                 >
-                  {item.children ? (
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setExpanded(expanded === item.href ? null : item.href)
-                        }
-                        aria-expanded={expanded === item.href}
-                        className="flex w-full items-center justify-between py-3 text-left text-base font-medium text-foreground"
-                      >
-                        {item.label}
-                        <ChevronDown
-                          className={`h-5 w-5 text-primary-400 transition-transform duration-150 ${
-                            expanded === item.href ? "rotate-180" : ""
-                          }`}
-                          aria-hidden="true"
-                        />
-                      </button>
-                      {expanded === item.href ? (
-                        <ul className="flex flex-col gap-1 pb-3 pl-4">
-                          {item.children.map((child) => (
-                            <li key={child.href}>
-                              <ActiveLink
-                                href={child.href}
-                                onClick={close}
-                                className="block py-2 text-sm text-primary-700"
-                              >
-                                {child.label}
-                              </ActiveLink>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <ActiveLink
-                      href={item.href}
-                      onClick={close}
-                      className="block py-3 text-base font-medium text-foreground"
-                    >
-                      {item.label}
-                    </ActiveLink>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
+                  <X className="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
 
-          <div className="border-t border-primary-100 px-6 py-4">
-            <Button href={t.contactHref} onClick={close} className="w-full">
-              {cta.primary}
-            </Button>
-          </div>
-        </div>
-      ) : null}
+              <nav className="flex-1 overflow-y-auto px-6 py-4">
+                <ul className="flex flex-col gap-1">
+                  {items.map((item) => (
+                    <li
+                      key={item.href}
+                      className="border-b border-primary-50 last:border-none"
+                    >
+                      {item.children ? (
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setExpanded(
+                                expanded === item.href ? null : item.href
+                              )
+                            }
+                            aria-expanded={expanded === item.href}
+                            className="flex w-full items-center justify-between py-3 text-left text-base font-medium text-foreground"
+                          >
+                            {item.label}
+                            <ChevronDown
+                              className={`h-5 w-5 text-primary-400 transition-transform duration-150 ${
+                                expanded === item.href ? "rotate-180" : ""
+                              }`}
+                              aria-hidden="true"
+                            />
+                          </button>
+                          {expanded === item.href ? (
+                            <ul className="flex flex-col gap-1 pb-3 pl-4">
+                              {item.children.map((child) => (
+                                <li key={child.href}>
+                                  <ActiveLink
+                                    href={child.href}
+                                    onClick={close}
+                                    className="block py-2 text-sm text-primary-700"
+                                  >
+                                    {child.label}
+                                  </ActiveLink>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : null}
+                        </div>
+                      ) : (
+                        <ActiveLink
+                          href={item.href}
+                          onClick={close}
+                          className="block py-3 text-base font-medium text-foreground"
+                        >
+                          {item.label}
+                        </ActiveLink>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              <div className="border-t border-primary-100 px-6 py-4">
+                <Button href={t.contactHref} onClick={close} className="w-full">
+                  {cta.primary}
+                </Button>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }
