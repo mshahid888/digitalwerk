@@ -25,6 +25,11 @@ const content: ServicePageContent = {
     title: "Words that convince — and get found",
     description:
       "The best website doesn't help much if the content doesn't convince. We write copy that explains your services clearly, builds trust, and performs well on Google at the same time.",
+    pricing: {
+      price: "€349",
+      period: "/ month",
+      note: "Professional content for your digital presence.",
+    },
   },
   problem: {
     title: "Good work, poorly explained",

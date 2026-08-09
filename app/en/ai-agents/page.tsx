@@ -28,6 +28,13 @@ const content: Omit<ServicePageContent, "included"> = {
     title: "Less effort, more customers — automatically",
     description:
       "AI agents answer inquiries, take calls, and book appointments — around the clock. That saves you time, lowers costs, and means you never miss an inquiry again.",
+    pricing: {
+      price: "€699",
+      period: "setup",
+      secondaryPrice: "€99",
+      secondaryPeriod: "/ month",
+      note: "One-time setup and ongoing support.",
+    },
   },
   problem: {
     title: "Every missed inquiry is a lost customer",

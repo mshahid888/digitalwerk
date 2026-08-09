@@ -19,6 +19,11 @@ const content: ServicePageContent = {
     title: "Eine Website, die für Ihr Unternehmen arbeitet",
     description:
       "Nicht nur ein digitales Schaufenster, sondern das Fundament für alles, was danach kommt: Sichtbarkeit, Vertrauen und neue Kunden. Wir entwickeln Websites, die schnell laden, gut aussehen und Besucher zum Handeln bewegen.",
+    pricing: {
+      price: "ab 1.299 €",
+      period: "einmalig",
+      note: "Professionelle Unternehmenswebsites – modern, schnell und suchmaschinenfreundlich.",
+    },
   },
   problem: {
     title: "Ihre Website kostet Sie mehr Kunden, als Sie denken",

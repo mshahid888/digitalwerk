@@ -1,8 +1,11 @@
+import type { PricingContent } from "./pricing";
+
 export type ServicePageContent = {
   hero: {
     badge: string;
     title: string;
     description: string;
+    pricing?: PricingContent;
   };
   problem: {
     title: string;

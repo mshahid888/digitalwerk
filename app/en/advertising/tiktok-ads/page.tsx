@@ -22,6 +22,11 @@ const content: ServicePageContent = {
     title: "Reach an audience that classic advertising barely reaches anymore",
     description:
       "TikTok Ads reaches a large, active audience with short, creative videos — especially effective for businesses with visually engaging products or services.",
+    pricing: {
+      price: "€249",
+      period: "/ month",
+      note: "Ad spend not included.",
+    },
   },
   problem: {
     title: "An audience that needs to be reached differently",

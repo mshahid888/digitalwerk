@@ -27,6 +27,11 @@ const content: Omit<ServicePageContent, "included"> = {
     title: "Mehr verkaufen – online und auf jedem Marktplatz",
     description:
       "Ob eigener Online-Shop oder Verkauf über Amazon, eBay und TikTok Shop: Wir helfen Unternehmen, online mehr zu verkaufen – mit einem Shop, der funktioniert, und Prozessen, die sich nicht verzetteln.",
+    pricing: {
+      price: "ab 1.499 €",
+      period: "einmalig",
+      note: "Professioneller Online-Shop für den erfolgreichen Verkauf Ihrer Produkte.",
+    },
   },
   problem: {
     title: "Verkaufen online ist komplizierter, als es sein sollte",

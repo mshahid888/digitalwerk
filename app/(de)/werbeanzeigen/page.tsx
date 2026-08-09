@@ -25,6 +25,7 @@ const channels: ComparisonItem[] = [
     highlight:
       "Sie schnelle Sichtbarkeit bei bereits bestehender Nachfrage möchten.",
     href: "/werbeanzeigen/google-ads",
+    price: "249 € / Monat",
   },
   {
     title: "Meta Ads",
@@ -33,6 +34,7 @@ const channels: ComparisonItem[] = [
     highlight:
       "Sie neue Kunden erreichen möchten, die noch nicht aktiv suchen.",
     href: "/werbeanzeigen/meta-ads",
+    price: "249 € / Monat",
   },
   {
     title: "TikTok Ads",
@@ -41,6 +43,7 @@ const channels: ComparisonItem[] = [
     highlight:
       "Ihr Angebot visuell ansprechend ist und eine jüngere Zielgruppe erreichen soll.",
     href: "/werbeanzeigen/tiktok-ads",
+    price: "249 € / Monat",
   },
 ];
 
@@ -51,6 +54,11 @@ export default function Page() {
         badge="Werbeanzeigen"
         title="Werbung, die sich an Ergebnissen messen lässt"
         description="Google Ads, Meta Ads und TikTok Ads bringen Ihr Unternehmen vor die richtige Zielgruppe – mit klaren Kennzahlen statt vager Versprechen. Wir empfehlen jeden Kanal nur dann, wenn er wirklich zu Ihrem Unternehmen passt, und verzichten bewusst auf übertriebene ROI-Zusagen."
+        pricing={{
+          price: "ab 249 €",
+          period: "/ Monat",
+          note: "Professionelles Anzeigenmanagement – Ihr Werbebudget wird separat bezahlt.",
+        }}
       />
 
       <ComparisonList

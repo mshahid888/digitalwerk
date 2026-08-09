@@ -25,6 +25,11 @@ const content: ServicePageContent = {
     title: "A website that works for your business",
     description:
       "Not just a digital storefront, but the foundation for everything that follows: visibility, trust, and new customers. We build websites that load fast, look good, and move visitors to take action.",
+    pricing: {
+      price: "from €1,299",
+      period: "one-time",
+      note: "Professional business websites — modern, fast, and built for search engines.",
+    },
   },
   problem: {
     title: "Your website is costing you more customers than you think",

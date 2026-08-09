@@ -19,6 +19,11 @@ const content: ServicePageContent = {
     title: "More visibility on Google — right where your customers search",
     description:
       "Local SEO helps businesses like yours get found on Google and Google Maps when potential customers search in your area. Not a quick trick, but a long-term investment in visibility that lasts.",
+    pricing: {
+      price: "€299",
+      period: "/ month",
+      note: "Transparent SEO for more visibility and relevant visitors.",
+    },
   },
   problem: {
     title: "Good work isn't enough if no one can find you",

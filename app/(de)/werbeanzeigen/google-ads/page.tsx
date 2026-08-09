@@ -19,6 +19,11 @@ const content: ServicePageContent = {
     title: "Erreichen Sie Kunden genau dann, wenn sie suchen",
     description:
       "Google Ads zeigt Ihr Unternehmen Menschen, die aktiv nach Ihrer Leistung suchen – nicht erst, wenn sie zufällig scrollen. Das macht Google Ads zu einem der direktesten Wege zu neuen Anfragen.",
+    pricing: {
+      price: "249 €",
+      period: "/ Monat",
+      note: "Werbebudget nicht inklusive.",
+    },
   },
   problem: {
     title: "Sichtbarkeit, die zu langsam kommt",

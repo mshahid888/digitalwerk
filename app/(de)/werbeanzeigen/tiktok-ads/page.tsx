@@ -19,6 +19,11 @@ const content: ServicePageContent = {
     title: "Erreichen Sie eine Zielgruppe, die klassische Werbung kaum noch sieht",
     description:
       "TikTok Ads erreicht ein großes, aktives Publikum mit kurzen, kreativen Videos – besonders wirkungsvoll für Unternehmen mit visuell ansprechenden Produkten oder Leistungen.",
+    pricing: {
+      price: "249 €",
+      period: "/ Monat",
+      note: "Werbebudget nicht inklusive.",
+    },
   },
   problem: {
     title: "Eine Zielgruppe, die anders erreicht werden will",

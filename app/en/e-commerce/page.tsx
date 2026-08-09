@@ -27,6 +27,11 @@ const content: Omit<ServicePageContent, "included"> = {
     title: "Sell more — online and on every marketplace",
     description:
       "Whether it's your own online store or selling through Amazon, eBay, and TikTok Shop: we help businesses sell more online — with a store that works and processes that don't spiral out of control.",
+    pricing: {
+      price: "from €1,499",
+      period: "one-time",
+      note: "A professional online store to sell your products successfully.",
+    },
   },
   problem: {
     title: "Selling online is more complicated than it should be",

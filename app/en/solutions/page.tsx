@@ -28,6 +28,7 @@ const services: ComparisonItem[] = [
       "Modern, fast, conversion-focused websites that turn visitors into customers.",
     highlight: "Your current website is outdated, slow, or doesn't work well on mobile.",
     href: "/en/solutions/web-development",
+    price: "from €1,299 one-time",
   },
   {
     title: "SEO",
@@ -35,6 +36,7 @@ const services: ComparisonItem[] = [
       "Local SEO that makes you more visible on Google and Google Maps — more calls, more visits.",
     highlight: "Your website exists but is barely found on Google.",
     href: "/en/solutions/seo",
+    price: "€299 / month",
   },
   {
     title: "Google Business Profile",
@@ -42,6 +44,7 @@ const services: ComparisonItem[] = [
       "Professional optimization of your Google profile for better rankings and more reviews.",
     highlight: "Your Google profile is incomplete or not set up yet.",
     href: "/en/solutions/google-business-profile",
+    price: "€199 one-time",
   },
   {
     title: "Content Creation",
@@ -49,6 +52,7 @@ const services: ComparisonItem[] = [
       "Professional website and SEO content that convinces and ranks.",
     highlight: "Your website is technically solid, but the copy doesn't convince — or is missing.",
     href: "/en/solutions/content-creation",
+    price: "€349 / month",
   },
 ];
 

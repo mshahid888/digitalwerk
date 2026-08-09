@@ -24,6 +24,11 @@ const content: ServicePageContent = {
     title: "Der schnellste Weg zu mehr lokaler Sichtbarkeit",
     description:
       "Ihr Google Unternehmensprofil ist oft der erste Kontakt zwischen Ihnen und neuen Kunden – noch bevor sie Ihre Website besuchen. Wir sorgen dafür, dass es vollständig, aktuell und überzeugend ist.",
+    pricing: {
+      price: "199 €",
+      period: "einmalig",
+      note: "Optimierung Ihres Google Unternehmensprofils für bessere lokale Sichtbarkeit.",
+    },
   },
   problem: {
     title: "Ihr Google-Profil arbeitet nicht für Sie",

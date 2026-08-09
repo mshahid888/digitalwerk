@@ -28,6 +28,13 @@ const content: Omit<ServicePageContent, "included"> = {
     title: "Weniger Aufwand, mehr Kunden – automatisch",
     description:
       "KI-Agenten beantworten Anfragen, nehmen Anrufe entgegen und vereinbaren Termine – rund um die Uhr. So sparen Sie Zeit, senken Kosten und verpassen keine Anfrage mehr.",
+    pricing: {
+      price: "699 €",
+      period: "Einrichtung",
+      secondaryPrice: "99 €",
+      secondaryPeriod: "/ Monat",
+      note: "Einmalige Einrichtung und laufende Betreuung.",
+    },
   },
   problem: {
     title: "Jede verpasste Anfrage ist ein verlorener Kunde",

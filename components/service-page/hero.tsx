@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
 import { ctaLabels } from "@/lib/site-config";
+import { ServicePricing } from "./pricing";
 import type { ServicePageContent } from "./types";
 
 export function ServiceHero({ hero }: { hero: ServicePageContent["hero"] }) {
@@ -15,6 +16,7 @@ export function ServiceHero({ hero }: { hero: ServicePageContent["hero"] }) {
           {hero.title}
         </Heading>
         <p className="max-w-2xl text-lg text-slate-600">{hero.description}</p>
+        {hero.pricing ? <ServicePricing pricing={hero.pricing} /> : null}
         <div className="flex flex-col gap-4 sm:flex-row">
           <Button href="/kontakt" size="lg">
             {ctaLabels.primary}

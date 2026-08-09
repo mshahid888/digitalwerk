@@ -19,6 +19,11 @@ const content: ServicePageContent = {
     title: "Mehr Sichtbarkeit bei Google – dort, wo Ihre Kunden suchen",
     description:
       "Lokales SEO sorgt dafür, dass Unternehmen wie Ihres bei Google und Google Maps gefunden werden, wenn potenzielle Kunden in Ihrer Region suchen. Kein schneller Trick, sondern eine langfristige Investition in Sichtbarkeit, die bleibt.",
+    pricing: {
+      price: "299 €",
+      period: "/ Monat",
+      note: "Transparentes SEO für mehr Sichtbarkeit und relevante Besucher.",
+    },
   },
   problem: {
     title: "Gute Arbeit reicht nicht, wenn man Sie nicht findet",

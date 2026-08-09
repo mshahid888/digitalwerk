@@ -24,6 +24,7 @@ const channels: ComparisonItem[] = [
       "Your ad appears exactly when someone is actively searching for your service.",
     highlight: "You want fast visibility for demand that already exists.",
     href: "/en/advertising/google-ads",
+    price: "€249 / month",
   },
   {
     title: "Meta Ads",
@@ -31,6 +32,7 @@ const channels: ComparisonItem[] = [
       "Campaigns on Facebook and Instagram that reach new audiences by interest and region.",
     highlight: "You want to reach new customers who aren't actively searching yet.",
     href: "/en/advertising/meta-ads",
+    price: "€249 / month",
   },
   {
     title: "TikTok Ads",
@@ -39,6 +41,7 @@ const channels: ComparisonItem[] = [
     highlight:
       "Your offer is visually appealing and you want to reach a younger audience.",
     href: "/en/advertising/tiktok-ads",
+    price: "€249 / month",
   },
 ];
 
@@ -49,6 +52,11 @@ export default function Page() {
         badge="Advertising"
         title="Advertising measured by results"
         description="Google Ads, Meta Ads, and TikTok Ads put your business in front of the right audience — with clear metrics instead of vague promises. We only recommend a channel when it genuinely fits your business, and we deliberately avoid overblown ROI guarantees."
+        pricing={{
+          price: "from €249",
+          period: "/ month",
+          note: "Professional ad management — your ad spend is billed separately.",
+        }}
       />
 
       <ComparisonList

@@ -22,6 +22,11 @@ const content: ServicePageContent = {
     title: "Reach customers at the exact moment they search",
     description:
       "Google Ads shows your business to people actively searching for your service — not just when they happen to be scrolling. That makes Google Ads one of the most direct paths to new inquiries.",
+    pricing: {
+      price: "€249",
+      period: "/ month",
+      note: "Ad spend not included.",
+    },
   },
   problem: {
     title: "Visibility that arrives too slowly",

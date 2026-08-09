@@ -19,6 +19,14 @@ const content: ServicePageContent = {
     title: "Ihre komplette digitale Abteilung – aus einer Hand",
     description:
       "Website, SEO, Google-Profil, Content, KI-Automatisierung und laufende Betreuung – gebündelt in einer Partnerschaft, die sich um Ihr digitales Wachstum kümmert, während Sie sich um Ihr Kerngeschäft kümmern.",
+    pricing: {
+      price: "699 €",
+      period: "/ Monat",
+      note: [
+        "Ihre digitale Präsenz, Marketing und Automatisierung – alles aus einer Hand.",
+        "Werbebudget nicht inklusive.",
+      ],
+    },
   },
   problem: {
     title: "Digitales Wachstum braucht mehr als eine Website",
@@ -85,7 +93,7 @@ const content: ServicePageContent = {
       "Website Development",
       "Local SEO",
       "Google Unternehmensprofil-Optimierung",
-      "Content Creation",
+      "Content-Erstellung",
       "KI-Automatisierung",
       "Analytics & Reporting",
       "Monatliche Optimierung",

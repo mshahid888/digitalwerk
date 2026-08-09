@@ -5,7 +5,7 @@ import type { ServicePageContent } from "@/components/service-page/types";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "Content Creation",
+    title: "Content-Erstellung",
     description:
       "Professionelle Website- und SEO-Inhalte, die überzeugen und bei Google ranken – verständlich geschrieben, individuell auf Ihre Branche zugeschnitten.",
   },
@@ -15,10 +15,15 @@ export const metadata: Metadata = buildMetadata(
 
 const content: ServicePageContent = {
   hero: {
-    badge: "Content Creation",
+    badge: "Content-Erstellung",
     title: "Worte, die überzeugen – und gefunden werden",
     description:
       "Die beste Website nützt wenig, wenn die Inhalte nicht überzeugen. Wir schreiben Texte, die Ihre Leistungen verständlich erklären, Vertrauen aufbauen und gleichzeitig bei Google gut ankommen.",
+    pricing: {
+      price: "349 €",
+      period: "/ Monat",
+      note: "Professionelle Inhalte für Ihre digitale Präsenz.",
+    },
   },
   problem: {
     title: "Gute Leistung, schlecht erklärt",
@@ -136,7 +141,7 @@ const content: ServicePageContent = {
     ],
   },
   faq: {
-    title: "Häufige Fragen zu Content Creation",
+    title: "Häufige Fragen zu Content-Erstellung",
     items: [
       {
         question: "Schreiben Sie auch branchenspezifische Inhalte?",
@@ -159,9 +164,9 @@ const content: ServicePageContent = {
           "Ja, das bieten wir als laufende Leistung an – ideal für langfristige Sichtbarkeit bei Google.",
       },
       {
-        question: "Ist Content Creation Teil von DigitalWerk Komplett?",
+        question: "Ist Content-Erstellung Teil von DigitalWerk Komplett?",
         answer:
-          "Ja, Content Creation ist Bestandteil von DigitalWerk Komplett und zusätzlich einzeln buchbar.",
+          "Ja, Content-Erstellung ist Bestandteil von DigitalWerk Komplett und zusätzlich einzeln buchbar.",
       },
     ],
   },

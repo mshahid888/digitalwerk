@@ -25,6 +25,11 @@ const content: ServicePageContent = {
     title: "The fastest way to more local visibility",
     description:
       "Your Google Business Profile is often the first point of contact between you and new customers — before they even visit your website. We make sure it's complete, current, and convincing.",
+    pricing: {
+      price: "€199",
+      period: "one-time",
+      note: "Optimization of your Google Business Profile for better local visibility.",
+    },
   },
   problem: {
     title: "Your Google profile isn't working for you",

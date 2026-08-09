@@ -14,6 +14,7 @@ const services: ComparisonItem[] = [
     highlight:
       "Ihre aktuelle Website veraltet ist, langsam lädt oder auf dem Smartphone schlecht funktioniert.",
     href: "/loesungen/webentwicklung",
+    price: "ab 1.299 € einmalig",
   },
   {
     title: "SEO",
@@ -22,6 +23,7 @@ const services: ComparisonItem[] = [
     highlight:
       "Ihre Website zwar existiert, bei Google aber kaum gefunden wird.",
     href: "/loesungen/seo",
+    price: "299 € / Monat",
   },
   {
     title: "Google Unternehmensprofil",
@@ -30,6 +32,7 @@ const services: ComparisonItem[] = [
     highlight:
       "Ihr Google-Profil unvollständig ist oder noch gar nicht eingerichtet wurde.",
     href: "/loesungen/google-unternehmensprofil",
+    price: "199 € einmalig",
   },
   {
     title: "Content Creation",
@@ -38,6 +41,7 @@ const services: ComparisonItem[] = [
     highlight:
       "Ihre Website technisch gut ist, die Texte aber nicht überzeugen oder ganz fehlen.",
     href: "/loesungen/content-creation",
+    price: "349 € / Monat",
   },
 ];
 

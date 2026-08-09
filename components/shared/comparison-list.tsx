@@ -12,6 +12,7 @@ export type ComparisonItem = {
   description: string;
   highlight: string;
   href: Route;
+  price?: string;
 };
 
 export function ComparisonList({
@@ -42,7 +43,14 @@ export function ComparisonList({
             <Card key={item.href} className="md:p-8">
               <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
-                  <Heading level={3}>{item.title}</Heading>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <Heading level={3}>{item.title}</Heading>
+                    {item.price ? (
+                      <span className="text-sm font-semibold text-primary-700">
+                        {item.price}
+                      </span>
+                    ) : null}
+                  </div>
                   <p className="mt-2 text-slate-600">{item.description}</p>
                   <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
                     <Badge tone="accent">{highlightLabel}</Badge>

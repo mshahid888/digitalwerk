@@ -3,16 +3,19 @@ import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
+import { ServicePricing, type PricingContent } from "@/components/service-page/pricing";
 
 export function PageIntro({
   badge,
   title,
   description,
+  pricing,
   tone = "muted",
 }: {
   badge: string;
   title: string;
   description: ReactNode;
+  pricing?: PricingContent;
   tone?: "default" | "muted";
 }) {
   return (
@@ -23,6 +26,7 @@ export function PageIntro({
           {title}
         </Heading>
         <p className="max-w-2xl text-lg text-slate-600">{description}</p>
+        {pricing ? <ServicePricing pricing={pricing} /> : null}
       </Container>
     </Section>
   );

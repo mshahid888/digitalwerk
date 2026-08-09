@@ -22,6 +22,11 @@ const content: ServicePageContent = {
     title: "Get in front of customers before they start searching",
     description:
       "Meta Ads reaches people on Facebook and Instagram based on interests, region, and behavior — ideal for making new audiences aware of your business before the need becomes urgent.",
+    pricing: {
+      price: "€249",
+      period: "/ month",
+      note: "Ad spend not included.",
+    },
   },
   problem: {
     title: "A good offer that no one sees",

@@ -25,6 +25,14 @@ const content: ServicePageContent = {
     title: "Your complete digital department — from one partner",
     description:
       "Website, SEO, Google Business Profile, content, AI automation, and ongoing support — bundled into one partnership that takes care of your digital growth while you take care of your core business.",
+    pricing: {
+      price: "€699",
+      period: "/ month",
+      note: [
+        "Your online presence, marketing, and automation — all from one partner.",
+        "Ad spend not included.",
+      ],
+    },
   },
   problem: {
     title: "Digital growth takes more than a website",

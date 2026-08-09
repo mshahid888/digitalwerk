@@ -19,6 +19,11 @@ const content: ServicePageContent = {
     title: "Zeigen Sie sich Kunden, bevor sie aktiv danach suchen",
     description:
       "Meta Ads erreicht Menschen auf Facebook und Instagram genau nach Interessen, Region und Verhalten – ideal, um neue Zielgruppen auf Ihr Unternehmen aufmerksam zu machen, bevor der Bedarf akut wird.",
+    pricing: {
+      price: "249 €",
+      period: "/ Monat",
+      note: "Werbebudget nicht inklusive.",
+    },
   },
   problem: {
     title: "Gute Angebote, die niemand sieht",
