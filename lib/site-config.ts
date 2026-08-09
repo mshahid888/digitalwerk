@@ -74,3 +74,13 @@ export function legalFieldOrPlaceholder(
 ): string {
   return value ?? `[${placeholderLabel} – bitte ergänzen]`;
 }
+
+// Same underlying values as legalFieldOrPlaceholder — only the placeholder
+// wording differs. Never invents a value: still-null fields render an
+// English "to be added" placeholder instead of a filled-in fact.
+export function legalFieldOrPlaceholderEn(
+  value: string | null,
+  placeholderLabel: string
+): string {
+  return value ?? `[${placeholderLabel} – to be added]`;
+}
