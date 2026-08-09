@@ -13,10 +13,10 @@ export const siteConfig = {
     email: "mshahidnawz7742@gmail.com",
     phone: "+49 160 5667490",
     address: "Martin-Luther-Platz 14, 91522 Ansbach",
-    // Flip to true only once the address above is the real, confirmed
-    // business address — this gates the Google Maps embed and
-    // LocalBusiness structured data so neither ships with placeholder NAP.
-    addressConfirmed: false,
+    // The address above is the real, confirmed business address — this
+    // gates the Google Maps embed and LocalBusiness structured data so
+    // neither ships with placeholder NAP.
+    addressConfirmed: true,
   },
   social: {
     instagram: "https://instagram.com/digitalwerk",
