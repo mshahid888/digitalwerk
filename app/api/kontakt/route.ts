@@ -68,12 +68,16 @@ export async function POST(request: Request) {
   let body: unknown;
   try {
     body = await request.json();
-  } catch {
+  } catch (error) {
+    console.error("Contact form: request body was not valid JSON:", error);
     return Response.json({ error: "Ungültige Anfrage." }, { status: 400 });
   }
 
   const parsed = parseContactPayload(body);
   if (!parsed.success) {
+    console.error(
+      `Contact form: payload validation failed: ${parsed.error}`
+    );
     return Response.json({ error: parsed.error }, { status: 400 });
   }
 
