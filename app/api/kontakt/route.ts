@@ -56,6 +56,9 @@ function parseContactPayload(body: unknown): ParseResult {
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
+    console.error(
+      "Contact form: RESEND_API_KEY is not set in this deployment's environment."
+    );
     return Response.json(
       { error: "E-Mail-Versand ist derzeit nicht konfiguriert." },
       { status: 503 }
@@ -101,6 +104,10 @@ export async function POST(request: Request) {
     });
 
     if (!resendResponse.ok) {
+      const errorBody = await resendResponse.text().catch(() => "");
+      console.error(
+        `Contact form: Resend API rejected the request (status ${resendResponse.status}): ${errorBody}`
+      );
       return Response.json(
         { error: "E-Mail konnte nicht gesendet werden." },
         { status: 502 }
@@ -108,7 +115,8 @@ export async function POST(request: Request) {
     }
 
     return Response.json({ success: true });
-  } catch {
+  } catch (error) {
+    console.error("Contact form: request to Resend failed:", error);
     return Response.json(
       { error: "E-Mail konnte nicht gesendet werden." },
       { status: 502 }
