@@ -10,7 +10,7 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalwerk.de",
   locale: "de_DE",
   contact: {
-    email: "mshahidnawz7742@gmail.com",
+    email: "info@digitalwerkk.de",
     phone: "+49 160 5667490",
     address: "Martin-Luther-Platz 14, 91522 Ansbach",
     // The address above is the real, confirmed business address — this
