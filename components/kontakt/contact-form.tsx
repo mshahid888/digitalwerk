@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { Check, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site-config";
 
@@ -18,6 +19,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     messageLabel: "Nachricht *",
     sending: "Wird gesendet …",
     send: "Nachricht senden",
+    sentButton: "Gesendet",
     sent: "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.",
     sentViaMailto:
       "Ihr E-Mail-Programm öffnet sich mit den ausgefüllten Angaben — bitte senden Sie die E-Mail von dort aus ab.",
@@ -35,6 +37,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     messageLabel: "Message *",
     sending: "Sending…",
     send: "Send message",
+    sentButton: "Sent",
     sent: "Thank you! Your message was sent successfully.",
     sentViaMailto:
       "Your email program will open with your details filled in — please send the email from there.",
@@ -185,16 +188,37 @@ export function ContactForm({ locale = "de" }: { locale?: Locale }) {
         type="submit"
         size="lg"
         className="w-full sm:w-auto"
-        disabled={state === "sending"}
+        disabled={state === "sending" || state === "sent"}
       >
-        {state === "sending" ? t.sending : t.send}
+        {state === "sent" ? (
+          <>
+            <Check className="h-5 w-5" aria-hidden="true" />
+            {t.sentButton}
+          </>
+        ) : state === "sending" ? (
+          t.sending
+        ) : (
+          t.send
+        )}
       </Button>
 
-      <p className="text-xs text-slate-500" role="status">
-        {state === "sent" && t.sent}
-        {state === "sent-via-mailto" && t.sentViaMailto}
-        {(state === "idle" || state === "sending") && t.idleHelper}
-      </p>
+      {state === "sent" ? (
+        <div
+          role="status"
+          className="flex items-start gap-3 rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm font-medium text-accent-900"
+        >
+          <CircleCheck
+            className="h-5 w-5 shrink-0 text-accent-600"
+            aria-hidden="true"
+          />
+          <span>{t.sent}</span>
+        </div>
+      ) : (
+        <p className="text-xs text-slate-500" role="status">
+          {state === "sent-via-mailto" && t.sentViaMailto}
+          {(state === "idle" || state === "sending") && t.idleHelper}
+        </p>
+      )}
     </form>
   );
 }
