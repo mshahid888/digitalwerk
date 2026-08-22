@@ -7,11 +7,10 @@ export const siteConfig = {
   // Vercel project settings). Falls back to a placeholder so local builds
   // keep working without it — update the fallback or set the env var
   // before launch, not both.
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalwerk.de",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalwerkk.de",
   locale: "de_DE",
   contact: {
     email: "info@digitalwerkk.de",
-    phone: "+49 160 5667490",
     address: "Martin-Luther-Platz 14, 91522 Ansbach",
     // The address above is the real, confirmed business address — this
     // gates the Google Maps embed and LocalBusiness structured data so
