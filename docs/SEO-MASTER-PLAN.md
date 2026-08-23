@@ -254,7 +254,7 @@ Not yet implemented — deferred per explicit scoping, not forgotten:
 |---|---|---|---|
 | M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | ✅ COMPLETE / LIVE — see "M1 — Schema helper wiring" below |
 | M2 | 2-hop redirect chain (HTTP apex → HTTPS apex → HTTPS www) | Low-Medium | NOT STARTED (Vercel domain config, not app code) |
-| M3 | No `Content-Security-Policy` header | Low | NOT STARTED |
+| M3 | No `Content-Security-Policy` header | Low | ⚠️ PARTIALLY COMPLETE — Report-Only shipped and verified 2026-08-23; enforcing mode blocked on a decision, see "M3 — Content-Security-Policy" below |
 | M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | NOT STARTED — requires a real PSI API key or Vercel Speed Insights check before any performance code work is scoped |
 | M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | NOT STARTED |
 
@@ -280,6 +280,143 @@ Do NOT mark M2–M5 as completed. Do NOT implement them without explicit approva
 **Production verification (2026-08-23):**
 - `https://www.digitalwerkk.de/kontakt` — 5 JSON-LD blocks present: `Organization`/`ProfessionalService`, `WebSite`, `BreadcrumbList`, `ContactPage`, `FAQPage`. No duplicates.
 - `https://www.digitalwerkk.de/ki-agenten/erstellen` — 5 JSON-LD blocks: `Organization`/`ProfessionalService`, `WebSite`, `BreadcrumbList`, `Service`, `FAQPage`. `Service.provider` correctly resolves to the site's Organization `@id`. Canonical confirmed correct.
+
+### M3 — Content-Security-Policy (2026-08-23)
+
+**STATUS: ⚠️ PARTIALLY COMPLETE.** Report-Only shipped, deployed, and
+verified live. Enforcing mode is a genuine architecture/security decision,
+documented below and **not implemented** — stopping at this decision point
+per instruction.
+
+**Analysis performed** (source-code + live-production audit, not assumed):
+
+- **Inline scripts**: `components/analytics/analytics.tsx` renders up to 5
+  `next/script` blocks, each gated behind an unset env var — only
+  `NEXT_PUBLIC_GA_MEASUREMENT_ID` is currently set. Each integration's
+  bootstrap code (`ga4-init`, `gtm-init`, `meta-pixel-init`,
+  `tiktok-pixel-init`, `clarity-init`) is an **inline** `<Script id="...">`
+  block with `strategy="afterInteractive"` — none carry a `nonce` or hash
+  today.
+- **GA4**: confirmed live via network trace — `gtag.js` loads from
+  `googletagmanager.com` (200), and the actual collection beacon fires to
+  **`region1.google-analytics.com/g/collect`** (a regional subdomain, not
+  the plain `www.google-analytics.com` one initially assumed) — this
+  changed the policy from a single fixed domain to a
+  `https://*.google-analytics.com` wildcard in `connect-src`.
+- **GTM/Meta/TikTok/Clarity**: not currently active (env vars unset) but
+  `analytics.tsx` is explicitly designed for later activation with no code
+  change, so the policy pre-allowlists all four now rather than needing an
+  update the day one gets turned on. **Caveat recorded, not solved**: GTM's
+  entire purpose is injecting arbitrary tags without a code deploy, which
+  is fundamentally in tension with a strict CSP allowlist — if GTM is ever
+  actually used to add tags beyond what's hardcoded today, the policy will
+  need per-tag updates.
+- **Third-party resources**: one `<iframe>` (Google Maps embed,
+  `components/kontakt/map-placeholder.tsx`, `/kontakt` only) requiring
+  `frame-src https://www.google.com`.
+- **Next.js requirements**: confirmed via production HTML — zero inline
+  `<style>` tags (Tailwind compiles to one external stylesheet), zero
+  external font requests (`next/font` self-hosts, per the earlier Phase 2
+  finding), zero `<img>`/`next/image` usage (per the Step 44 finding) — so
+  `style-src`, `font-src`, and `img-src` can all stay tight (`'self'`,
+  `'self'`, `'self' data:` respectively) with no third-party exceptions
+  needed beyond Facebook's pixel fallback image.
+- **Nonce-based CSP practicality**: checked against
+  `node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md`
+  (this project's actual Next.js 16.3.0 docs, not assumed from training
+  data — this version renamed `middleware.ts` to `proxy.ts` for this
+  purpose, a real breaking change). Per that doc: nonces require a
+  `proxy.ts` that generates a fresh nonce per request, and **"all pages
+  must be dynamically rendered"** — static generation, ISR, and CDN caching
+  are all disabled site-wide. This site is currently **100% statically
+  generated** (50/50 routes, confirmed via this session's own build
+  output) — adopting nonces would be a real architecture change with real
+  performance/cost consequences, not a drop-in fix.
+- **Components needing modification for nonces**: `analytics.tsx` (every
+  inline `Script` would need a `nonce` prop sourced from `headers()`), a
+  new `proxy.ts` (doesn't exist yet), and every page would need to either
+  accept dynamic rendering or use `connection()` to opt in — effectively a
+  site-wide rendering-strategy change.
+- **Alternative — Subresource Integrity (SRI)**: Next.js 16 offers
+  experimental hash-based CSP as a static-generation-compatible
+  alternative to nonces. Rejected as a same-session solution: explicitly
+  experimental, App-Router-only features can change/break, and the docs
+  themselves note SRI "cannot handle dynamically generated scripts" — this
+  site's inline analytics bootstraps interpolate a build-time env-var
+  value into the script body, and it's not established from the docs alone
+  whether that counts as "dynamically generated" for SRI's purposes.
+  Untested here; not assumed safe.
+- **CSP Report-Only**: usable immediately, no rendering-strategy change,
+  **never blocks anything by definition** — the safe first step.
+
+**Recommended safest approach (this pass): ship Report-Only now; decide
+nonce-vs-unsafe-inline-vs-SRI later, with real violation data in hand.**
+
+**Implemented — Report-Only only:**
+
+**Commit:** `2ca18f9` — feat(seo): add Content-Security-Policy in
+Report-Only mode.
+
+`next.config.ts` — added `Content-Security-Policy-Report-Only` to the
+existing `headers()` array (same pattern as the pre-existing
+`X-Content-Type-Options`/`X-Frame-Options`/`Referrer-Policy` headers, no
+new mechanism introduced). Policy: `default-src 'self'`; `script-src`
+allows `'self'` + the four analytics domains
+(`googletagmanager.com`, `connect.facebook.net`, `analytics.tiktok.com`,
+`clarity.ms`); `connect-src` adds their collection-endpoint domains
+(including the `*.google-analytics.com` wildcard); `style-src`/`font-src`
+are `'self'` only; `img-src` is `'self' data:` + Facebook's pixel-fallback
+domain; `frame-src` is `'self' https://www.google.com` for the Maps embed;
+`object-src 'none'`, `base-uri 'self'`, `form-action 'self'`,
+`frame-ancestors 'none'`, `upgrade-insecure-requests`. No `report-uri`/
+`report-to` configured yet (no collector endpoint exists) — violations are
+visible in each browser's own devtools, not centrally aggregated. Note:
+`script-src`/`style-src` intentionally have **no** `'unsafe-inline'` and
+**no** nonce, so this policy — once switched to enforcing — **would**
+currently block the inline analytics bootstrap scripts. That's the point:
+Report-Only surfaces this now, safely, ahead of the enforcing-mode
+decision.
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `npm run build` — 50/50 routes, all still static,
+confirming Report-Only doesn't force dynamic rendering) → Committed →
+Pushed → Deployed (`dpl_E6SQkDauBExQA46FNn6i4pkGGUzJ`, READY, aliased to
+`www.digitalwerkk.de`) → Production Verified — all 5 stages complete.
+
+**Production verification (2026-08-23):**
+- `curl -sD - https://www.digitalwerkk.de/` — header present, byte-for-byte
+  the intended policy.
+- Live browser check (homepage): network trace showed `gtag.js` (200) and
+  the GA4 collection beacon to `region1.google-analytics.com/g/collect`
+  both completing normally — **analytics functions identically to before**,
+  confirming Report-Only mode blocks nothing, as designed. (This same
+  trace is what surfaced the `region1.` regional subdomain, correcting the
+  policy's `connect-src` before this was even called "final.")
+- Live browser check (`/kontakt`): confirmed the Google Maps `<iframe>`
+  element still renders with a `google.com/maps` `src`.
+- Console-level CSP violation messages were not independently visible
+  through this session's console-reading tool (a tooling limitation —
+  native browser security warnings may not surface through the same
+  channel as page `console.*()` calls, not evidence of anything wrong);
+  the network-level and header-level checks above are the load-bearing
+  verification, and Report-Only's non-blocking behavior is guaranteed by
+  the CSP spec regardless.
+
+**Decision point — enforcing mode (not implemented, stopping here):**
+
+Three real options exist to move from Report-Only to actually enforcing,
+none of them a free technical fix:
+
+| Option | Keeps static generation? | Security strength | Cost |
+|---|---|---|---|
+| **A. Nonce + `strict-dynamic`** | ❌ No — forces site-wide dynamic rendering (`proxy.ts`, per Next.js 16 docs) | Strongest | Real: loses CDN caching, slower TTFB, higher server load/cost |
+| **B. `'unsafe-inline'` for scripts** | ✅ Yes | Weak — defeats most of CSP's script-injection protection | Low engineering cost, but a real security-posture compromise |
+| **C. Subresource Integrity (experimental)** | ✅ Yes | Strong for static assets | Experimental/App-Router-only; untested against this site's inline, env-var-interpolated analytics bootstraps |
+
+This is exactly the kind of "significant architecture/security tradeoff"
+that shouldn't be picked autonomously. **Awaiting a decision on A vs. B vs.
+C** (or: stay in Report-Only indefinitely as monitoring-only, which is
+also a legitimate choice) before enforcing mode is implemented.
 
 ---
 
@@ -626,6 +763,7 @@ Verified — all 5 stages complete.
 | `cbf90f7` | fix(seo): improve robots and footer internal links | Phase 2 (H1/H2) | Pushed, deployed, production verified |
 | `9b0bf1f` | feat(seo): wire unused JSON-LD schema helpers into pages | Phase 2 (M1) | Pushed, deployed, production verified |
 | `b86ee47` | fix(seo): add local Ansbach/Bavaria signals to Organization schema | Phase 4 (keyword strategy → local finding) | Pushed, deployed, production verified |
+| `2ca18f9` | feat(seo): add Content-Security-Policy in Report-Only mode | Phase 2 (M3, partial) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
