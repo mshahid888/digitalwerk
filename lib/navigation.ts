@@ -46,6 +46,8 @@ export const footerServiceLinks: NavLink[] = [
   { label: "Google Unternehmensprofil", href: "/loesungen/google-unternehmensprofil" },
   { label: "Content Creation", href: "/loesungen/content-creation" },
   { label: "KI-Agenten", href: "/ki-agenten" },
+  { label: "KI-Agenten erstellen", href: "/ki-agenten/erstellen" },
+  { label: "KI-Agenten für E-Commerce", href: "/ki-agenten/e-commerce" },
   { label: "Werbeanzeigen", href: "/werbeanzeigen" },
   { label: "E-Commerce", href: "/e-commerce" },
 ];
