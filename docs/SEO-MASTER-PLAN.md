@@ -589,6 +589,34 @@ homepage. Likely related to M5 (`lib/metadata.ts` robustness). Not
 investigated further or fixed here since it wasn't part of what was
 approved; flagging for a future, separate decision.
 
+**Re-confirmed still live (2026-08-23), root cause NOT found — needs its
+own dedicated investigation, not attempted here.** Re-checked via fresh
+`curl` against production: both `/` and `/kontakt` still show the
+identical generic `og:title="DigitalWerk"` and the sitewide default
+`og:description`, not page-specific values. Traced as far as source +
+Next.js's own docs allow without deeper build-level debugging:
+`lib/metadata.ts`'s `buildMetadata()` does construct a page-specific
+`openGraph.title`/`openGraph.description` internally (uses `pageTitle`/
+`pageDescription`, which are correctly derived from each page's
+`overrides.title`/`description` — confirmed by reading the source), and
+per `node_modules/next/dist/docs/.../generate-metadata.md`'s own
+documented merge rule ("Metadata objects exported from multiple segments
+... are shallowly merged ... Duplicate keys are replaced ... metadata with
+nested fields such as `openGraph` ... defined in an earlier segment are
+overwritten by the last segment to define them"), `/kontakt/page.tsx`'s
+own `openGraph` (non-undefined) *should* fully replace
+`(de)/layout.tsx`'s generic one. It doesn't, in production. This
+contradicts both the source-level reasoning and the documented behavior,
+so the actual cause is unknown — not simply "page doesn't override
+openGraph" (it does) and not simply "Next merges differently than
+expected" (the docs match the expected behavior). Ruled out as a
+same-session fix: this needs real build-output-level debugging (not just
+source reading), and any change touches `lib/metadata.ts`, which every
+one of the site's 50 routes' social-sharing tags depends on — too broad a
+blast radius to guess at a fix. Flagged as its own investigation task,
+not folded into M5 without first confirming they're actually the same
+root cause.
+
 Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
 - Body content already mentions the primary "KI-Agenten" keyword cluster
