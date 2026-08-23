@@ -19,7 +19,7 @@ export default function GermanLayout({ children }: { children: ReactNode }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
-        <SiteShell>{children}</SiteShell>
+        <SiteShell locale="de">{children}</SiteShell>
       </body>
     </html>
   );
