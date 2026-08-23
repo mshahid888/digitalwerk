@@ -255,7 +255,7 @@ Not yet implemented — deferred per explicit scoping, not forgotten:
 | M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | ✅ COMPLETE / LIVE — see "M1 — Schema helper wiring" below |
 | M2 | 2-hop redirect chain (HTTP apex → HTTPS apex → HTTPS www) | Low-Medium | NOT STARTED (Vercel domain config, not app code) |
 | M3 | No `Content-Security-Policy` header | Low | ✅ CLOSED (Report-Only, deferred/monitored — user decision 2026-08-23) — see "M3 — Content-Security-Policy" below |
-| M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | NOT STARTED — requires a real PSI API key or Vercel Speed Insights check before any performance code work is scoped |
+| M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | BLOCKED (re-attempted 2026-08-23 with real avenues, all closed — see below) |
 | M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | ✅ COMPLETE / LIVE (2026-08-23, commit `c60da5b`) — see the OG-metadata resolution write-up under Step 33 (Phase 4) |
 
 Do NOT mark M2/M4 as completed without explicit approval or real evidence respectively. M1/M3/M5 are resolved — see their write-ups.
@@ -697,6 +697,46 @@ All three now show correct, page-specific, non-duplicated values. M5
 (`lib/metadata.ts` robustness) can be considered addressed by this same
 change — the underlying `openGraph`/`twitter` merge-order fragility M5
 was tracking is exactly what this commit fixed.
+
+### M4 — Core Web Vitals (re-attempted 2026-08-23, still blocked)
+
+Per instruction, tried every real avenue actually accessible this
+session rather than restating the old "no API key" note unchanged:
+
+- **Google PageSpeed Insights, unauthenticated public endpoint**:
+  `GET https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://www.digitalwerkk.de/&strategy=mobile` —
+  returned HTTP 429: `"Quota exceeded for quota metric 'Queries' and limit
+  'Queries per day'"`. This is a shared global quota for unauthenticated
+  callers (not specific to this project) — already exhausted by other
+  traffic. A real Google Cloud API key would remove this limit but
+  creating one is an account-level action outside this session's
+  authority.
+- **Vercel Web Analytics / Speed Insights**: queried directly via the
+  Vercel API (`get_web_analytics`) — `400: "web_analytics_not_enabled"`.
+  Confirms the earlier source-level finding (no `@vercel/analytics` or
+  `@vercel/speed-insights` package installed) with a direct platform
+  response. Enabling Speed Insights requires adding the
+  `@vercel/speed-insights` package and mounting `<SpeedInsights />` — a
+  real product/cost decision (Vercel Speed Insights has its own pricing
+  beyond the Hobby plan's free tier limits), not something to add
+  silently as a side effect of an audit.
+- **Single-sample client-side extraction** (`performance.getEntriesByType`
+  in a live browser tab on the production homepage): attempted as a
+  fallback; `paint`/`largest-contentful-paint` entries came back empty
+  despite the page having fully loaded, making the sample unreliable.
+  **Not reported as real CWV data** — a single sample from an
+  automated-browser context (unknown throttling profile, not real-user
+  monitoring, not a proper Lighthouse lab run) wouldn't be credible
+  Core-Web-Vitals evidence even if it had come back complete, and
+  `.claude/SEO-AGENT.md`'s GA4/GSC rule against fabricating or estimating
+  performance data as real applies here too.
+
+**STATUS: remains BLOCKED.** No further action possible without either a
+real Google API key (external account action) or a decision to enable
+Vercel Speed Insights (real cost/product decision). Not retrying again
+this session per the "don't loop on a known blocker" rule — flagging for
+your decision: get/provide a PSI API key, or approve enabling Speed
+Insights, whichever you'd prefer.
 
 Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
