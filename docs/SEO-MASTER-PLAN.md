@@ -89,9 +89,35 @@ Both pushed to main and deployed.
 
 ### REMAINING PHASE 1 WORK:
 - Full mapping of the broader 801-keyword dataset to future content/pages.
+  **BLOCKED — dataset not accessible (checked 2026-08-23), see finding below.**
 - Identify remaining high-value keyword clusters that deserve dedicated pages.
 - Do NOT create pages merely to target low-volume keywords.
 - Do NOT change completed Phase 1 pages unless an audit identifies a concrete issue.
+
+**Finding (2026-08-23): the 801-keyword dataset does not exist anywhere in
+this repository.** Exhaustive search performed: every file extension a
+keyword export could plausibly use (`.csv`, `.xlsx`, `.json`), every
+filename containing "keyword", the full `docs/` folder (contains only this
+file), the full repo root, and a text search for "801", "Keyword Magic",
+and "20,420" across the entire project (excluding `node_modules`) — the
+**only** place any of this appears is the summary prose right above (a
+handful of aggregate numbers and ~13 illustrative theme names). The actual
+row-by-row data — each of the 801 keywords with its own volume, difficulty,
+and intent — was never saved into the project. It appears to exist only
+wherever the original Semrush Keyword Magic Tool research was run (e.g. a
+Semrush export on the researcher's own machine, or a prior conversation
+not accessible from this repository), not in version control.
+
+**This blocks Step 42 (Content optimization) and the deeper per-page
+content work under Steps 34–38** — none of that can be done without
+inventing which keywords apply to which page, which `.claude/SEO-AGENT.md`
+explicitly prohibits.
+
+**What's needed to unblock this**: the actual dataset file (CSV/XLSX/JSON
+export from Semrush, or equivalent) added to the repository — e.g. under
+`docs/keyword-research/`. Per `.claude/SEO-AGENT.md`, SEMrush is not part
+of the current workflow, so this can't be re-fetched automatically; it
+needs to be provided.
 
 ---
 
