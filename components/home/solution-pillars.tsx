@@ -15,7 +15,7 @@ const pillars = [
   {
     title: "KI-Automatisierung",
     description:
-      "Chatbots, Sprachassistenten und automatisierte Terminbuchung – für schnelle Antworten, rund um die Uhr.",
+      "KI-Agenten übernehmen Kundenservice, Terminbuchung und wiederkehrende Anfragen – automatisch und rund um die Uhr.",
     href: "/ki-agenten",
   },
   {

@@ -10,7 +10,7 @@ const included = [
   "Local SEO",
   "Google Unternehmensprofil",
   "Content Creation",
-  "KI-Automatisierung",
+  "KI-Agenten für Ihr Unternehmen",
   "Analytics & Reporting",
   "Monatliche Optimierung",
   "Laufender Support",

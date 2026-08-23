@@ -28,7 +28,7 @@ const services: Array<{ title: string; description: string; href: Route }> = [
   },
   {
     title: "KI-Agenten",
-    description: "Automatisierter Kundenservice und Terminbuchung.",
+    description: "KI-Agenten für Kundenservice und Terminbuchung.",
     href: "/ki-agenten",
   },
   {

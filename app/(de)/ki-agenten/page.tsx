@@ -10,13 +10,14 @@ import { ServiceWhyDigitalWerk } from "@/components/service-page/why-digitalwerk
 import { ServiceFAQ } from "@/components/service-page/faq";
 import { CapabilityGrid, type Capability } from "@/components/shared/capability-grid";
 import { PrivacyTrust } from "@/components/ki-agenten/privacy-trust";
+import { ComparisonList, type ComparisonItem } from "@/components/shared/comparison-list";
 import type { ServicePageContent } from "@/components/service-page/types";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "KI-Agenten",
+    title: "KI-Agenten für Unternehmen: Kundenservice & Termine automatisieren",
     description:
-      "KI-Agenten für Restaurants, Praxen, Kanzleien und mehr: Anrufe, Terminbuchung und Kundenanfragen automatisch bearbeiten – Zeit und Kosten sparen.",
+      "KI-Agenten übernehmen Anrufe, Chats und Terminbuchung für Ihr Unternehmen – rund um die Uhr. Jetzt Kosten & Möglichkeiten im kostenlosen Erstgespräch erfahren.",
   },
   "/ki-agenten",
   { hreflang: { de: "/ki-agenten", en: "/en/ai-agents" } }
@@ -25,7 +26,7 @@ export const metadata: Metadata = buildMetadata(
 const content: Omit<ServicePageContent, "included"> = {
   hero: {
     badge: "KI-Agenten",
-    title: "Weniger Aufwand, mehr Kunden – automatisch",
+    title: "KI-Agenten für Ihr Unternehmen: Weniger Aufwand, mehr Kunden",
     description:
       "KI-Agenten beantworten Anfragen, nehmen Anrufe entgegen und vereinbaren Termine – rund um die Uhr. So sparen Sie Zeit, senken Kosten und verpassen keine Anfrage mehr.",
     pricing: {
@@ -175,6 +176,27 @@ const content: Omit<ServicePageContent, "included"> = {
         answer:
           "Ja, KI-Agenten sind Bestandteil von DigitalWerk Komplett und zusätzlich einzeln buchbar.",
       },
+      {
+        question: "Was ist ein KI-Agent?",
+        answer:
+          "Ein KI-Agent ist ein Software-System, das mithilfe künstlicher Intelligenz eigenständig Aufgaben übernimmt – zum Beispiel Kundenanfragen beantworten, Informationen nachschlagen oder einen Termin buchen. Im Gegensatz zu einfachen, regelbasierten Programmen versteht ein KI-Agent natürliche Sprache und kann innerhalb klar definierter Regeln selbstständig handeln, statt nur vorgefertigte Antworten auszugeben.",
+      },
+      {
+        question:
+          "Was ist der Unterschied zwischen einem KI-Agenten und einem Chatbot?",
+        answer:
+          "Ein klassischer Chatbot folgt vordefinierten Dialogpfaden und liefert Antworten aus einem festen Skript – bei unerwarteten oder komplexeren Fragen stößt er schnell an Grenzen. Ein KI-Agent versteht natürliche Sprache, zieht bei Bedarf relevanten Kontext heran und kann eigenständig handeln, etwa einen Termin buchen oder eine Anfrage qualifizieren, statt nur zu antworten. Kurz gesagt: Ein Chatbot antwortet, ein KI-Agent erledigt.",
+      },
+      {
+        question: "Wie baut man einen KI-Agenten?",
+        answer:
+          "Die Entwicklung beginnt mit einer Analyse: Welche Aufgaben soll der KI-Agent übernehmen, welche Informationen benötigt er, und wie soll er mit Kunden kommunizieren? Darauf folgen Einrichtung, Anbindung an bestehende Systeme wie Kalender oder Kundendaten sowie eine Testphase, bevor der Agent live geht. Bei DigitalWerk übernehmen wir diesen gesamten Prozess für Sie – von der Analyse bis zur laufenden Betreuung.",
+      },
+      {
+        question: "Was kostet ein KI-Agent?",
+        answer:
+          "Die Kosten hängen vom Funktionsumfang und den gewünschten Anbindungen ab. Bei DigitalWerk startet die Einrichtung eines KI-Agenten bei 699 € einmalig, zzgl. 99 € monatlich für Betreuung und laufende Optimierung. Im kostenlosen Erstgespräch erhalten Sie ein transparentes Angebot, das genau auf Ihr Unternehmen zugeschnitten ist.",
+      },
     ],
   },
   cta: {
@@ -230,6 +252,25 @@ const aiSolutions: Capability[] = [
   },
 ];
 
+const chatbotVsAgent: ComparisonItem[] = [
+  {
+    title: "Klassischer Chatbot",
+    description:
+      "Folgt vordefinierten Dialogpfaden und beantwortet Fragen aus einem festen Skript. Stößt bei individuellen oder komplexeren Anfragen schnell an Grenzen.",
+    highlight:
+      "Einfache, wiederkehrende Standardfragen mit klar vorhersehbaren Antworten.",
+    href: "/kontakt",
+  },
+  {
+    title: "KI-Agent",
+    description:
+      "Versteht natürliche Sprache, zieht bei Bedarf Kontext heran und kann eigenständig handeln – etwa einen Termin buchen oder eine Anfrage qualifizieren, statt nur zu antworten.",
+    highlight:
+      "Kundenservice, Terminbuchung und Anfragen, die echtes Verständnis und eigenständiges Handeln erfordern.",
+    href: "/kontakt",
+  },
+];
+
 export default function Page() {
   return (
     <>
@@ -243,6 +284,14 @@ export default function Page() {
         capabilities={aiSolutions}
       />
       <PrivacyTrust />
+      <ComparisonList
+        title="KI-Agent oder Chatbot – was passt zu Ihrem Unternehmen?"
+        intro="Beide automatisieren Kommunikation – aber auf unterschiedliche Weise. Der Unterschied entscheidet, welche Lösung wirklich zu Ihren Anfragen passt."
+        highlightLabel="Am besten geeignet für"
+        items={chatbotVsAgent}
+        linkLabel="Kostenlose Beratung anfragen"
+        tone="muted"
+      />
       <ServiceProcess process={content.process} />
       <ServiceWhyDigitalWerk whyDigitalWerk={content.whyDigitalWerk} />
       <ServiceFAQ faq={content.faq} />

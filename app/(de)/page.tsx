@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { siteConfig } from "@/lib/site-config";
 import { CTA } from "@/components/ui/cta";
 import { Hero } from "@/components/home/hero";
 import { Technologies } from "@/components/home/technologies";
@@ -22,35 +21,9 @@ export const metadata: Metadata = buildMetadata(
   { hreflang: { de: "/", en: "/en" } }
 );
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  description: siteConfig.description,
-  email: siteConfig.contact.email,
-  telephone: siteConfig.contact.phone,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: siteConfig.contact.address,
-    addressCountry: "DE",
-  },
-  sameAs: [
-    siteConfig.social.instagram,
-    siteConfig.social.linkedin,
-    siteConfig.social.facebook,
-  ],
-};
-
 export default function Page() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
       <Hero />
       <Technologies />
       <Problem />
