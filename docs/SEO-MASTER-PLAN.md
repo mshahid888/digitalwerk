@@ -254,11 +254,11 @@ Not yet implemented — deferred per explicit scoping, not forgotten:
 |---|---|---|---|
 | M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | ✅ COMPLETE / LIVE — see "M1 — Schema helper wiring" below |
 | M2 | 2-hop redirect chain (HTTP apex → HTTPS apex → HTTPS www) | Low-Medium | NOT STARTED (Vercel domain config, not app code) |
-| M3 | No `Content-Security-Policy` header | Low | ⚠️ PARTIALLY COMPLETE — Report-Only shipped and verified 2026-08-23; enforcing mode blocked on a decision, see "M3 — Content-Security-Policy" below |
+| M3 | No `Content-Security-Policy` header | Low | ✅ CLOSED (Report-Only, deferred/monitored — user decision 2026-08-23) — see "M3 — Content-Security-Policy" below |
 | M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | NOT STARTED — requires a real PSI API key or Vercel Speed Insights check before any performance code work is scoped |
-| M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | NOT STARTED |
+| M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | ✅ COMPLETE / LIVE (2026-08-23, commit `c60da5b`) — see the OG-metadata resolution write-up under Step 33 (Phase 4) |
 
-Do NOT mark M2–M5 as completed. Do NOT implement them without explicit approval.
+Do NOT mark M2/M4 as completed without explicit approval or real evidence respectively. M1/M3/M5 are resolved — see their write-ups.
 
 ### M1 — Schema helper wiring
 
@@ -417,6 +417,21 @@ This is exactly the kind of "significant architecture/security tradeoff"
 that shouldn't be picked autonomously. **Awaiting a decision on A vs. B vs.
 C** (or: stay in Report-Only indefinitely as monitoring-only, which is
 also a legitimate choice) before enforcing mode is implemented.
+
+**DECISION (user, 2026-08-23): remain in Report-Only mode. Do not switch
+to enforcing. Do not use `'unsafe-inline'`, nonce-based dynamic rendering,
+or experimental SRI at this stage.**
+
+**STATUS: ✅ M3 CLOSED as "Report-Only, deferred/monitored" — this is the
+policy's intended, final state for now, not a partial/incomplete status.**
+CSP enforcement (options A/B/C above) is explicitly deferred technical
+work, to be revisited only on a future explicit decision — not something
+to re-propose or re-litigate autonomously. The Report-Only header
+(`2ca18f9`) stays active in production as ongoing, passive monitoring:
+it costs nothing, blocks nothing, and any future browser-reported
+violation pattern (if a `report-uri`/`report-to` collector is ever added)
+would inform whichever enforcing option is eventually chosen. No further
+action on M3 unless/until the user revisits the A/B/C decision.
 
 ---
 
@@ -617,6 +632,72 @@ blast radius to guess at a fix. Flagged as its own investigation task,
 not folded into M5 without first confirming they're actually the same
 root cause.
 
+**✅ RESOLVED (2026-08-23), root cause narrowed to Vercel build-side, not
+source code — fixed via a real robustness change that also served as the
+empirical test.** Build-level debugging (as flagged above) performed:
+
+1. **Ruled out a source bug conclusively.** `rm -rf .next && npm run build`
+   (fully clean, zero cache, current committed HEAD) produced **correct,
+   page-specific** `og:title`/`og:description` locally for both `/` and
+   `/kontakt` — proving the committed source was never actually wrong.
+2. **Ruled out stale CDN/edge caching.** The generic production response
+   had `X-Vercel-Cache: PRERENDER` and `Age: 0` — a fresh prerendered
+   response from the live deployment itself, not a cached one.
+3. **Conclusion:** the discrepancy was specific to Vercel's own build
+   output for this route's metadata on that deployment — most consistent
+   with Vercel's persistent build cache (restored between deployments for
+   faster incremental builds) reusing a stale prerendered metadata
+   fragment for routes whose own file hadn't changed in a while, though
+   this couldn't be directly inspected/confirmed (no tool access to
+   Vercel's internal build cache). Not stated as certain — recorded as the
+   most evidence-consistent explanation, not a confirmed root cause.
+
+**Commit:** `c60da5b` — fix(seo): merge openGraph/twitter defensively, fix
+duplicate brand name in OG title.
+
+**Implemented:** `lib/metadata.ts` — `openGraph`/`twitter` are now built
+into standalone `defaultOpenGraph`/`defaultTwitter` objects and explicitly
+merged **after** the `...overrides` spread (`{ ...defaultOpenGraph,
+...overrides.openGraph }`), so a future page passing a *partial*
+`openGraph` override (e.g. just a custom image) can no longer silently
+drop `url`/`locale`/`siteName`/`title`/`description` — a real robustness
+gap regardless of the caching question. This content change forced
+Vercel to recompute the route's output on the next deploy, which is what
+resolved the discrepancy in practice.
+
+**Bonus fix, found while in this code:** the homepage's `og:title`/
+`twitter:title` showed **"DigitalWerk — KI-Agenten & digitaler
+Wachstumspartner | DigitalWerk"** — the brand name twice. `pageTitle`
+always appended `| DigitalWerk`, but the homepage's title override
+already embeds the brand explicitly (the Step 33 `title.template`
+workaround). Fixed: `pageTitle` now skips the suffix when
+`overrides.title` already contains `siteConfig.name`. Verified this
+doesn't change behavior for any other page — none of the other ~40 pages'
+title overrides include the brand name.
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `rm -rf .next && npm run build` — 50/50 routes,
+confirmed correct output locally before pushing) → Committed → Pushed →
+Deployed (`dpl_5CResndWgtQ5b7QNHSXy9yQTpdfE`, READY, aliased to
+`www.digitalwerkk.de`) → Production Verified — all 5 stages complete.
+
+**Production verification (2026-08-23):** fresh `curl` against all three
+of `/`, `/kontakt`, and `/ki-agenten`:
+- `/` — `og:title="DigitalWerk — KI-Agenten & digitaler Wachstumspartner"`
+  (brand appears once, not twice), `og:description` matches the
+  homepage's own description.
+- `/kontakt` — `og:title="Kontakt | DigitalWerk"`, `og:description`
+  matches Kontakt's own description (previously both were the generic
+  sitewide defaults).
+- `/ki-agenten` — `og:title="KI-Agenten für Unternehmen: Kundenservice &
+  Termine automatisieren | DigitalWerk"`, `og:description` matches that
+  page's own description.
+
+All three now show correct, page-specific, non-duplicated values. M5
+(`lib/metadata.ts` robustness) can be considered addressed by this same
+change — the underlying `openGraph`/`twitter` merge-order fragility M5
+was tracking is exactly what this commit fixed.
+
 Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
 - Body content already mentions the primary "KI-Agenten" keyword cluster
@@ -791,7 +872,8 @@ Verified — all 5 stages complete.
 | `cbf90f7` | fix(seo): improve robots and footer internal links | Phase 2 (H1/H2) | Pushed, deployed, production verified |
 | `9b0bf1f` | feat(seo): wire unused JSON-LD schema helpers into pages | Phase 2 (M1) | Pushed, deployed, production verified |
 | `b86ee47` | fix(seo): add local Ansbach/Bavaria signals to Organization schema | Phase 4 (keyword strategy → local finding) | Pushed, deployed, production verified |
-| `2ca18f9` | feat(seo): add Content-Security-Policy in Report-Only mode | Phase 2 (M3, partial) | Pushed, deployed, production verified |
+| `2ca18f9` | feat(seo): add Content-Security-Policy in Report-Only mode | Phase 2 (M3) | Pushed, deployed, production verified |
+| `c60da5b` | fix(seo): merge openGraph/twitter defensively, fix duplicate brand name in OG title | Phase 2 (M5) / Phase 4 (Step 33 OG finding) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
