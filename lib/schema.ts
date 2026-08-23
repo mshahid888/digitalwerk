@@ -3,6 +3,15 @@ import { siteConfig, siteConfigEn } from "./site-config";
 
 const organizationId = `${siteConfig.url}#organization`;
 const germany = { "@type": "Country", name: "Germany" };
+// DigitalWerk's confirmed local market (Ansbach/Mittelfranken/Bayern),
+// layered alongside the existing Germany-wide areaServed on the
+// Organization entity — DigitalWerk serves clients nationwide, but has a
+// real local presence worth signaling separately from that national claim.
+const localArea = [
+  { "@type": "City", name: "Ansbach" },
+  { "@type": "AdministrativeArea", name: "Mittelfranken" },
+  { "@type": "AdministrativeArea", name: "Bayern" },
+];
 
 export function absoluteUrl(path: string = "/"): string {
   return new URL(path, siteConfig.url).toString();
@@ -28,10 +37,13 @@ export function buildOrganizationJsonLd(
     description:
       locale === "en" ? siteConfigEn.description : siteConfig.description,
     email: siteConfig.contact.email,
-    areaServed: germany,
+    areaServed: [germany, ...localArea],
     address: {
       "@type": "PostalAddress",
       streetAddress: siteConfig.contact.address,
+      addressLocality: "Ansbach",
+      addressRegion: "Bayern",
+      postalCode: "91522",
       addressCountry: "DE",
     },
     sameAs: [
