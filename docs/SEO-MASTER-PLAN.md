@@ -89,8 +89,12 @@ Both pushed to main and deployed.
 
 ### REMAINING PHASE 1 WORK:
 - Full mapping of the broader 801-keyword dataset to future content/pages.
-  **BLOCKED — dataset not accessible (checked 2026-08-23), see finding below.**
+  **BLOCKED — dataset not accessible (checked 2026-08-23), see finding below.
+  Not unblocked — see "Keyword strategy (2026-08-23)" under Phase 4 for the
+  curated substitute built from different sources instead.**
 - Identify remaining high-value keyword clusters that deserve dedicated pages.
+  **Partially addressed (2026-08-23)** — see the Digital Marketing and
+  Leadgenerierung gap findings in the Phase 4 keyword-strategy section.
 - Do NOT create pages merely to target low-volume keywords.
 - Do NOT change completed Phase 1 pages unless an audit identifies a concrete issue.
 
@@ -360,19 +364,31 @@ block, `layout/not-found-content.tsx`, `legal/legal-page.tsx`,
 `(de)/error.tsx`) — confirmed one H1 per page composition pattern, no
 page composes two of them together, no duplicate H1s found.
 
-**Step 42 — Content optimization: BLOCKED (prerequisite not met)**
-Depends on Phase 1's own still-open item: "Full mapping of the broader
-801-keyword dataset to future content/pages" (see Phase 1 "REMAINING PHASE
-1 WORK", never completed). Per the roadmap's dependency rule, this step
-cannot be responsibly executed — doing keyword-driven content optimization
-without that mapping would mean inventing which keywords apply where,
-which `.claude/SEO-AGENT.md` explicitly prohibits. Needs the Phase 1 gap
-closed first (a human/strategy task, not a technical one).
+**Step 42 — Content optimization: NOT STARTED (prerequisite substitute now available, awaiting approval)**
+Previously blocked on Phase 1's still-open item: "Full mapping of the
+broader 801-keyword dataset to future content/pages" (see Phase 1
+"REMAINING PHASE 1 WORK"). That original dataset remains inaccessible and
+this does **not** claim to have found or reconstructed it. Instead, a
+curated keyword strategy built from the 99 recovered historical terms and
+the 64 real Semrush-sourced rows (see "Keyword strategy (2026-08-23)"
+below) now gives a non-invented basis for keyword-to-page decisions on 7
+of the site's clusters. Content optimization itself has **not** begun —
+this strategy is a proposal awaiting your review (see
+`docs/keyword-research/KEYWORD-STRATEGY.md`, "Next step").
 
-**Step 43 — Internal links: PARTIALLY COMPLETE (existing implementation)**
-Phase 2 already implemented KI-Agenten pillar↔supporting-page links and
-footer service links (see Phase 1 "Internal linking" and Phase 2 H2). A
-full site-wide broken-link/orphan-page crawl has not been performed.
+**Step 43 — Internal links: ✅ COMPLETE + VERIFIED (2026-08-23)**
+Full site-wide broken-link/orphan-page crawl performed via direct
+source-code cross-reference (not a live browser crawl): every `href`
+in `lib/navigation.ts` (`primaryNav`, `primaryNavEn`, all four footer
+link groups, DE + EN) was diffed against the complete 42-route list
+derived directly from `app/**/page.tsx` on disk. Result: **exact 1:1
+match — every route is nav-linked, no orphans, no broken nav links.**
+Separately grepped every inline `href="/..."` JSX literal outside
+`navigation.ts` (28 contextual in-body links across pages/components,
+e.g. `/branchen`→`/ki-agenten`, `/e-commerce`→`/ki-agenten/e-commerce`,
+`/ki-agenten`↔its two supporting pages, homepage/solutions CTAs): **every
+one resolves to a real route.** No broken or orphaned internal links found
+anywhere in the codebase.
 
 **Step 44 — Images/alt text: N/A — confirmed by source audit**
 Grepped the entire codebase for `<img`, `next/image`, and `Image` imports:
@@ -462,9 +478,141 @@ Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
 Web-design page SEO): PARTIALLY COMPLETE** — the underlying elements
 (titles, meta descriptions, H1 structure, schema, internal links) are
 verified sound across all of these page groups via Steps 39–45 above.
-Page-specific content/keyword-targeting quality per vertical has the same
-dependency as Step 42 (Phase 1's keyword-mapping gap) and hasn't been
-individually re-audited beyond that.
+Page-specific content/keyword-targeting quality per vertical now has a
+non-invented basis to work from (see "Keyword strategy (2026-08-23)"
+immediately below) but hasn't been implemented yet — still awaiting review.
+
+### Keyword strategy (2026-08-23)
+
+**Status: proposal, not implemented.** Following the two prior research
+steps (99-term recovery reference; 64-row real Semrush-sourced dataset —
+both in `docs/keyword-research/`), a curated commercial keyword universe was
+built and clustered into page-target recommendations. Full detail:
+`docs/keyword-research/KEYWORD-STRATEGY.md` and
+`docs/keyword-research/digitalwerk-keyword-strategy.csv` / `.xlsx`.
+
+**Explicitly not a reconciliation with the original 801-keyword dataset** —
+that dataset remains inaccessible (see Phase 1 finding above) and no attempt
+was made to recreate or force-match it here.
+
+**Methodology summary:**
+- 135 curated rows: 64 `REAL_SEMRUSH_DATA` (exact, unmeasured values never
+  invented), 67 `RECOVERED_DISCUSSION_TERM` (recalled from prior discussion,
+  no metrics attached), 4 `NEW_GENERATED` (new local-intent "... Ansbach"
+  candidates, explicitly flagged, no metrics attached — a documented gap-fill
+  pattern, not invented data).
+- Grouped into the 7 tiers requested, in priority order: KI-Agenten →
+  Digital Marketing → SEO → Web design/development → Automation → Lead
+  generation → E-Commerce. Chatbots and KI-Beratung folded in as KI-Agenten
+  sub-clusters (same buyer, same target pages). Social & Content added as an
+  8th, explicitly out-of-scope supporting tier for completeness only.
+- Every row maps to either a real, currently-live route (checked directly
+  against `app/(de)/**/page.tsx` on disk, not the possibly-stale
+  architecture memory doc) or the literal flag `GAP — no dedicated page`.
+
+**Key findings:**
+- 6 of 8 clusters map cleanly onto existing pages — no new pages needed
+  (KI-Agenten, SEO, Webdesign/Webentwicklung, E-Commerce, Social & Content,
+  plus Automation via an intentional overlap onto the KI-Agenten pages,
+  since DigitalWerk delivers automation through KI-Agenten rather than as a
+  separate product).
+- **2 real content gaps found, flagged for a decision, not built:** Digital
+  Marketing (real 2,900/mo national head term, no dedicated page — closest
+  fit is `/loesungen/digitalwerk-komplett`) and Leadgenerierung (modest
+  volume but the highest CPCs in the entire dataset, up to $15.55 — no
+  dedicated page at all).
+- "seo agentur" (22,200/mo) and "webdesign agentur" (9,900/mo) are the two
+  highest-volume real keywords in the whole universe — larger than any
+  KI-Agenten term — though this doesn't argue against the deliberate
+  KI-Agenten-first business positioning.
+- Local (Ansbach) coverage is thin across the board: only SEO has one
+  *measured* local data point (30/mo); every other cluster's local coverage
+  is either unmeasured (recovered) or was a genuine gap until the 4 new
+  candidates added here.
+
+**Next step:** awaiting review of `KEYWORD-STRATEGY.md`'s proposed clusters,
+page targets, and the two flagged gaps. No page content, metadata, or new
+pages have been created as part of this step.
+
+### Gap-page strategy: Digital Marketing & Leadgenerierung (2026-08-23)
+
+**Approved (user, 2026-08-23):** proceed with the keyword-strategy
+findings; keep KI-Agenten as primary positioning; keep the validated
+existing page mappings unchanged; develop the two identified gaps to
+implementation-ready detail; do not implement either page yet.
+
+**Status: proposal only — not implemented.** Full detail:
+`docs/keyword-research/GAP-PAGE-STRATEGY.md`.
+
+**Digital Marketing** — proposed URL `/loesungen/digital-marketing`
+(+ `/en/solutions/digital-marketing`). Primary keywords (real):
+"digital marketing agentur" (2,900/mo, KD 67, CPC $6.96), "agentur für
+digital marketing" (320/mo, KD 54, CPC $5.63). Local/regional targets
+("Marketing Agentur Ansbach," "Online Marketing Ansbach," "Digital
+Marketing Bayern") are recovered, not measured. Full page-section plan
+mapped to the locked service-page template.
+
+**Leadgenerierung** — proposed URL `/loesungen/leadgenerierung`
+(+ `/en/solutions/lead-generation`). Primary keywords (real):
+"leadgenerierung" (1,900/mo, KD 42, CPC $5.81), "leadgenerierung agentur"
+(880/mo, **KD 12** — the lowest KD of any "...Agentur" commercial term
+found in this project), "b2b leadgenerierung" (880/mo, **CPC $15.55** —
+the highest CPC found in this project). "KI Leadgenerierung" (recovered,
+unmeasured) anchors the page's core differentiator section, directly
+reinforcing the KI-Agenten primary positioning rather than competing with
+it. Local coverage: only a `NEW_GENERATED`, unmeasured candidate
+("leadgenerierung ansbach") exists — this tier had zero local term of any
+kind before this pass.
+
+**Open decision (not resolved):** both proposed pages would be a 6th/7th
+item in the "Lösungen" dropdown, which currently has exactly 5 locked
+items. Needs your call on nav placement (dropdown item vs. linked-but-
+unlisted, the same pattern already used for the two `/ki-agenten/*`
+supporting pages) before implementation.
+
+**Local/Ansbach opportunity analysis (expanded):** the only *measured*
+local search number anywhere in the project is "seo agentur ansbach"
+(30/mo) — real evidence against building multiple thin per-keyword local
+landing pages, and evidence for concentrating local signal on schema +
+Google Business Profile + in-page local copy instead. **New technical
+finding surfaced during this research** (not previously recorded): the
+site's `Organization` schema (`lib/schema.ts` `buildOrganizationJsonLd()`)
+emits the real, confirmed Ansbach street address but has **no
+`addressLocality`, `addressRegion`, `postalCode`, or `GeoCoordinates`**,
+and `areaServed` is hardcoded Germany-wide with no city/region layer.
+`siteConfig.social` also has no Google Business Profile URL. Proposed
+fix recorded in `GAP-PAGE-STRATEGY.md` §3.3.
+
+**✅ IMPLEMENTED + VERIFIED (2026-08-23).** This finding was small,
+schema-only, no page creation, no nav change — normal-authorized under
+`.claude/SEO-AGENT.md` — so it was executed immediately as the next
+autonomous step rather than left as a proposal only.
+
+**Commit:** `b86ee47` — fix(seo): add local Ansbach/Bavaria signals to
+Organization schema.
+
+**Implemented:** `lib/schema.ts` `buildOrganizationJsonLd()` — added
+`addressLocality: "Ansbach"`, `addressRegion: "Bayern"`,
+`postalCode: "91522"` to `PostalAddress`; layered `City` (Ansbach) +
+`AdministrativeArea` (Mittelfranken, Bayern) onto `areaServed` alongside
+the pre-existing `Country` (Germany) entry — additive, the national claim
+is unchanged. `GeoCoordinates` and a Google Business Profile `sameAs`
+entry were considered and intentionally **not** added: no verified
+coordinate source or GBP URL was available this session, and inventing
+either would violate the no-invented-data rule. Flagged as open follow-up
+items, not done.
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `npm run build` — 50/50 routes) → Committed → Pushed
+→ Deployed (`dpl_6Z54nES5XNQ95i3NELYaYJNwDxvi`, READY) → Production
+Verified — all 5 stages complete.
+
+**Production verification (2026-08-23):** fetched
+`https://www.digitalwerkk.de/` directly — `areaServed` now contains
+`Country/Germany`, `City/Ansbach`, `AdministrativeArea/Mittelfranken`,
+`AdministrativeArea/Bayern`; `PostalAddress` contains
+`addressLocality":"Ansbach"`, `addressRegion":"Bayern"`,
+`postalCode":"91522"`, confirmed present in the live page's JSON-LD.
 
 ---
 
@@ -477,6 +625,7 @@ individually re-audited beyond that.
 | `ffdca8a` | feat(seo): add schema and breadcrumb architecture | Phase 2 | Pushed, deployed, production verified |
 | `cbf90f7` | fix(seo): improve robots and footer internal links | Phase 2 (H1/H2) | Pushed, deployed, production verified |
 | `9b0bf1f` | feat(seo): wire unused JSON-LD schema helpers into pages | Phase 2 (M1) | Pushed, deployed, production verified |
+| `b86ee47` | fix(seo): add local Ansbach/Bavaria signals to Organization schema | Phase 4 (keyword strategy → local finding) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 

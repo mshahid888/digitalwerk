@@ -1,0 +1,136 @@
+﻿priority_rank,cluster,keyword,source_status,search_volume,keyword_difficulty,intent,CPC_USD,SERP_features,target_page,notes
+1,KI-Agenten,ki agenten,REAL_SEMRUSH_DATA,3600,48,I,2.9,9,/ki-agenten,
+1,KI-Agenten,ki agent,REAL_SEMRUSH_DATA,1900,46,I,2.35,7,/ki-agenten,
+1,KI-Agenten,ki agenter,REAL_SEMRUSH_DATA,1900,,I,2.07,9,/ki-agenten,spelling variant; KD not shown by tool
+1,KI-Agenten,ki agents,REAL_SEMRUSH_DATA,1600,45,I,2.35,8,/ki-agenten,
+1,KI-Agenten,ki agenten erstellen,REAL_SEMRUSH_DATA,1300,30,I,2.72,9,/ki-agenten/erstellen,
+1,KI-Agenten,KI Agentur,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,KI-Agenten Agentur,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,AI Agentur,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,KI-Agenten Unternehmen,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,KI Agent Software,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,KI Agent Entwicklung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+1,KI-Agenten,KI-Agenten entwickeln,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+1,KI-Agenten,KI Agent erstellen,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+1,KI-Agenten,KI für Unternehmen,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,KI für KMU,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Agenten,ki agenten ansbach,NEW_GENERATED,,,,,,/ki-agenten,Local-intent gap: every other tier has a recovered/real Ansbach term except this one; not measured
+1,Chatbots,ki chatbot,REAL_SEMRUSH_DATA,3600,70,I,1.42,9,/ki-agenten,
+1,Chatbots,chatbot ki,REAL_SEMRUSH_DATA,720,66,I,1.48,7,/ki-agenten,
+1,Chatbots,ki chatbots,REAL_SEMRUSH_DATA,720,64,I,1.18,10,/ki-agenten,
+1,Chatbots,ki-chatbot,REAL_SEMRUSH_DATA,720,79,I,1.18,6,/ki-agenten,"hyphenated variant, distinct SERP"
+1,Chatbots,ki chatbot kostenlos,REAL_SEMRUSH_DATA,480,36,I/C,0.6,6,/ki-agenten,'free' modifier — lower commercial value
+1,Chatbots,Chatbot Agentur,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,Chatbots,Chatbot erstellen,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+1,Chatbots,Chatbot für Unternehmen,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,Chatbots,Kundenservice Chatbot,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,Chatbots,WhatsApp Chatbot,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Beratung,ki beratung,REAL_SEMRUSH_DATA,2900,45,I,8.34,7,/ki-agenten,
+1,KI-Beratung,ki berater,REAL_SEMRUSH_DATA,720,30,I,8.34,8,/ki-agenten,
+1,KI-Beratung,ki-beratung,REAL_SEMRUSH_DATA,720,56,C,7.14,4,/ki-agenten,"hyphenated variant, distinct SERP from 'ki beratung'"
+1,KI-Beratung,beratung ki,REAL_SEMRUSH_DATA,320,51,C,2.32,5,/ki-agenten,
+1,KI-Beratung,ki beratung für unternehmen,REAL_SEMRUSH_DATA,320,50,I/C,9.69,7,/ki-agenten,
+1,KI-Beratung,KI Consulting,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+1,KI-Beratung,KI Strategie,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten,
+2,Digital Marketing,digital marketing agentur,REAL_SEMRUSH_DATA,2900,67,C,6.96,5,GAP — no dedicated page; see strategy doc,
+2,Digital Marketing,agentur digital marketing,REAL_SEMRUSH_DATA,320,63,I,0.0,7,GAP — no dedicated page; see strategy doc,
+2,Digital Marketing,agentur für digital marketing,REAL_SEMRUSH_DATA,320,54,C,5.63,5,GAP — no dedicated page; see strategy doc,
+2,Digital Marketing,digital marketing agentur münchen,REAL_SEMRUSH_DATA,320,43,C,4.02,4,GAP — no dedicated page; see strategy doc,"competitive intelligence only — München, not DigitalWerk's market"
+2,Digital Marketing,Online Marketing Agentur,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,
+2,Digital Marketing,digitales Marketing,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,
+2,Digital Marketing,Digital Marketing Bayern,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,regional — Ansbach is in Bavaria
+2,Digital Marketing,Marketing Agentur Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,local/Ansbach-specific
+2,Digital Marketing,Online Marketing Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,local/Ansbach-specific
+3,SEO,seo agentur,REAL_SEMRUSH_DATA,22200,51,C,12.43,4,/loesungen/seo,
+3,SEO,seo agentur berlin,REAL_SEMRUSH_DATA,4400,19,C,6.38,4,/loesungen/seo,competitive intelligence only — Berlin
+3,SEO,seo agentur münchen,REAL_SEMRUSH_DATA,4400,40,C,15.42,3,/loesungen/seo,competitive intelligence only — München
+3,SEO,seo agentur köln,REAL_SEMRUSH_DATA,3600,23,C,7.31,3,/loesungen/seo,competitive intelligence only — Köln
+3,SEO,seo agentur hamburg,REAL_SEMRUSH_DATA,2900,29,I/T,10.09,5,/loesungen/seo,competitive intelligence only — Hamburg
+3,SEO,seo agentur ansbach,REAL_SEMRUSH_DATA,30,,,8.07,,/loesungen/seo,primary local target — DigitalWerk's actual market
+3,SEO,SEO Beratung,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,
+3,SEO,SEO Unternehmen,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,
+3,SEO,SEO Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,local/Ansbach-specific
+3,SEO,Suchmaschinenoptimierung Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,local/Ansbach-specific
+3,SEO,SEO Nürnberg,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,regional — ~45km from Ansbach
+3,SEO,SEO Fürth,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,regional
+3,SEO,SEO Rothenburg,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,"regional — Rothenburg o.d. Tauber, near Ansbach"
+3,SEO,SEO Mittelfranken,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,regional — Ansbach's own administrative district
+3,SEO,Google Maps SEO,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,
+3,SEO,Google Unternehmensprofil optimieren,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/google-unternehmensprofil,exact match to existing dedicated page
+3,Local SEO / lokale Suche,lokale seo agentur,REAL_SEMRUSH_DATA,320,27,I,0.0,7,/loesungen/seo,
+3,Local SEO / lokale Suche,agentur für lokales seo,REAL_SEMRUSH_DATA,70,,,0.0,,/loesungen/seo,
+3,Local SEO / lokale Suche,lokal seo agentur,REAL_SEMRUSH_DATA,50,,,7.75,,/loesungen/seo,
+3,Local SEO / lokale Suche,lokale seo agentur köln,REAL_SEMRUSH_DATA,50,,,0.0,,/loesungen/seo,competitive intelligence only — Köln
+3,Local SEO / lokale Suche,seo agentur für lokale suchmaschinenoptimierung,REAL_SEMRUSH_DATA,40,,,0.0,,/loesungen/seo,
+3,Local SEO / lokale Suche,Local SEO,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,
+3,Local SEO / lokale Suche,lokale Suche,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/seo,
+4,Webdesign,webdesign agentur,REAL_SEMRUSH_DATA,9900,51,C,5.33,6,/loesungen/webentwicklung,
+4,Webdesign,agentur webdesign,REAL_SEMRUSH_DATA,2400,50,C,5.33,5,/loesungen/webentwicklung,
+4,Webdesign,agentur für webdesign,REAL_SEMRUSH_DATA,1900,54,I,5.75,10,/loesungen/webentwicklung,
+4,Webdesign,webdesign agentur berlin,REAL_SEMRUSH_DATA,1900,49,C,4.79,3,/loesungen/webentwicklung,competitive intelligence only — Berlin
+4,Webdesign,webdesign agenturen,REAL_SEMRUSH_DATA,1300,50,C,5.33,7,/loesungen/webentwicklung,plural form
+4,Webdesign,Webdesign Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,local/Ansbach-specific — no real data captured for this exact term
+4,Webdesign,Website erstellen lassen,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,
+4,Webdesign,Website Agentur Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,local/Ansbach-specific
+4,Webdesign,professionelle Website,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,
+4,Webdesign,Unternehmenswebsite erstellen,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,
+4,Webentwicklung,webentwicklung agentur,REAL_SEMRUSH_DATA,1900,31,C,8.91,3,/loesungen/webentwicklung,
+4,Webentwicklung,agentur für webentwicklung,REAL_SEMRUSH_DATA,1300,35,C,7.68,5,/loesungen/webentwicklung,
+4,Webentwicklung,agentur webentwicklung,REAL_SEMRUSH_DATA,720,35,C,7.68,3,/loesungen/webentwicklung,
+4,Webentwicklung,webentwickler agentur,REAL_SEMRUSH_DATA,390,34,C,9.11,3,/loesungen/webentwicklung,
+4,Webentwicklung,webentwicklung agentur berlin,REAL_SEMRUSH_DATA,140,39,C,0.0,3,/loesungen/webentwicklung,competitive intelligence only — Berlin
+4,Webentwicklung,Webentwicklung Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,local/Ansbach-specific
+4,Webentwicklung,Website Entwicklung,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,
+4,Webentwicklung,individuelle Webentwicklung,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/webentwicklung,
+5,KI-Automatisierung,ki automatisierung agentur,REAL_SEMRUSH_DATA,260,18,C,8.22,4,/ki-agenten/erstellen,mapped to KI-Agenten pages — DigitalWerk delivers automation via KI-Agenten; see strategy doc
+5,KI-Automatisierung,automatisierung agentur münster,REAL_SEMRUSH_DATA,210,11,I,0.0,3,/ki-agenten/erstellen,competitive intelligence only — Münster
+5,KI-Automatisierung,ki automatisierung agentur münster,REAL_SEMRUSH_DATA,170,0,I,0.0,3,/ki-agenten/erstellen,competitive intelligence only — Münster
+5,KI-Automatisierung,automatisierung agentur,REAL_SEMRUSH_DATA,140,21,I,4.6,6,/ki-agenten/erstellen,
+5,KI-Automatisierung,KI-Automatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,KI Automatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,KI Automation,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,KI Automatisierung Unternehmen,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,Prozesse mit KI automatisieren,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,Geschäftsprozesse automatisieren,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,Workflow Automatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,Unternehmensprozesse automatisieren,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,Geschäftsautomatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,
+5,KI-Automatisierung,Automation,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/erstellen,"original theme, generic term"
+5,KI-Automatisierung,ki automatisierung ansbach,NEW_GENERATED,,,,,,/ki-agenten/erstellen,Local-intent gap: no Ansbach term recovered or measured for this cluster; not measured
+6,Leadgenerierung,leadgenerierung,REAL_SEMRUSH_DATA,1900,42,I,5.81,6,GAP — no dedicated page; see strategy doc,
+6,Leadgenerierung,b2b leadgenerierung,REAL_SEMRUSH_DATA,880,19,I,15.55,6,GAP — no dedicated page; see strategy doc,
+6,Leadgenerierung,leadgenerierung agentur,REAL_SEMRUSH_DATA,880,12,I,7.01,5,GAP — no dedicated page; see strategy doc,
+6,Leadgenerierung,b2b leadgenerierung agentur,REAL_SEMRUSH_DATA,480,17,I,15.09,4,GAP — no dedicated page; see strategy doc,
+6,Leadgenerierung,leadgenerierung b2b,REAL_SEMRUSH_DATA,480,18,I,13.14,6,GAP — no dedicated page; see strategy doc,
+6,Leadgenerierung,Leads generieren,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,
+6,Leadgenerierung,automatisierte Leadgenerierung,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,overlaps KI-Automatisierung
+6,Leadgenerierung,KI Leadgenerierung,RECOVERED_DISCUSSION_TERM,,,,,,GAP — no dedicated page; see strategy doc,overlaps KI-Agenten
+6,Leadgenerierung,leadgenerierung ansbach,NEW_GENERATED,,,,,,GAP — no dedicated page; see strategy doc,Local-intent gap: no Ansbach term recovered or measured for this cluster; not measured
+7,E-Commerce,e-commerce agentur,REAL_SEMRUSH_DATA,1900,25,C,14.52,5,/e-commerce,
+7,E-Commerce,e commerce agentur,REAL_SEMRUSH_DATA,1600,18,C,15.6,5,/e-commerce,spacing variant
+7,E-Commerce,agentur e commerce,REAL_SEMRUSH_DATA,480,16,C,19.94,6,/e-commerce,
+7,E-Commerce,e commerce agenturen,REAL_SEMRUSH_DATA,390,26,C,15.6,5,/e-commerce,"plural, spacing variant"
+7,E-Commerce,e-commerce agenturen,REAL_SEMRUSH_DATA,390,27,C,13.39,7,/e-commerce,"plural, hyphenated variant"
+7,E-Commerce,agentur für e commerce,REAL_SEMRUSH_DATA,260,25,T,0.0,6,/e-commerce,
+7,E-Commerce,E-Commerce,RECOVERED_DISCUSSION_TERM,,,,,,/e-commerce,original theme
+7,E-Commerce,E-Commerce Automatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/e-commerce,overlaps KI-Automatisierung
+7,E-Commerce,KI E-Commerce,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/e-commerce,overlaps KI-Agenten
+7,E-Commerce,Online Shop Agentur,RECOVERED_DISCUSSION_TERM,,,,,,/e-commerce,
+7,E-Commerce,Shop Automatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/ki-agenten/e-commerce,
+7,E-Commerce,e-commerce agentur ansbach,NEW_GENERATED,,,,,,/e-commerce,Local-intent gap: no Ansbach term recovered or measured for this cluster; not measured
+8,Social & Content,social media agentur,REAL_SEMRUSH_DATA,6600,57,C,5.06,5,/loesungen/content-creation,
+8,Social & Content,social media marketing agentur,REAL_SEMRUSH_DATA,2400,58,C,5.76,7,/loesungen/content-creation,
+8,Social & Content,agentur social media,REAL_SEMRUSH_DATA,1000,55,C,4.83,7,/loesungen/content-creation,
+8,Social & Content,social media agentur hamburg,REAL_SEMRUSH_DATA,1000,21,C,4.89,5,/loesungen/content-creation,competitive intelligence only — Hamburg
+8,Social & Content,ki content erstellung,REAL_SEMRUSH_DATA,320,11,I,2.71,6,/loesungen/content-creation,
+8,Social & Content,content erstellung mit ki,REAL_SEMRUSH_DATA,90,13,I,2.9,5,/loesungen/content-creation,
+8,Social & Content,ki content erstellen,REAL_SEMRUSH_DATA,50,,,2.03,,/loesungen/content-creation,
+8,Social & Content,content erstellen mit ki,REAL_SEMRUSH_DATA,40,,,2.83,,/loesungen/content-creation,
+8,Social & Content,content erstellen ki,REAL_SEMRUSH_DATA,40,,,0.0,,/loesungen/content-creation,
+8,Social & Content,Social Media Marketing Ansbach,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,local/Ansbach-specific
+8,Social & Content,Social Media Automatisierung,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,
+8,Social & Content,KI Social Media,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,
+8,Social & Content,Social Media Content erstellen,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,
+8,Social & Content,KI Texte erstellen,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,
+8,Social & Content,Content Marketing Agentur,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,
+8,Social & Content,KI Content Marketing,RECOVERED_DISCUSSION_TERM,,,,,,/loesungen/content-creation,

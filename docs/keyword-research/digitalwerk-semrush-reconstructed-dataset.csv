@@ -1,0 +1,65 @@
+﻿keyword,cluster,seed_term,intent,search_volume,keyword_difficulty,CPC_USD,SERP_features,notes,source_status
+ki agenten,KI-Agenten,KI-Agenten,I,3600,48,2.9,9,,REAL_SEMRUSH_DATA
+ki agent,KI-Agenten,KI-Agenten,I,1900,46,2.35,7,,REAL_SEMRUSH_DATA
+ki agenter,KI-Agenten,KI-Agenten,I,1900,,2.07,9,spelling variant of 'ki agenter/agentur'; KD not shown by tool,REAL_SEMRUSH_DATA
+ki agents,KI-Agenten,KI-Agenten,I,1600,45,2.35,8,,REAL_SEMRUSH_DATA
+ki agenten erstellen,KI-Agenten,KI-Agenten,I,1300,30,2.72,9,,REAL_SEMRUSH_DATA
+ki beratung,KI-Beratung,KI-Beratung,I,2900,45,8.34,7,,REAL_SEMRUSH_DATA
+ki berater,KI-Beratung,KI-Beratung,I,720,30,8.34,8,,REAL_SEMRUSH_DATA
+ki-beratung,KI-Beratung,KI-Beratung,C,720,56,7.14,4,"hyphenated variant, distinct SERP from 'ki beratung'",REAL_SEMRUSH_DATA
+beratung ki,KI-Beratung,KI-Beratung,C,320,51,2.32,5,,REAL_SEMRUSH_DATA
+ki beratung für unternehmen,KI-Beratung,KI-Beratung,I/C,320,50,9.69,7,,REAL_SEMRUSH_DATA
+ki chatbot,Chatbots,KI Chatbot,I,3600,70,1.42,9,,REAL_SEMRUSH_DATA
+chatbot ki,Chatbots,KI Chatbot,I,720,66,1.48,7,,REAL_SEMRUSH_DATA
+ki chatbots,Chatbots,KI Chatbot,I,720,64,1.18,10,,REAL_SEMRUSH_DATA
+ki-chatbot,Chatbots,KI Chatbot,I,720,79,1.18,6,"hyphenated variant, distinct SERP",REAL_SEMRUSH_DATA
+ki chatbot kostenlos,Chatbots,KI Chatbot,I/C,480,36,0.6,6,'free' modifier — lower commercial value,REAL_SEMRUSH_DATA
+digital marketing agentur,Digital Marketing,Digital Marketing Agentur,C,2900,67,6.96,5,,REAL_SEMRUSH_DATA
+agentur digital marketing,Digital Marketing,Digital Marketing Agentur,I,320,63,0.0,7,,REAL_SEMRUSH_DATA
+agentur für digital marketing,Digital Marketing,Digital Marketing Agentur,C,320,54,5.63,5,,REAL_SEMRUSH_DATA
+digital marketing agentur münchen,Digital Marketing,Digital Marketing Agentur,C,320,43,4.02,4,city-specific: München (not DigitalWerk's Ansbach market),REAL_SEMRUSH_DATA
+seo agentur,SEO,SEO Agentur,C,22200,51,12.43,4,,REAL_SEMRUSH_DATA
+seo agentur berlin,SEO,SEO Agentur,C,4400,19,6.38,4,city-specific: Berlin (not Ansbach),REAL_SEMRUSH_DATA
+seo agentur münchen,SEO,SEO Agentur,C,4400,40,15.42,3,city-specific: München (not Ansbach),REAL_SEMRUSH_DATA
+seo agentur köln,SEO,SEO Agentur,C,3600,23,7.31,3,city-specific: Köln (not Ansbach),REAL_SEMRUSH_DATA
+seo agentur hamburg,SEO,SEO Agentur,I/T,2900,29,10.09,5,city-specific: Hamburg (not Ansbach),REAL_SEMRUSH_DATA
+seo agentur ansbach,SEO / Local SEO,SEO Agentur Ansbach,,30,,8.07,,exact DigitalWerk home-market term; low volume but high relevance,REAL_SEMRUSH_DATA
+webdesign agentur,Webdesign,Webdesign Agentur,C,9900,51,5.33,6,,REAL_SEMRUSH_DATA
+agentur webdesign,Webdesign,Webdesign Agentur,C,2400,50,5.33,5,,REAL_SEMRUSH_DATA
+agentur für webdesign,Webdesign,Webdesign Agentur,I,1900,54,5.75,10,,REAL_SEMRUSH_DATA
+webdesign agentur berlin,Webdesign,Webdesign Agentur,C,1900,49,4.79,3,city-specific: Berlin (not Ansbach),REAL_SEMRUSH_DATA
+webdesign agenturen,Webdesign,Webdesign Agentur,C,1300,50,5.33,7,plural form,REAL_SEMRUSH_DATA
+webentwicklung agentur,Webentwicklung,Webentwicklung Agentur,C,1900,31,8.91,3,,REAL_SEMRUSH_DATA
+agentur für webentwicklung,Webentwicklung,Webentwicklung Agentur,C,1300,35,7.68,5,,REAL_SEMRUSH_DATA
+agentur webentwicklung,Webentwicklung,Webentwicklung Agentur,C,720,35,7.68,3,,REAL_SEMRUSH_DATA
+webentwickler agentur,Webentwicklung,Webentwicklung Agentur,C,390,34,9.11,3,,REAL_SEMRUSH_DATA
+webentwicklung agentur berlin,Webentwicklung,Webentwicklung Agentur,C,140,39,0.0,3,city-specific: Berlin (not Ansbach),REAL_SEMRUSH_DATA
+leadgenerierung,Leadgenerierung,Leadgenerierung,I,1900,42,5.81,6,,REAL_SEMRUSH_DATA
+b2b leadgenerierung,Leadgenerierung,Leadgenerierung,I,880,19,15.55,6,,REAL_SEMRUSH_DATA
+leadgenerierung agentur,Leadgenerierung,Leadgenerierung,I,880,12,7.01,5,,REAL_SEMRUSH_DATA
+b2b leadgenerierung agentur,Leadgenerierung,Leadgenerierung,I,480,17,15.09,4,,REAL_SEMRUSH_DATA
+leadgenerierung b2b,Leadgenerierung,Leadgenerierung,I,480,18,13.14,6,,REAL_SEMRUSH_DATA
+e-commerce agentur,E-Commerce,E-Commerce Agentur,C,1900,25,14.52,5,,REAL_SEMRUSH_DATA
+e commerce agentur,E-Commerce,E-Commerce Agentur,C,1600,18,15.6,5,spacing variant,REAL_SEMRUSH_DATA
+agentur e commerce,E-Commerce,E-Commerce Agentur,C,480,16,19.94,6,,REAL_SEMRUSH_DATA
+e commerce agenturen,E-Commerce,E-Commerce Agentur,C,390,26,15.6,5,"plural, spacing variant",REAL_SEMRUSH_DATA
+e-commerce agenturen,E-Commerce,E-Commerce Agentur,C,390,27,13.39,7,"plural, hyphenated variant",REAL_SEMRUSH_DATA
+agentur für e commerce,E-Commerce,E-Commerce Agentur,T,260,25,0.0,6,,REAL_SEMRUSH_DATA
+social media agentur,Social & Content,Social Media Agentur,C,6600,57,5.06,5,,REAL_SEMRUSH_DATA
+social media marketing agentur,Social & Content,Social Media Agentur,C,2400,58,5.76,7,,REAL_SEMRUSH_DATA
+agentur social media,Social & Content,Social Media Agentur,C,1000,55,4.83,7,,REAL_SEMRUSH_DATA
+social media agentur hamburg,Social & Content,Social Media Agentur,C,1000,21,4.89,5,city-specific: Hamburg (not Ansbach),REAL_SEMRUSH_DATA
+ki content erstellung,Social & Content,KI Content erstellen,I,320,11,2.71,6,,REAL_SEMRUSH_DATA
+content erstellung mit ki,Social & Content,KI Content erstellen,I,90,13,2.9,5,,REAL_SEMRUSH_DATA
+ki content erstellen,Social & Content,KI Content erstellen,,50,,2.03,,KD/SF not shown by tool (low-volume long tail),REAL_SEMRUSH_DATA
+content erstellen mit ki,Social & Content,KI Content erstellen,,40,,2.83,,KD/SF not shown by tool (low-volume long tail),REAL_SEMRUSH_DATA
+content erstellen ki,Social & Content,KI Content erstellen,,40,,0.0,,KD/SF not shown by tool (low-volume long tail),REAL_SEMRUSH_DATA
+ki automatisierung agentur,KI-Automatisierung,Automatisierung Agentur,C,260,18,8.22,4,,REAL_SEMRUSH_DATA
+automatisierung agentur münster,KI-Automatisierung,Automatisierung Agentur,I,210,11,0.0,3,city-specific: Münster (not Ansbach),REAL_SEMRUSH_DATA
+ki automatisierung agentur münster,KI-Automatisierung,Automatisierung Agentur,I,170,0,0.0,3,city-specific: Münster (not Ansbach),REAL_SEMRUSH_DATA
+automatisierung agentur,KI-Automatisierung,Automatisierung Agentur,I,140,21,4.6,6,,REAL_SEMRUSH_DATA
+lokale seo agentur,Local SEO / lokale Suche,lokale SEO Agentur,I,320,27,0.0,7,,REAL_SEMRUSH_DATA
+agentur für lokales seo,Local SEO / lokale Suche,lokale SEO Agentur,,70,,0.0,,KD/SF not shown by tool,REAL_SEMRUSH_DATA
+lokal seo agentur,Local SEO / lokale Suche,lokale SEO Agentur,,50,,7.75,,KD/SF not shown by tool,REAL_SEMRUSH_DATA
+lokale seo agentur köln,Local SEO / lokale Suche,lokale SEO Agentur,,50,,0.0,,city-specific: Köln (not Ansbach); KD/SF not shown,REAL_SEMRUSH_DATA
+seo agentur für lokale suchmaschinenoptimierung,Local SEO / lokale Suche,lokale SEO Agentur,,40,,0.0,,KD/SF not shown by tool,REAL_SEMRUSH_DATA
