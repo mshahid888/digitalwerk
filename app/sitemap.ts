@@ -78,6 +78,16 @@ const routes: SitemapRoute[] = [
     languages: { de: "/ki-agenten", en: "/en/ai-agents" },
   },
   {
+    path: "/ki-agenten/erstellen",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/ki-agenten/e-commerce",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
     path: "/werbeanzeigen",
     priority: 0.8,
     changeFrequency: "monthly",
@@ -273,6 +283,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             languages: {
               "de-DE": `${siteConfig.url}${route.languages.de}`,
               en: `${siteConfig.url}${route.languages.en}`,
+              "x-default": `${siteConfig.url}${route.languages.de}`,
             },
           },
         }

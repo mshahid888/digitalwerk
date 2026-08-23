@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { buildMetadata } from "@/lib/metadata";
 import { CTA } from "@/components/ui/cta";
+import { Card } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
+import { Heading } from "@/components/ui/heading";
+import { Section } from "@/components/ui/section";
 import { ServiceHero } from "@/components/service-page/hero";
 import { ServiceProblem } from "@/components/service-page/problem";
 import { ServiceSolution } from "@/components/service-page/solution";
@@ -295,6 +301,50 @@ export default function Page() {
       <ServiceProcess process={content.process} />
       <ServiceWhyDigitalWerk whyDigitalWerk={content.whyDigitalWerk} />
       <ServiceFAQ faq={content.faq} />
+      <Section tone="muted">
+        <Container className="flex flex-col items-center gap-10">
+          <div className="max-w-2xl text-center">
+            <Heading level={2}>Mehr zum Thema KI-Agenten</Heading>
+            <p className="mt-4 text-lg text-slate-600">
+              Vertiefende Informationen zu zwei häufigen Anwendungsfällen.
+            </p>
+          </div>
+
+          <div className="grid w-full gap-6 sm:grid-cols-2">
+            <Link href="/ki-agenten/erstellen" className="group">
+              <Card hoverable className="flex h-full flex-col">
+                <Heading level={3} size={4} className="group-hover:text-primary-600">
+                  KI-Agenten erstellen lassen
+                </Heading>
+                <p className="mt-3 flex-1 text-sm text-slate-600">
+                  Ablauf, Kosten und Beispiele: So entsteht ein KI-Agent für
+                  Ihr Unternehmen – selbst gebaut oder professionell
+                  umgesetzt.
+                </p>
+                <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary-600">
+                  Mehr erfahren
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </span>
+              </Card>
+            </Link>
+            <Link href="/ki-agenten/e-commerce" className="group">
+              <Card hoverable className="flex h-full flex-col">
+                <Heading level={3} size={4} className="group-hover:text-primary-600">
+                  KI-Agenten für Ihren Online-Shop
+                </Heading>
+                <p className="mt-3 flex-1 text-sm text-slate-600">
+                  Produktfragen, Bestellstatus und Support automatisch
+                  beantworten – für Shopify- und WooCommerce-Shops.
+                </p>
+                <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary-600">
+                  Mehr erfahren
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </span>
+              </Card>
+            </Link>
+          </div>
+        </Container>
+      </Section>
       <div className="py-16 md:py-24">
         <CTA
           eyebrow={content.cta.eyebrow}

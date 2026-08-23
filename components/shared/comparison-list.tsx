@@ -20,12 +20,14 @@ export function ComparisonList({
   intro,
   highlightLabel,
   items,
+  linkLabel = "Mehr erfahren",
   tone = "muted",
 }: {
   title: string;
   intro?: string;
   highlightLabel: string;
   items: ComparisonItem[];
+  linkLabel?: string;
   tone?: "default" | "muted";
 }) {
   return (
@@ -62,7 +64,7 @@ export function ComparisonList({
                   href={item.href}
                   className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700"
                 >
-                  Mehr erfahren
+                  {linkLabel}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>

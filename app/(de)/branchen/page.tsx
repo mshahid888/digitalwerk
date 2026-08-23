@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
@@ -99,6 +100,22 @@ export default function Page() {
         intro="Eine Auswahl der Branchen, für die unsere Lösungen besonders geeignet sind."
         capabilities={industries}
       />
+
+      <div className="py-8 text-center">
+        <Container>
+          <p className="text-slate-600">
+            Viele dieser Branchen profitieren besonders von{" "}
+            <Link
+              href="/ki-agenten"
+              className="font-semibold text-primary-600 hover:text-primary-700"
+            >
+              KI-Agenten für Unternehmen
+            </Link>
+            : automatisierte Terminbuchung und Kundenservice, rund um die
+            Uhr.
+          </p>
+        </Container>
+      </div>
 
       <div className="py-16 md:py-24">
         <CTA

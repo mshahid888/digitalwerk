@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { CTA } from "@/components/ui/cta";
+import { Container } from "@/components/ui/container";
 import { ServiceHero } from "@/components/service-page/hero";
 import { ServiceProblem } from "@/components/service-page/problem";
 import { ServiceSolution } from "@/components/service-page/solution";
@@ -217,6 +219,19 @@ export default function Page() {
         intro="Wir arbeiten mit den Systemen, die zu Ihrem Unternehmen passen – einzeln oder kombiniert."
         capabilities={platforms}
       />
+      <div className="py-8 text-center">
+        <Container>
+          <p className="text-slate-600">
+            Speziell für Online-Shops:{" "}
+            <Link
+              href="/ki-agenten/e-commerce"
+              className="font-semibold text-primary-600 hover:text-primary-700"
+            >
+              KI-Agenten für Ihren Online-Shop
+            </Link>
+          </p>
+        </Container>
+      </div>
       <ServiceProcess process={content.process} />
       <ServiceWhyDigitalWerk whyDigitalWerk={content.whyDigitalWerk} />
       <ServiceFAQ faq={content.faq} />
