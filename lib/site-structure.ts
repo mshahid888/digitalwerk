@@ -45,6 +45,16 @@ const breadcrumbsByPath: Record<string, BreadcrumbItem[]> = {
     { href: "/loesungen", label: "Lösungen" },
     { href: "/loesungen/content-creation", label: "Content Creation" },
   ],
+  "/loesungen/digital-marketing": [
+    deHome,
+    { href: "/loesungen", label: "Lösungen" },
+    { href: "/loesungen/digital-marketing", label: "Digital Marketing" },
+  ],
+  "/loesungen/leadgenerierung": [
+    deHome,
+    { href: "/loesungen", label: "Lösungen" },
+    { href: "/loesungen/leadgenerierung", label: "Leadgenerierung" },
+  ],
   "/ki-agenten": [deHome, { href: "/ki-agenten", label: "KI-Agenten" }],
   "/ki-agenten/erstellen": [
     deHome,
@@ -111,6 +121,16 @@ const breadcrumbsByPath: Record<string, BreadcrumbItem[]> = {
     enHome,
     { href: "/en/solutions", label: "Solutions" },
     { href: "/en/solutions/content-creation", label: "Content Creation" },
+  ],
+  "/en/solutions/digital-marketing": [
+    enHome,
+    { href: "/en/solutions", label: "Solutions" },
+    { href: "/en/solutions/digital-marketing", label: "Digital Marketing" },
+  ],
+  "/en/solutions/lead-generation": [
+    enHome,
+    { href: "/en/solutions", label: "Solutions" },
+    { href: "/en/solutions/lead-generation", label: "Lead Generation" },
   ],
   "/en/ai-agents": [enHome, { href: "/en/ai-agents", label: "AI Agents" }],
   "/en/advertising": [

@@ -10,6 +10,7 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { CTA } from "@/components/ui/cta";
+import { RelatedServices } from "@/components/solutions/related-services";
 
 export const metadata: Metadata = buildMetadata(
   {
@@ -53,6 +54,22 @@ const services: ComparisonItem[] = [
     highlight: "Your website is technically solid, but the copy doesn't convince — or is missing.",
     href: "/en/solutions/content-creation",
     price: "€349 / month",
+  },
+  {
+    title: "Digital Marketing",
+    description:
+      "SEO, advertising, and content as one coordinated strategy — supported by AI agents.",
+    highlight:
+      "Your digital efforts run side by side instead of together, leading to wasted spend.",
+    href: "/en/solutions/digital-marketing",
+  },
+  {
+    title: "Lead Generation",
+    description:
+      "AI agents handle first contact and qualification for a predictable flow of inquiries.",
+    highlight:
+      "Inquiries arrive inconsistently or take too much manual effort to qualify.",
+    href: "/en/solutions/lead-generation",
   },
 ];
 
@@ -114,7 +131,10 @@ export default function Page() {
         intro="Don't need the complete package? Every service is also available on its own."
         highlightLabel="A good fit if"
         items={services}
+        linkLabel="Learn more"
       />
+
+      <RelatedServices locale="en" />
 
       <div className="py-16 md:py-24">
         <CTA
@@ -124,6 +144,7 @@ export default function Page() {
           primaryHref="/en/contact"
           secondaryHref="/en/contact"
           secondaryLabel="Request a Project"
+          locale="en"
         />
       </div>
     </>

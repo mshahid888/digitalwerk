@@ -72,6 +72,24 @@ const routes: SitemapRoute[] = [
     },
   },
   {
+    path: "/loesungen/digital-marketing",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    languages: {
+      de: "/loesungen/digital-marketing",
+      en: "/en/solutions/digital-marketing",
+    },
+  },
+  {
+    path: "/loesungen/leadgenerierung",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    languages: {
+      de: "/loesungen/leadgenerierung",
+      en: "/en/solutions/lead-generation",
+    },
+  },
+  {
     path: "/ki-agenten",
     priority: 0.8,
     changeFrequency: "monthly",

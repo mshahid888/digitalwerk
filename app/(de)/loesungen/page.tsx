@@ -43,6 +43,22 @@ const services: ComparisonItem[] = [
     href: "/loesungen/content-creation",
     price: "349 € / Monat",
   },
+  {
+    title: "Digital Marketing",
+    description:
+      "SEO, Werbeanzeigen und Content als abgestimmte Strategie – ergänzt durch KI-Agenten.",
+    highlight:
+      "Ihre digitalen Maßnahmen nebeneinander statt zusammen laufen und Streuverluste entstehen.",
+    href: "/loesungen/digital-marketing",
+  },
+  {
+    title: "Leadgenerierung",
+    description:
+      "KI-Agenten übernehmen Erstansprache und Qualifizierung für planbar mehr Anfragen.",
+    highlight:
+      "Anfragen unregelmäßig kommen oder viel manuelle Qualifizierung kosten.",
+    href: "/loesungen/leadgenerierung",
+  },
 ];
 
 export const metadata: Metadata = buildMetadata(
