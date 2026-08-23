@@ -228,6 +228,39 @@ create pages yet."
 
 ---
 
+## 3.5 Page-creation gate evaluation (2026-08-23)
+
+Per the master plan's own standing rule ("Do NOT create unnecessary
+pages. Only create new pages when supported by keyword opportunity,
+search intent, topical architecture, and business value") and this
+instruction's explicit reminder not to build a page merely because
+keywords exist, both candidates are evaluated against all four criteria
+— not just volume.
+
+| Criterion | Digital Marketing | Leadgenerierung |
+|---|---|---|
+| **Keyword opportunity** | Real, largest single term in either candidate: 2,900/mo national head term | Real but smaller: 1,900/mo head term, modest volumes elsewhere |
+| **Search intent** | Mixed — top term is `C` (commercial), but KD 67 signals a highly contested, generic SERP | Strong — `I`/`C` mix, and the lowest KD of any "...Agentur" commercial term found in this entire project (`leadgenerierung agentur`, KD 12) |
+| **Topical architecture fit** | Weak-to-moderate — "digital marketing agentur" is a broad, generic category term; DigitalWerk's declared strategy is KI-Agenten-first, and this page would sit somewhat adjacent to, rather than reinforcing, that positioning. Real overlap risk with the existing `/loesungen/digitalwerk-komplett` flagship page, which already bundles digital-marketing-adjacent services | Strong — "KI Leadgenerierung" (recovered) makes this a direct KI-Agenten use case, not a competing category. No existing page covers this angle at all, so no cannibalization risk |
+| **Business value signal** | Real but average — CPC $6.96, mid-pack across the whole dataset | **Strongest in the dataset** — CPC up to $15.55, the highest of any keyword found across all 8 tiers, a real high-buyer-value signal despite modest volume |
+
+**Reading, not a decision**: Leadgenerierung clears all four criteria
+more clearly than Digital Marketing does. Digital Marketing's case rests
+almost entirely on raw volume (criterion 1) while showing real weakness
+on topical fit and only average business value — exactly the pattern the
+"don't build for keywords alone" rule exists to catch. Leadgenerierung's
+case is closer to what the rule is looking for: real (if smaller) volume,
+strong intent signal, a genuine KI-Agenten-reinforcing angle, no
+cannibalization, and the single strongest commercial-value number found
+in this entire research effort.
+
+**This is an evaluation, not a go/no-go decision** — page creation still
+requires your explicit approval regardless of how a candidate scores
+here, per standing instruction. If asked to prioritize one over the
+other, or to build only one, Leadgenerierung is the better-evidenced
+candidate on the criteria above; Digital Marketing is not disqualified,
+just weaker on fit and value despite being larger on volume.
+
 ## 4. What happens next
 
 Per your instruction, these two page strategies and the local analysis are

@@ -856,6 +856,24 @@ items. Needs your call on nav placement (dropdown item vs. linked-but-
 unlisted, the same pattern already used for the two `/ki-agenten/*`
 supporting pages) before implementation.
 
+**Page-creation gate evaluation (2026-08-23, not a decision — still not
+implemented).** Per the standing rule ("Do NOT create unnecessary pages
+... only when supported by keyword opportunity, search intent, topical
+architecture, and business value") and explicit instruction not to build
+a page merely because keywords exist, both candidates were scored against
+all four criteria, not just volume — full table in
+`GAP-PAGE-STRATEGY.md` §3.5. **Reading**: Leadgenerierung clears the bar
+more clearly — real intent, the lowest-KD "...Agentur" commercial term
+found anywhere in this project, a genuine KI-Agenten-reinforcing angle
+("KI Leadgenerierung"), no cannibalization of an existing page, and the
+single highest CPC in the whole dataset ($15.55). Digital Marketing has
+the larger raw volume (2,900/mo) but weaker topical fit (a broad generic
+category term, real overlap risk with the existing
+`/loesungen/digitalwerk-komplett` flagship) and only average business
+value — the exact pattern the "don't build for keywords alone" rule
+exists to catch. Neither is disqualified; this is a recommendation for
+your review, not a go/no-go call made here.
+
 **Local/Ansbach opportunity analysis (expanded):** the only *measured*
 local search number anywhere in the project is "seo agentur ansbach"
 (30/mo) — real evidence against building multiple thin per-keyword local
