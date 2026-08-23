@@ -367,7 +367,50 @@ What CTA copy/offers/placement to use is a business decision, not a
 technical or data-derivable one — `.claude/SEO-AGENT.md` prohibits inventing
 strategy. Not started; needs direction before any CTA content changes.
 
-**Step 33 — Homepage SEO: PARTIALLY COMPLETE — real finding, needs a decision**
+**Step 33 — Homepage SEO: ✅ COMPLETE + VERIFIED**
+
+**Decision (user, 2026-08-23):** update the homepage title and meta
+description to include "KI-Agenten".
+
+**Commits:** `fcc965f` (initial change) + `0fb2161` (fix-up, see below).
+
+**Implemented:** `app/(de)/page.tsx` title override changed to
+`"DigitalWerk — KI-Agenten & digitaler Wachstumspartner"`; description
+changed to swap "KI-Automatisierung" for "KI-Agenten". H1 and homepage
+structure intentionally left untouched (outside this approval's scope).
+
+**Real issue found and fixed during production verification:** the first
+version of this change (`fcc965f`) used title `"KI-Agenten & digitaler
+Wachstumspartner"` with no brand name, assuming the `(de)` layout's
+`title.template` ("%s | DigitalWerk") would apply automatically the same
+way it does for nested pages (verified live: `/kontakt` renders "Kontakt |
+DigitalWerk"). Live production check showed the **homepage does not
+inherit that template for its own same-segment `page.tsx`** — the title
+rendered with no "DigitalWerk" anywhere in it, a genuine regression.
+Fixed in `0fb2161` by including the brand name explicitly in the title
+string. **Technical note for future title-override work on this exact
+route**: `app/(de)/page.tsx` (and presumably `app/en/page.tsx`) do not
+get the parent layout's title template applied the way every other page
+does — any future title override on the homepage route must include the
+brand name explicitly rather than relying on the template.
+
+**Production verification (2026-08-23):**
+`https://www.digitalwerkk.de/` — `document.title` = "DigitalWerk —
+KI-Agenten & digitaler Wachstumspartner", `<meta name="description">`
+contains "KI-Agenten aus einer Hand", canonical unaffected
+(`https://www.digitalwerkk.de/`).
+
+**Secondary observation (not fixed — out of scope, pre-existing,
+sitewide, not a regression):** `og:title` and `og:description` on both
+the homepage and `/kontakt` (checked as a control) show generic,
+brand-only values ("DigitalWerk" / the sitewide default description)
+instead of each page's own title/description. This is not new — it
+predates today's changes and affects every page equally, not just the
+homepage. Likely related to M5 (`lib/metadata.ts` robustness). Not
+investigated further or fixed here since it wasn't part of what was
+approved; flagging for a future, separate decision.
+
+Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
 - Body content already mentions the primary "KI-Agenten" keyword cluster
   in 3 places (`services-overview.tsx`, `solution-pillars.tsx`,
