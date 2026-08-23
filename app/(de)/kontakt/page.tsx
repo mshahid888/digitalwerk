@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
+import { buildContactPageJsonLd } from "@/lib/schema";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
@@ -52,22 +54,10 @@ const faq = {
   ],
 };
 
-const contactPageJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ContactPage",
-  name: `Kontakt | ${siteConfig.name}`,
-  url: `${siteConfig.url}/kontakt`,
-};
-
 export default function Page() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(contactPageJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={buildContactPageJsonLd("/kontakt", "de")} />
       <PageIntro
         tone="default"
         badge="Kontakt"

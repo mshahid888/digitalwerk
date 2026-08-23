@@ -5,7 +5,7 @@ import { SkipLink } from "./skip-link";
 import { Analytics } from "@/components/analytics/analytics";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { JsonLd } from "@/components/seo/json-ld";
-import { buildOrganizationJsonLd } from "@/lib/schema";
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/schema";
 import type { Locale } from "@/lib/i18n-routes";
 
 // Shared <body> content for both locale root layouts (app/(de)/layout.tsx,
@@ -19,10 +19,12 @@ export function SiteShell({
   locale: Locale;
 }) {
   const organizationJsonLd = buildOrganizationJsonLd(locale);
+  const websiteJsonLd = buildWebSiteJsonLd();
 
   return (
     <>
       {organizationJsonLd ? <JsonLd data={organizationJsonLd} /> : null}
+      <JsonLd data={websiteJsonLd} />
       <SkipLink />
       <Header />
       <Breadcrumbs />

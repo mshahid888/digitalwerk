@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
-import { siteConfig } from "@/lib/site-config";
+import { buildServiceJsonLd } from "@/lib/schema";
+import { JsonLd } from "@/components/seo/json-ld";
 import { CTA } from "@/components/ui/cta";
 import { ServiceHero } from "@/components/service-page/hero";
 import { ServiceProblem } from "@/components/service-page/problem";
@@ -162,29 +163,16 @@ const shopCapabilities: Capability[] = [
   },
 ];
 
-const serviceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "KI-Agenten für E-Commerce",
-  serviceType: "KI-Agenten für E-Commerce",
-  description,
-  url: `${siteConfig.url}${path}`,
-  areaServed: { "@type": "Country", name: "Germany" },
-  provider: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.url,
-  },
-};
-
 export default function Page() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(serviceJsonLd).replace(/</g, "\\u003c"),
-        }}
+      <JsonLd
+        data={buildServiceJsonLd({
+          path,
+          name: "KI-Agenten für E-Commerce",
+          description,
+          locale: "de",
+        })}
       />
       <ServiceHero hero={content.hero} />
       <ServiceProblem problem={content.problem} />
