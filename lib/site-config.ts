@@ -4,10 +4,11 @@ export const siteConfig = {
   description:
     "DigitalWerk ist die digitale Wachstumspartnerschaft für deutsche Unternehmen — Webentwicklung, lokales SEO, Google Unternehmensprofil, Content, Werbeanzeigen, KI-Automatisierung und E-Commerce aus einer Hand.",
   // Reads the real domain from NEXT_PUBLIC_SITE_URL once it's set (e.g. in
-  // Vercel project settings). Falls back to a placeholder so local builds
-  // keep working without it — update the fallback or set the env var
-  // before launch, not both.
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalwerkk.de",
+  // Vercel project settings). Falls back to the canonical production
+  // domain so local builds keep working without it — update the fallback
+  // or set the env var before launch, not both. www is canonical; the
+  // apex domain 308-redirects to www at the Vercel domain level.
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.digitalwerkk.de",
   locale: "de_DE",
   contact: {
     email: "info@digitalwerkk.de",
