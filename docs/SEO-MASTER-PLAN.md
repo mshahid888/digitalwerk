@@ -300,6 +300,105 @@ Original Phase 3 scope (for reference — now tracked step-by-step above instead
 
 ---
 
+## PHASE 4 — ON-PAGE SEO
+
+**STATUS: IN PROGRESS** (roadmap Steps 33–46, first pass 2026-08-23 via source-code audit — no live content changed)
+
+Phase 3's remaining items (27 not authorized, 28/29 blocked on Google, 32
+undefined scope) are not currently executable, so per the roadmap's
+dependency/order rules the next executable work is Phase 4. This pass
+audited the SEO **elements** (Steps 39–46), since they cut across every
+page and several were already substantially handled by earlier phases;
+per-page-type review (Steps 33–38) is folded into the same findings below
+rather than repeated separately.
+
+**Step 39 — Title tags: ✅ COMPLETE + VERIFIED (existing implementation)**
+Already verified in the Phase 2 technical audit: all 42 pages have unique,
+non-duplicate titles via the shared `buildMetadata()` helper. Not
+re-audited from scratch — recorded per `.claude/SEO-AGENT.md`'s rule that
+existing verified work isn't repeated.
+
+**Step 40 — Meta descriptions: ✅ COMPLETE + VERIFIED (existing implementation)**
+Same basis as Step 39 — Phase 2 already verified all 42 pages have unique
+descriptions via `buildMetadata()`.
+
+**Step 41 — H1/H2/H3 structure: ✅ COMPLETE + VERIFIED**
+Fresh source audit (2026-08-23): every heading site-wide renders through
+one shared `components/ui/heading.tsx` component, which decouples semantic
+`level` (the actual `<h1>`–`<h4>` tag) from visual `size` — this exists
+specifically to let a heading sit correctly in the document outline without
+skipping a level. Exactly 7 direct `level={1}` usages exist, each a
+distinct page-template's hero/intro component (`service-page/hero.tsx`,
+`shared/page-intro.tsx`, `home/hero.tsx`, `app/en/page.tsx`'s own hero
+block, `layout/not-found-content.tsx`, `legal/legal-page.tsx`,
+`(de)/error.tsx`) — confirmed one H1 per page composition pattern, no
+page composes two of them together, no duplicate H1s found.
+
+**Step 42 — Content optimization: BLOCKED (prerequisite not met)**
+Depends on Phase 1's own still-open item: "Full mapping of the broader
+801-keyword dataset to future content/pages" (see Phase 1 "REMAINING PHASE
+1 WORK", never completed). Per the roadmap's dependency rule, this step
+cannot be responsibly executed — doing keyword-driven content optimization
+without that mapping would mean inventing which keywords apply where,
+which `.claude/SEO-AGENT.md` explicitly prohibits. Needs the Phase 1 gap
+closed first (a human/strategy task, not a technical one).
+
+**Step 43 — Internal links: PARTIALLY COMPLETE (existing implementation)**
+Phase 2 already implemented KI-Agenten pillar↔supporting-page links and
+footer service links (see Phase 1 "Internal linking" and Phase 2 H2). A
+full site-wide broken-link/orphan-page crawl has not been performed.
+
+**Step 44 — Images/alt text: N/A — confirmed by source audit**
+Grepped the entire codebase for `<img`, `next/image`, and `Image` imports:
+**zero matches anywhere.** The site is built entirely from typography,
+`lucide-react` icons, and CSS — there is no raster image inventory to have
+alt text on. Nothing to fix; this step doesn't apply to the current design
+system.
+
+**Step 45 — Schema: ✅ COMPLETE + VERIFIED (existing implementation)**
+Fully covered by Phase 2's schema architecture plus the M1 fix above:
+Organization/ProfessionalService, WebSite, BreadcrumbList, ContactPage,
+Service, and FAQPage schema are all wired and verified live in production
+(see M1 above). Not re-audited — already has direct production evidence
+from today.
+
+**Step 46 — Conversion/CTA optimization: NEEDS HUMAN STRATEGIC INPUT**
+What CTA copy/offers/placement to use is a business decision, not a
+technical or data-derivable one — `.claude/SEO-AGENT.md` prohibits inventing
+strategy. Not started; needs direction before any CTA content changes.
+
+**Step 33 — Homepage SEO: PARTIALLY COMPLETE — real finding, needs a decision**
+Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
+- Body content already mentions the primary "KI-Agenten" keyword cluster
+  in 3 places (`services-overview.tsx`, `solution-pillars.tsx`,
+  `komplett-callout.tsx`) — matches Phase 1's claim that "existing cards
+  were contextually optimized."
+- **However: the homepage `<title>` tag ("DigitalWerk — Ihr digitaler
+  Wachstumspartner"), meta description, and H1 ("Mehr Kunden. Mehr
+  Sichtbarkeit. Mehr Wachstum – digital.") contain no "KI-Agenten" keyword
+  at all** — the meta description mentions "KI-Automatisierung" (a related
+  but different term), not the specific, highest-volume keyword cluster
+  Phase 1 identified (801 keywords, 20,420 total volume).
+- This is a real, evidenced gap in the two highest-weighted on-page SEO
+  elements — but Phase 1 explicitly preserved the homepage H1/structure
+  unchanged by design ("No homepage sections were added, removed, or
+  reordered"), and the working rules require explicit approval before any
+  homepage structural change. **Flagging for a decision, not implementing
+  it**: should the title/meta description/H1 be adjusted to include
+  "KI-Agenten," or is the current brand-positioning copy intentional and
+  should stay as-is? This is the kind of call that belongs to you, not
+  something to invent.
+
+**Steps 34–38 (Service-page / AI-agent / Digital-marketing / SEO /
+Web-design page SEO): PARTIALLY COMPLETE** — the underlying elements
+(titles, meta descriptions, H1 structure, schema, internal links) are
+verified sound across all of these page groups via Steps 39–45 above.
+Page-specific content/keyword-targeting quality per vertical has the same
+dependency as Step 42 (Phase 1's keyword-mapping gap) and hasn't been
+individually re-audited beyond that.
+
+---
+
 ## COMMIT / DEPLOYMENT HISTORY
 
 | Commit | Message | Phase | Status |
