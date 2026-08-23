@@ -255,7 +255,7 @@ Do NOT mark M2–M5 as completed. Do NOT implement them without explicit approva
 
 ## PHASE 3 — GOOGLE SEARCH CONSOLE & MEASUREMENT
 
-**STATUS: IN PROGRESS** (roadmap Steps 23–32; this section now reflects real GSC/GA4 evidence gathered 2026-08-23, superseding the earlier "NOT STARTED" placeholder — see `.claude/SEO-AGENT.md` for the operating rules driving this phase going forward)
+**STATUS: IN PROGRESS** — 6 of 10 steps COMPLETE + VERIFIED (23, 24, 25, 26, 30, 31); 1 not authorized (27); 2 blocked on Google-side processing (28, 29); 1 undefined scope (32). This section reflects real GSC/GA4 evidence gathered 2026-08-23, superseding the earlier "NOT STARTED" placeholder — see `.claude/SEO-AGENT.md` for the operating rules driving this phase going forward.
 
 **Step 23 — Google Search Console: ✅ COMPLETE + VERIFIED**
 Domain property created for `digitalwerkk.de` under the account's Google identity.
@@ -278,8 +278,8 @@ GSC → Indexing → Pages report has not finished processing for this newly-ver
 **Step 29 — Google-selected canonical: BLOCKED (depends on Step 28)**
 For the homepage, both "User-declared canonical" and "Google-selected canonical" show `N/A` in the Index view — expected, since Google assigns a canonical only after indexing. Not yet checked for other pages.
 
-**Step 30 — Security & Manual Actions: NOT STARTED**
-Not yet checked — this report is not obviously gated by the same processing delay as Step 28 and should be checked independently.
+**Step 30 — Security & Manual Actions: ✅ COMPLETE + VERIFIED**
+GSC → Security & Manual Actions, both sub-reports checked directly (not gated by the Step 28 processing delay, as anticipated): **Security issues — "No issues detected."** **Manual actions — "No issues detected."**
 
 **Step 31 — GA4: ✅ COMPLETE + VERIFIED**
 Account "DigitalWerk", property "DigitalWerk" (Internet & Telecom, Germany, EUR), web stream "DigitalWerk Website" → `https://www.digitalwerkk.de`. Measurement ID `G-YXGMNDPP14` wired into `components/analytics/analytics.tsx` via `NEXT_PUBLIC_GA_MEASUREMENT_ID` (Vercel Production + Preview). Confirmed live: GA4 Realtime overview showed 1 active user in the last 30 minutes from real production traffic.
