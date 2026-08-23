@@ -14,7 +14,7 @@ import { FAQ } from "@/components/home/faq";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "KI-Agenten & digitaler Wachstumspartner",
+    title: "DigitalWerk — KI-Agenten & digitaler Wachstumspartner",
     description:
       "Mehr Kunden, mehr Sichtbarkeit, mehr Wachstum: Website, SEO, Werbeanzeigen und KI-Agenten aus einer Hand – für Unternehmen in ganz Deutschland.",
   },
