@@ -2,7 +2,7 @@
 
 Living status document for the DigitalWerk KI-Agenten SEO initiative. Updated as phases/tasks complete — historical entries are not rewritten.
 
-**Current production commit:** `cbf90f7` — fix(seo): improve robots and footer internal links
+**Current production commit:** `9b0bf1f` — feat(seo): wire unused JSON-LD schema helpers into pages
 
 ---
 
@@ -222,70 +222,81 @@ Not yet implemented — deferred per explicit scoping, not forgotten:
 
 | ID | Finding | Severity | Status |
 |---|---|---|---|
-| M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | NOT STARTED |
+| M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | ✅ COMPLETE / LIVE — see "M1 — Schema helper wiring" below |
 | M2 | 2-hop redirect chain (HTTP apex → HTTPS apex → HTTPS www) | Low-Medium | NOT STARTED (Vercel domain config, not app code) |
 | M3 | No `Content-Security-Policy` header | Low | NOT STARTED |
 | M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | NOT STARTED — requires a real PSI API key or Vercel Speed Insights check before any performance code work is scoped |
 | M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | NOT STARTED |
 
-Do NOT mark M1–M5 as completed. Do NOT implement them without explicit approval.
+Do NOT mark M2–M5 as completed. Do NOT implement them without explicit approval.
+
+### M1 — Schema helper wiring
+
+**STATUS: ✅ COMPLETE / LIVE**
+
+**Commit:** `9b0bf1f` — feat(seo): wire unused JSON-LD schema helpers into pages
+
+**Implemented:**
+- `/kontakt` and `/en/contact`: inline `contactPageJsonLd` object + raw `<script>` replaced with `<JsonLd data={buildContactPageJsonLd(path, locale)} />`.
+- `/ki-agenten/erstellen` and `/ki-agenten/e-commerce`: inline `serviceJsonLd` object + raw `<script>` replaced with `<JsonLd data={buildServiceJsonLd({ path, name, description, locale })} />`. `Service.provider` now references the single canonical Organization entity (`{"@id": "https://www.digitalwerkk.de#organization"}`) instead of a duplicated inline Organization block.
+- `components/layout/site-shell.tsx`: `buildWebSiteJsonLd()` wired in alongside the existing `buildOrganizationJsonLd()`, so `WebSite` schema now renders site-wide (both locales) exactly once per page.
+
+**Lifecycle:** Implemented → Committed → Pushed → Deployed → Production Verified — all 5 stages complete.
+
+**Isolation method:** the two contact pages had pre-existing, unrelated uncommitted edits (phone-number removal) in the working tree. Isolated via `git stash push` (full pre-existing dirty set) → clean HEAD baseline → made the M1 edit → validated → committed → pushed → `git stash pop` (3-way merge restored the unrelated edits cleanly, still uncommitted, exactly as before).
+
+**Validation:** `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` — 50/50 routes generated successfully (all static, meaning every schema builder executed without error at build time, including `buildWebSiteJsonLd` via `SiteShell` on every route).
+
+**Production verification (2026-08-23):**
+- `https://www.digitalwerkk.de/kontakt` — 5 JSON-LD blocks present: `Organization`/`ProfessionalService`, `WebSite`, `BreadcrumbList`, `ContactPage`, `FAQPage`. No duplicates.
+- `https://www.digitalwerkk.de/ki-agenten/erstellen` — 5 JSON-LD blocks: `Organization`/`ProfessionalService`, `WebSite`, `BreadcrumbList`, `Service`, `FAQPage`. `Service.provider` correctly resolves to the site's Organization `@id`. Canonical confirmed correct.
 
 ---
 
 ## PHASE 3 — GOOGLE SEARCH CONSOLE & MEASUREMENT
 
-**STATUS: NOT STARTED**
+**STATUS: IN PROGRESS** (roadmap Steps 23–32; this section now reflects real GSC/GA4 evidence gathered 2026-08-23, superseding the earlier "NOT STARTED" placeholder — see `.claude/SEO-AGENT.md` for the operating rules driving this phase going forward)
 
-Planned work (not yet begun):
+**Step 23 — Google Search Console: ✅ COMPLETE + VERIFIED**
+Domain property created for `digitalwerkk.de` under the account's Google identity.
 
-**1. Google Search Console**
-- Verify correct domain property
-- Check indexing
-- Check crawl errors
-- Check excluded pages
-- Check sitemap processing
+**Step 24 — Domain verification: ✅ COMPLETE + VERIFIED**
+Verified via DNS TXT record (`google-site-verification=...`) added at the domain's DNS provider (IONOS), host `@`, as a separate record alongside all pre-existing records (none modified/removed). GSC returned "Ownership auto verified" via the Domain name provider method.
 
-**2. Sitemap submission**
-- Submit sitemap.xml
-- Confirm Google processes it
-- Check discovered URLs
+**Step 25 — Sitemap submission: ✅ COMPLETE + VERIFIED**
+`https://www.digitalwerkk.de/sitemap.xml` submitted. GSC status: **Success**. Discovered pages: **36** (matches `app/sitemap.ts`'s route count exactly — no orphans, no gaps).
 
-**3. URL Inspection**
+**Step 26 — URL Inspection: ✅ COMPLETE**
+All 7 priority pages inspected (`/`, `/ki-agenten`, `/ki-agenten/erstellen`, `/ki-agenten/e-commerce`, `/branchen`, `/e-commerce`, `/kontakt`). None are indexed yet (expected — property verified only days ago). 6 of 7 show "URL is unknown to Google"; `/e-commerce` shows "Discovered - currently not indexed" (Google has seen it via the sitemap and a referring link from `/impressum`, hasn't crawled it yet). Homepage Live Test: "available to Google," HTTP 200. No robots/noindex/redirect blocks found on any inspected page.
 
-Priority pages:
-- `/`
-- `/ki-agenten`
-- `/ki-agenten/erstellen`
-- `/ki-agenten/e-commerce`
-- `/e-commerce`
-- `/branchen`
-- `/kontakt`
+**Step 27 — Request indexing: NOT AUTHORIZED**
+Requires explicit per-instance user approval every time — never assumed, even under the standing operating rules in `.claude/SEO-AGENT.md`. Not requested for any URL so far.
 
-**4. Index coverage**
+**Step 28 — Check indexed/excluded pages: BLOCKED**
+GSC → Indexing → Pages report has not finished processing for this newly-verified property: "Processing data, please check again in a day or so" (both the summary widget and the "Why pages aren't indexed" breakdown table are empty). Not a technical fault — Google-side processing delay. Retry later; do not loop on it repeatedly.
 
-Identify:
-- indexed pages
-- excluded pages
-- crawled but not indexed
-- duplicate/canonical issues
-- important pages not indexed
+**Step 29 — Google-selected canonical: BLOCKED (depends on Step 28)**
+For the homepage, both "User-declared canonical" and "Google-selected canonical" show `N/A` in the Index view — expected, since Google assigns a canonical only after indexing. Not yet checked for other pages.
 
-**5. Search performance baseline**
+**Step 30 — Security & Manual Actions: NOT STARTED**
+Not yet checked — this report is not obviously gated by the same processing delay as Step 28 and should be checked independently.
 
-Track:
-- impressions
-- clicks
-- CTR
-- average position
-- KI-Agenten keyword performance
+**Step 31 — GA4: ✅ COMPLETE + VERIFIED**
+Account "DigitalWerk", property "DigitalWerk" (Internet & Telecom, Germany, EUR), web stream "DigitalWerk Website" → `https://www.digitalwerkk.de`. Measurement ID `G-YXGMNDPP14` wired into `components/analytics/analytics.tsx` via `NEXT_PUBLIC_GA_MEASUREMENT_ID` (Vercel Production + Preview). Confirmed live: GA4 Realtime overview showed 1 active user in the last 30 minutes from real production traffic.
 
-**6. Analytics/conversion tracking**
+**Step 32 — Connect other required analytics: SCOPE UNDEFINED**
+Not started — "other required analytics" isn't defined anywhere in this plan or by the user yet. `components/analytics/analytics.tsx` already supports GTM/Meta Pixel/TikTok Pixel/Clarity (all inactive, gated behind unset env vars) if/when one of these is actually decided as needed. Do not activate any of them without an explicit decision on what's required.
 
-Verify:
-- GA4
-- lead/contact conversions
-- CTA clicks
-- SEO conversion baseline
+**SEMrush**: evaluated and explicitly excluded from the workflow (not necessary at DigitalWerk's current stage — see prior audit). A "RankyTools" group-buy/shared-account service was also investigated and rejected (no official SEMrush relationship, no API/MCP, likely violates SEMrush's own Terms of Service). Neither is depended on anywhere in this plan.
+
+Original Phase 3 scope (for reference — now tracked step-by-step above instead):
+
+- Google Search Console: verify property, indexing, crawl errors, excluded pages, sitemap processing
+- Sitemap submission and discovered-URL confirmation
+- URL Inspection across the priority page list
+- Index coverage: indexed / excluded / crawled-not-indexed / canonical issues
+- Search performance baseline: impressions, clicks, CTR, average position, KI-Agenten keyword performance (not yet reachable — no Performance data exists for a property this new)
+- Analytics/conversion tracking: GA4, lead/contact conversions, CTA clicks, SEO conversion baseline (GA4 connected; conversion/CTA event tracking not yet implemented)
 
 ---
 
@@ -297,10 +308,34 @@ Verify:
 | `68dc356` | feat(seo): add KI-Agenten supporting pages | Phase 1 | Pushed, deployed, production verified |
 | `ffdca8a` | feat(seo): add schema and breadcrumb architecture | Phase 2 | Pushed, deployed, production verified |
 | `cbf90f7` | fix(seo): improve robots and footer internal links | Phase 2 (H1/H2) | Pushed, deployed, production verified |
+| `9b0bf1f` | feat(seo): wire unused JSON-LD schema helpers into pages | Phase 2 (M1) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
+Not in this table (infrastructure/config changes, not commits): DNS TXT record added at IONOS for GSC domain verification; Vercel `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_GA_MEASUREMENT_ID` environment variables added (Production + Preview); GSC domain property created and verified; GA4 account/property/stream created. All performed with explicit user approval at the time.
+
 ---
+
+## AUTONOMOUS OPERATION (added 2026-08-23)
+
+Day-to-day execution of this plan is now governed by `.claude/SEO-AGENT.md` —
+a durable operating guide the user asked to be created so ordinary SEO work
+(content, metadata, schema, on-page fixes, committing/pushing/deploying
+through the existing Vercel pipeline) doesn't need repeated per-step
+approval. High-risk actions (indexing requests, DNS, domain config,
+deletions, billing, purchases, account-permission changes) still always
+require explicit approval — see that file for the full list.
+
+**Roadmap note:** the user has also given a 106-step, 10-phase roadmap
+(Phases 1–10) as the strategic structure going forward, with Phases 1–2
+(Steps 1–22, corresponding to this document's Phase 1 and Phase 2) directed
+not to be re-executed or re-audited as tasks. That directive is honored
+above and in `.claude/SEO-AGENT.md`. It does **not** mean the M2–M5 findings
+in this document's Phase 2 are being treated as resolved — they remain open
+and will be picked up when their corresponding roadmap step is reached (see
+`.claude/SEO-AGENT.md`'s reconciliation note). This document remains the
+authoritative evidence record regardless of which step-numbering scheme is
+in use.
 
 ## IMPORTANT WORKING RULES
 
