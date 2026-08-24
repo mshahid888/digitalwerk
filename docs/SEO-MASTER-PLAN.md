@@ -255,7 +255,7 @@ Not yet implemented — deferred per explicit scoping, not forgotten:
 | M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | ✅ COMPLETE / LIVE — see "M1 — Schema helper wiring" below |
 | M2 | 2-hop redirect chain (HTTP apex → HTTPS apex → HTTPS www) | Low-Medium | NOT STARTED (Vercel domain config, not app code) |
 | M3 | No `Content-Security-Policy` header | Low | ✅ CLOSED (Report-Only, deferred/monitored — user decision 2026-08-23) — see "M3 — Content-Security-Policy" below |
-| M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | ⚠️ PARTIALLY RESOLVED (2026-08-24) — Vercel Speed Insights enabled, collector verified loading; dashboard data not yet confirmed, see below |
+| M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | ⚠️ ENABLED, AWAITING DATA (re-checked 2026-08-24) — Speed Insights enabled and collector verified working on both checks; no data yet, assessed as normal ingestion delay + low real traffic (3rd tool showing this pattern), not an integration fault — see below |
 | M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | ✅ COMPLETE / LIVE (2026-08-23, commit `c60da5b`) — see the OG-metadata resolution write-up under Step 33 (Phase 4) |
 
 Do NOT mark M2/M4 as completed without explicit approval or real evidence respectively. M1/M3/M5 are resolved — see their write-ups.
@@ -809,6 +809,60 @@ all still static) → Committed → Pushed → Deployed
 to real CWV data) is removed — Speed Insights is enabled, free, and its
 collector script is verified loading. Full resolution (confirmed data
 flowing into the dashboard) is pending a later check.
+
+**Re-checked (2026-08-24), single pass, not looped.** Followed a fixed
+verification checklist rather than repeatedly polling for data:
+
+1. **Dashboard summary and Web Vitals** — Speed Insights dashboard,
+   Production scope, Last 7 Days: **"No data available. Make sure you are
+   using the latest @vercel/speed-insights package."** Checked both
+   **Desktop** and **Mobile** tabs — same result on both. No Real
+   Experience Score, no FCP/LCP/INP/CLS values to record; nothing to log
+   as metrics this pass.
+2. **Observability → Usage/Overview** — checked for a raw Speed Insights
+   event count independent of the Web Vitals visualization. No dedicated
+   Speed Insights event panel found on this page (only Edge
+   Requests/Data Transfer/Functions/Compute, all Vercel-platform metrics,
+   not Speed Insights-specific). Edge Requests does show real traffic in
+   the last 12 hours, confirming the site is being hit — just not
+   translating into recorded Speed Insights events yet.
+3. **Collector script re-verified live** — fresh network trace on the
+   production homepage: `https://www.digitalwerkk.de/d3b7b1aefc240b69/script.js`
+   → **200**, same-origin, loading exactly as before. No regression, no
+   CSP interference (still `'self'`-covered).
+4. **Vitals-report beacon** — not observed in this session's network
+   trace (searched for a `vitals`-pattern request after navigating
+   between pages). **Inconclusive, not a red flag**: Web Vitals beacons
+   fire via `navigator.sendBeacon` on page unload/`visibilitychange`,
+   which this browser-automation tooling isn't well-positioned to
+   capture (the request fires as the page context is torn down). Absence
+   of evidence here isn't evidence of absence.
+
+**Assessment: normal ingestion delay / insufficient real traffic, not a
+broken integration** — no code or config changed, per instruction.
+Reasoning, not just a guess:
+- The collector script itself loads successfully and consistently across
+  every check so far — the actual failure mode for a broken integration
+  (CSP block, wrong script path, build error) would show up as the
+  script *not* loading, which hasn't happened at any point.
+- This is the **third independent tool** in this project reporting the
+  same underlying symptom for the same underlying reason: GA4 (Realtime
+  showed only 1 active user, days ago), GSC's Core Web Vitals/CrUX report
+  ("Not enough usage data in the last 90 days"), and now Speed Insights.
+  All three require real visitor traffic to populate, and all three are
+  reporting the same "too new, too little traffic yet" state — a
+  consistent, cross-tool pattern, not an isolated Speed-Insights-specific
+  failure.
+- Speed Insights' own Hobby-plan reporting window is only 7 days and its
+  event minimum needs genuine page-lifecycle visits; the site was
+  enabled less than a day ago per the production timestamps in this
+  document.
+
+**No further action taken this pass** — no code or configuration
+changed, since no concrete integration problem was found (per
+instruction). Not re-checking again on a fixed interval; the next
+natural checkpoint is whenever traffic has had more time to accumulate,
+not a scheduled re-poll.
 
 Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
