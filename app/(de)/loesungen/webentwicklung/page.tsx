@@ -5,9 +5,9 @@ import type { ServicePageContent } from "@/components/service-page/types";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "Webentwicklung",
+    title: "Webentwicklung & Webdesign",
     description:
-      "Moderne, schnelle und conversion-starke Websites, die Besucher in Kunden verwandeln. Handwerklich sauber entwickelt statt nur hübsch gestaltet.",
+      "Webdesign Agentur für moderne, schnelle und conversion-starke Websites, die Besucher in Kunden verwandeln. Handwerklich sauber entwickelt statt nur hübsch gestaltet.",
   },
   "/loesungen/webentwicklung",
   { hreflang: { de: "/loesungen/webentwicklung", en: "/en/solutions/web-development" } }

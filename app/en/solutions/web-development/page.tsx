@@ -5,9 +5,9 @@ import type { ServicePageContent } from "@/components/service-page/types";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "Web Development",
+    title: "Web Development & Design",
     description:
-      "Modern, fast, conversion-focused websites that turn visitors into customers. Built with craftsmanship, not just good looks.",
+      "Web design agency for modern, fast, conversion-focused websites that turn visitors into customers. Built with craftsmanship, not just good looks.",
   },
   "/en/solutions/web-development",
   {

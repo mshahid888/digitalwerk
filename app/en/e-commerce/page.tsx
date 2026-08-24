@@ -13,9 +13,9 @@ import type { ServicePageContent } from "@/components/service-page/types";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "E-Commerce",
+    title: "E-Commerce Agency",
     description:
-      "Online store on Shopify or WooCommerce, connected to Amazon, eBay, and TikTok Shop — sell more, manage less.",
+      "E-commerce agency for online stores on Shopify or WooCommerce, connected to Amazon, eBay, and TikTok Shop — sell more, manage less.",
   },
   "/en/e-commerce",
   { hreflang: { de: "/e-commerce", en: "/en/e-commerce" }, locale: "en_US" }

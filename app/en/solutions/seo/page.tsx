@@ -5,9 +5,9 @@ import type { ServicePageContent } from "@/components/service-page/types";
 
 export const metadata: Metadata = buildMetadata(
   {
-    title: "SEO",
+    title: "SEO Agency",
     description:
-      "Local SEO for better visibility on Google and Google Maps — honest advice, built for the long term. Free assessment for your business.",
+      "SEO agency for local SEO and better visibility on Google and Google Maps — honest advice, built for the long term. Free assessment for your business.",
   },
   "/en/solutions/seo",
   { hreflang: { de: "/loesungen/seo", en: "/en/solutions/seo" }, locale: "en_US" }
