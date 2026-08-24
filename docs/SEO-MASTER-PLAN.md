@@ -1209,17 +1209,67 @@ page's Organization JSON-LD, exactly matching the Nominatim lookup.
 
 ## PHASE 5 — LOCAL SEO
 
-**STATUS: IN PROGRESS (structure added 2026-08-24, per the original
-106-step roadmap supplied by the user — not invented).** Initial status
-for every step below is `NOT STARTED` unless existing evidence from
-earlier phases already proves otherwise, per instruction. Several Phase 5
-items overlap with local-schema and local-keyword work already done in
-Phase 4 — where that's true, it's recorded here with a pointer, not
-repeated.
+**STATUS: IN PROGRESS.** Structure added 2026-08-24 per the original
+106-step roadmap supplied by the user — not invented. As of 2026-08-24:
+**3 of 9 steps COMPLETE** (50, 51, 52); **1 substantially complete**
+(48, on-site NAP consistency — third-party citation consistency
+inherently untestable until Step 54 has data); **1 partially complete**
+(49, existing keyword work); **1 blocked** (47, genuine Google
+account-verification limitation — see below); **2 not started** (53, 54);
+**1 not started, depends on 47** (55).
 
-**47. Google Business Profile — NOT STARTED**
+**47. Google Business Profile — ⚠️ BLOCKED (researched 2026-08-24, genuine
+account-access limitation, not attempted further)**
 
-**48. Business information consistency — NOT STARTED**
+**Research performed**: checked `business.google.com/locations` under the
+same Google identity already connected to this project's GSC/GA4. Real
+finding: Business Profile Manager access exists, but the **only**
+business listed is **"GoogleMaps Profis"** (München/Nürnberg area,
+verified) — a completely different, unrelated business. **DigitalWerk
+has no Google Business Profile of its own under this account.** That
+unrelated listing was not opened, edited, or interacted with in any way.
+
+**Why this is blocked, not just unstarted**: creating a *new* GBP listing
+is not a code/content change — it creates a real, public-facing Google
+listing representing DigitalWerk, and Google's standard verification for
+a new listing requires proving control of the physical business location
+(postcard-to-address or phone verification), which this session cannot
+complete on the user's behalf. This is account-level/business-verification
+work, the same category as GSC property creation earlier in this project
+(which required direct user involvement). **Not attempted** — flagging
+the exact blocker per instruction and continuing with other steps.
+
+**What's needed to unblock**: either (a) confirmation that a GBP for
+DigitalWerk already exists under a *different* Google account (in which
+case access to that account is needed), or (b) the user's direct
+involvement to create and verify a new listing (this session can prepare
+the exact business information to enter — name, address, phone, category,
+hours, description — once that's decided, using only the site's own
+already-confirmed real business info, nothing invented).
+
+**48. Business information consistency — ✅ COMPLETE (on-site, verified
+2026-08-24)**
+
+Checked Name/Address/Phone consistency across every page currently
+carrying business info on production: homepage footer, `/kontakt`, and
+`/impressum`. **Fully consistent** on all three: phone `+49 160 5667490`,
+email `info@digitalwerkk.de`, address `Martin-Luther-Platz 14, 91522
+Ansbach` — identical everywhere, matching `lib/site-config.ts`'s single
+source of truth.
+
+**Observation, not acted on**: this session's pre-existing, unrelated,
+still-uncommitted working-tree changes (present since before this session
+began — see the standing "NOTE ON PRE-EXISTING UNCOMMITTED WORKING-TREE
+CHANGES" at the end of this document) include an in-progress phone-number
+removal in `components/kontakt/contact-info.tsx`. If that unrelated work
+is committed later without also updating the footer/schema to match, it
+would introduce a genuine NAP inconsistency. Flagging this for whoever
+finishes that unrelated work — not something this SEO task should resolve
+by touching someone else's in-progress edit.
+
+**Third-party citation consistency** (the other half of NAP consistency)
+is inherently untestable right now: no citations exist yet to check
+against (see Step 54, `NOT STARTED`).
 
 **49. Local keywords — PARTIALLY COMPLETE (existing work)**
 Already substantially addressed in Phase 4's keyword strategy: real and
@@ -1236,11 +1286,34 @@ agentur ansbach"), that dedicated per-keyword local landing pages are
 signal on schema + Google Business Profile + in-page copy instead. That
 recommendation stands as this phase's Ansbach strategy.
 
-**51. Relevant surrounding locations — PARTIALLY COMPLETE (existing work)**
+**51. Relevant surrounding locations — ✅ COMPLETE (implemented 2026-08-24)**
 Regional terms (Nürnberg, Fürth, Rothenburg o.d. Tauber, Mittelfranken)
 already identified in `KEYWORD-STRATEGY.md`'s SEO tier; Mittelfranken and
 Bayern already added to the Organization schema's `areaServed` (commit
-`b86ee47`). Not yet worked into on-page body copy anywhere.
+`b86ee47`). Now also worked into actual on-page body copy.
+
+**Commit:** `a468d0c` — feat(seo): add regional service-area point to SEO
+page (Phase 5, Step 51).
+
+**Implemented:** added one new point to `/loesungen/seo`'s (+
+`/en/solutions/seo`'s) "Why Choose DigitalWerk" section —
+"Regional verwurzelt" / "Regionally rooted" — naming Ansbach plus
+Nürnberg, Fürth, and Rothenburg ob der Tauber. Additive only (appended
+to the existing `whyDigitalWerk.points` array), no restructuring. The
+underlying claim ("we serve businesses across Mittelfranken") isn't new
+— it's consistent with what the Digital Marketing and Leadgenerierung
+pages already state.
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `rm -rf .next && npm run build` — 54/54 routes) →
+Committed → Pushed → Deployed (`dpl_EFsqSeYhUJ9Avx9cueUPyJyRjsUV`, READY,
+aliased to `www.digitalwerkk.de`) → Production Verified — all 5 stages
+complete.
+
+**Production verification (2026-08-24):** fresh `curl` against both
+`/loesungen/seo` and `/en/solutions/seo` — "Regional verwurzelt"/
+"Regionally rooted" heading and body copy confirmed present and correct
+on both live pages.
 
 **52. LocalBusiness schema — COMPLETE + VERIFIED (existing implementation)**
 `buildOrganizationJsonLd()` already emits `"@type": ["Organization",
@@ -1368,6 +1441,7 @@ is an ongoing cycle, not a one-time task, and only begins once Phases
 | `c7dea46` | fix(seo): align existing service-page titles/descriptions with real keyword data | Phase 4 (Steps 34-38) | Pushed, deployed, production verified |
 | `a46f42f` | feat(seo): enable Vercel Speed Insights (M4) | Phase 2 (M4, partial) | Pushed, deployed; collector script verified live, dashboard data pending |
 | `a02717b` | fix(seo): add real GeoCoordinates to Organization schema | Phase 4 (local schema follow-up) | Pushed, deployed, production verified |
+| `a468d0c` | feat(seo): add regional service-area point to SEO page (Phase 5, Step 51) | Phase 5 (Step 51) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
