@@ -783,7 +783,33 @@ Web-design page SEO): PARTIALLY COMPLETE** — the underlying elements
 verified sound across all of these page groups via Steps 39–45 above.
 Page-specific content/keyword-targeting quality per vertical now has a
 non-invented basis to work from (see "Keyword strategy (2026-08-23)"
-immediately below) but hasn't been implemented yet — still awaiting review.
+immediately below).
+
+**✅ Title/description alignment pass completed (2026-08-23, commit
+`c7dea46`).** Audited every existing service page's title/description
+against the real keywords mapped to it in `KEYWORD-STRATEGY.md`. Found
+and fixed the same category of gap Step 33 found on the homepage: SEO
+(`/loesungen/seo`, `/en/solutions/seo`) and E-Commerce (`/e-commerce`,
+`/en/e-commerce`) titles were missing "Agentur"/"Agency" despite their
+real head terms ("seo agentur" 22,200/mo — the single largest keyword in
+the whole project; "e-commerce agentur" 1,900/mo) using that exact
+framing; Webentwicklung (`/loesungen/webentwicklung`,
+`/en/solutions/web-development`) never mentioned "Webdesign" at all
+despite "webdesign agentur" (9,900/mo) — the **second**-largest keyword
+in the whole project — being mapped to that exact page. Title/description
+only, same scope constraint as Step 33's homepage fix (H1 and body left
+untouched). Deployed (`dpl_FfaErN6qy3rA5SK9NyTgZQSVzo7i`, READY) and
+production-verified: all six updated titles (3 pages × DE/EN) confirmed
+live via fresh `curl`. KI-Agenten pillar (`/ki-agenten`) was also
+audited and found already well-aligned from its Phase 1 optimization —
+no change needed there, consistent with the "don't touch completed Phase
+1 pages without a concrete issue" rule (none was found).
+
+Body-copy-level content optimization beyond title/description (deeper
+Steps 34–38 work — e.g., working the recovered/regional keyword terms
+into FAQ or body sections of existing pages) remains a larger, lower-
+urgency task not undertaken here, since it goes beyond the same-scope
+precedent this pass deliberately stayed within.
 
 ### Keyword strategy (2026-08-23)
 
@@ -1018,6 +1044,7 @@ Verified — all 5 stages complete.
 | `c60da5b` | fix(seo): merge openGraph/twitter defensively, fix duplicate brand name in OG title | Phase 2 (M5) / Phase 4 (Step 33 OG finding) | Pushed, deployed, production verified |
 | `5c0e0f5` | feat(seo): add Digital Marketing and Leadgenerierung service pages | Phase 4 (gap pages) | Pushed; deployment FAILED (see process note) |
 | `90e35dc` | fix(seo): remove accidentally-committed unrelated changes from en/solutions/page.tsx | Phase 4 (gap pages, isolation fix) | Pushed, deployed, production verified |
+| `c7dea46` | fix(seo): align existing service-page titles/descriptions with real keyword data | Phase 4 (Steps 34-38) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
