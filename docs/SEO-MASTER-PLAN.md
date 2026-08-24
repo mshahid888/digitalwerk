@@ -1210,42 +1210,99 @@ page's Organization JSON-LD, exactly matching the Nominatim lookup.
 ## PHASE 5 — LOCAL SEO
 
 **STATUS: IN PROGRESS.** Structure added 2026-08-24 per the original
-106-step roadmap supplied by the user — not invented. As of 2026-08-24:
-**3 of 9 steps COMPLETE** (50, 51, 52); **1 substantially complete**
-(48, on-site NAP consistency — third-party citation consistency
-inherently untestable until Step 54 has data); **1 partially complete**
-(49, existing keyword work); **1 blocked** (47, genuine Google
-account-verification limitation — see below); **2 not started** (53, 54);
-**1 not started, depends on 47** (55).
+106-step roadmap supplied by the user — not invented. **Correction
+(2026-08-24, later same day)**: Step 47's original finding below was
+wrong — the profile does exist under this account, just under a
+different business name than expected (see corrected write-up). As of
+this correction: **4 of 9 steps COMPLETE** (47 partially, 50, 51, 52);
+**1 substantially complete** (48, on-site NAP consistency — third-party
+citation consistency inherently untestable until Step 54 has data);
+**1 partially complete** (49, existing keyword work); **2 not started**
+(53, 54, now with real GBP evidence instead of a blind web search); **1
+not started, depends on business decisions flagged in 47** (55).
 
-**47. Google Business Profile — ⚠️ BLOCKED (researched 2026-08-24, genuine
-account-access limitation, not attempted further)**
+**47. Google Business Profile — ⚠️ PARTIALLY COMPLETE / CORRECTED
+(2026-08-24)**
 
-**Research performed**: checked `business.google.com/locations` under the
-same Google identity already connected to this project's GSC/GA4. Real
-finding: Business Profile Manager access exists, but the **only**
-business listed is **"GoogleMaps Profis"** (München/Nürnberg area,
-verified) — a completely different, unrelated business. **DigitalWerk
-has no Google Business Profile of its own under this account.** That
-unrelated listing was not opened, edited, or interacted with in any way.
+**This step's original finding (below, preserved for the record) was
+incorrect and has been superseded.** The original search only looked
+for a listing literally named "DigitalWerk" under
+`business.google.com/locations`; the account's one listed business,
+"GoogleMaps Profis," was found but dismissed as unrelated because
+nothing in its name indicated otherwise. The user corrected this and
+provided a direct link confirming it **is** the real profile — its
+category (Marketing agency), description (explicitly names Ansbach,
+Weidenbach, Nürnberg, Bayern), and service-area (includes 91522
+Ansbach) all independently confirm this on inspection.
 
-**Why this is blocked, not just unstarted**: creating a *new* GBP listing
-is not a code/content change — it creates a real, public-facing Google
-listing representing DigitalWerk, and Google's standard verification for
-a new listing requires proving control of the physical business location
-(postcard-to-address or phone verification), which this session cannot
-complete on the user's behalf. This is account-level/business-verification
-work, the same category as GSC property creation earlier in this project
-(which required direct user involvement). **Not attempted** — flagging
-the exact blocker per instruction and continuing with other steps.
+**Audit performed (read-only, before any change):**
 
-**What's needed to unblock**: either (a) confirmation that a GBP for
-DigitalWerk already exists under a *different* Google account (in which
-case access to that account is needed), or (b) the user's direct
-involvement to create and verify a new listing (this session can prepare
-the exact business information to enter — name, address, phone, category,
-hours, description — once that's decided, using only the site's own
-already-confirmed real business info, nothing invented).
+| Field | Found value |
+|---|---|
+| Business name | GoogleMaps Profis |
+| Primary category | Marketing agency |
+| Secondary categories | None (before this session's edit) |
+| Location type | Service-area business, no public address |
+| Service area | München, Nürnberg, Würzburg, Göttingen, 91522 Ansbach |
+| Website | Empty (before this session's edit) |
+| Phone | 01522 9083532 (also the WhatsApp/chat number) |
+| Hours | Open 24 hours, every day |
+| Verification | Verified |
+| Reviews | 5.0★, 1 review ("Farooq Hashim," 18 weeks ago, "Good," unreplied) |
+| Services (original 6) | Google Business Profile Optimierung, Google Maps Ranking Service, Local SEO Betreuung, Lokale Keyword-Recherche, Wettbewerbsanalyse, Google Maps Eintrag erstellen |
+| Photos | 3 generic/stock graphics, last added 254 days ago |
+| Stats | 165 profile views last month, 10 customer interactions |
+
+**Real gap found**: every existing field was scoped to Local SEO /
+Google Maps optimization only — nothing reflected KI-Agenten, Digital
+Marketing, Webdesign/Webentwicklung, Automation, or Leadgenerierung,
+despite those being real, live service pages on digitalwerkk.de.
+
+**Safe, factual changes implemented this session (no business decision
+required), all submitted and pending Google's review (~up to 24h):**
+- Added the missing **website** field → `https://www.digitalwerkk.de`
+- Added 4 new **custom services** under the existing Marketing agency
+  category: KI Agenten Entwicklung, Digital Marketing, Webdesign
+  Webentwicklung, Leadgenerierung — additive, the original 6 services
+  untouched
+- Added **"Web Designer"** as a secondary business category — an exact
+  match from Google's fixed category taxonomy (verified by typing
+  "Website" and selecting the suggested option, not free-typed), a
+  factual reflection of the real, live Webentwicklung/Webdesign service
+- Expanded the **description**: appended one sentence to the existing
+  text (which was left completely unchanged) — "Als DigitalWerk bieten
+  wir zusätzlich KI-Agenten, Digital Marketing, Webdesign und
+  Webentwicklung sowie Leadgenerierung für Unternehmen in der Region
+  an." — using only real, already-published service names, no invented
+  pricing or claims
+
+**Flagged — needs a business decision, deliberately NOT touched:**
+- **Business name** ("GoogleMaps Profis" vs. a "DigitalWerk"-branded
+  name) — Google requires the GBP name to match the business's real
+  trading name; per explicit instruction, not changed to insert
+  keywords, and not changed at all without confirmation this is the
+  intended real-world name
+- **Phone number mismatch**: GBP shows `01522 9083532`; the website
+  shows `+49 160 5667490` — don't know which is the real, current,
+  monitored number
+- **Hours** (currently 24/7) — don't know the real operating/response
+  hours
+- **Service area** (Würzburg, Göttingen included alongside Ansbach) —
+  Göttingen in particular is ~300km outside Bavaria and looks
+  anomalous, but per explicit instruction this was not touched without
+  verifying real business details
+- **Replying to the existing review** — an external message on the
+  user's behalf, needs explicit go-ahead
+- Whether **"Marketing agency"** should remain the primary category, or
+  whether a different primary category better fits the current service
+  mix — left as-is; only a secondary category was added
+
+**Original (incorrect) 2026-08-24 finding, preserved for the record —
+superseded by the correction above:** "Business Profile Manager access
+exists, but the only business listed is 'GoogleMaps Profis'
+(München/Nürnberg area, verified) — a completely different, unrelated
+business. DigitalWerk has no Google Business Profile of its own under
+this account." This was wrong — see the correction above.
 
 **48. Business information consistency — ✅ COMPLETE (on-site, verified
 2026-08-24)**
@@ -1323,19 +1380,30 @@ It carries a full, real, verified `PostalAddress` (street, locality,
 region, postal code, country — commit `b86ee47`) and `GeoCoordinates`
 (commit `a02717b`). No further schema-type change needed for this step.
 
-**53. Reviews/reputation — NOT STARTED, genuinely blocked (researched
-2026-08-24)**
+**53. Reviews/reputation — ⚠️ PARTIALLY COMPLETE / CORRECTED (2026-08-24)**
 
-Web search for real reviews of this DigitalWerk (Ansbach,
-Martin-Luther-Platz 14) found none, on any platform. **Important
-disambiguation**: a search result for "Digitalwerk GmbH & CoKG" on
-ProvenExpert is a **different, unrelated company** (Darmstadt,
-IT/telecom integration) — a name collision, not this client. No real
-reviews exist to add `Review`/`AggregateRating` schema for, and per
-instruction, none were fabricated. **Genuinely time/business-dependent**:
-this can only move forward once the business has served real clients who
-leave real reviews (most naturally on a Google Business Profile, which
-is itself blocked on Step 47). Nothing to implement right now.
+**Correction**: the original finding below (web search found no reviews)
+was based on searching under the "DigitalWerk" name and is now known to
+be incomplete — Step 47's corrected audit found the real GBP (under
+"GoogleMaps Profis") **does have 1 real review**: 5.0★ from "Farooq
+Hashim," posted 18 weeks ago, text "Good," currently unreplied by the
+business. This is real, existing, verified data — not fabricated here.
+
+**Not yet done**: replying to the existing review (an external message
+on the user's behalf, needs explicit go-ahead — see Step 47) and adding
+`Review`/`AggregateRating` schema to the site referencing this review
+(a smaller follow-up, technically straightforward once the reply
+question is settled, not done in this pass to avoid front-running that
+decision). Beyond this one review, no broader review history exists yet
+— genuinely time/business-dependent, same as before.
+
+**Original (incomplete) 2026-08-24 finding, preserved for the record:**
+"Web search for real reviews of this DigitalWerk (Ansbach,
+Martin-Luther-Platz 14) found none, on any platform." Still true as a
+statement about public web search results; incomplete because it didn't
+check the actual GBP directly. **Disambiguation still holds**: a search
+result for "Digitalwerk GmbH & CoKG" on ProvenExpert is a different,
+unrelated company (Darmstadt, IT/telecom integration), not this client.
 
 **54. Local citations — NOT STARTED, genuinely blocked (researched
 2026-08-24)**
@@ -1353,9 +1421,14 @@ standing-authorized for autonomous SEO work). **Not attempted** — this
 needs either your direct involvement or an explicit go-ahead naming
 which specific directories to submit to.
 
-**55. Google Maps visibility — NOT STARTED, depends on Step 47**
-Cannot be meaningfully worked on until a Google Business Profile exists
-(Step 47, blocked).
+**55. Google Maps visibility — NOT STARTED, depends on the Step 47
+business decisions**
+A real, verified GBP now exists (Step 47, corrected) with initial
+optimization done, so this is no longer blocked on the profile's mere
+existence. It remains genuinely not actionable further until the
+flagged Step 47 decisions (business name, phone number, real hours) are
+resolved — Maps ranking/visibility work built on top of inconsistent
+NAP data would be premature.
 
 ---
 
@@ -1736,7 +1809,7 @@ is an ongoing cycle, not a one-time task, and only begins once Phases
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
-Not in this table (infrastructure/config changes, not commits): DNS TXT record added at IONOS for GSC domain verification; Vercel `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_GA_MEASUREMENT_ID` environment variables added (Production + Preview); GSC domain property created and verified; GA4 account/property/stream created. All performed with explicit user approval at the time.
+Not in this table (infrastructure/config changes, not commits): DNS TXT record added at IONOS for GSC domain verification; Vercel `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_GA_MEASUREMENT_ID` environment variables added (Production + Preview); GSC domain property created and verified; GA4 account/property/stream created; Google Business Profile ("GoogleMaps Profis," 2026-08-24) — website field, description, 4 new services, and a "Web Designer" secondary category added, all pending Google's review. All performed with explicit user approval at the time.
 
 ---
 
