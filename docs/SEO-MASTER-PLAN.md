@@ -255,7 +255,7 @@ Not yet implemented — deferred per explicit scoping, not forgotten:
 | M1 | New `buildContactPageJsonLd`/`buildServiceJsonLd`/`buildWebSiteJsonLd` schema helpers defined but not called by any page yet (`/kontakt` and the two KI-Agenten supporting pages still use disconnected inline JSON-LD) | Medium | ✅ COMPLETE / LIVE — see "M1 — Schema helper wiring" below |
 | M2 | 2-hop redirect chain (HTTP apex → HTTPS apex → HTTPS www) | Low-Medium | NOT STARTED (Vercel domain config, not app code) |
 | M3 | No `Content-Security-Policy` header | Low | ✅ CLOSED (Report-Only, deferred/monitored — user decision 2026-08-23) — see "M3 — Content-Security-Policy" below |
-| M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | BLOCKED (re-attempted 2026-08-23 with real avenues, all closed — see below) |
+| M4 | Core Web Vitals (LCP/INP/CLS) unverified — no authenticated Lighthouse/PSI access in the audit environment | Medium | ⚠️ PARTIALLY RESOLVED (2026-08-24) — Vercel Speed Insights enabled, collector verified loading; dashboard data not yet confirmed, see below |
 | M5 | `lib/metadata.ts` pending `absoluteUrl()`-based canonical rewrite — robustness improvement, not a live bug (live canonicals already verified correct) | Low | ✅ COMPLETE / LIVE (2026-08-23, commit `c60da5b`) — see the OG-metadata resolution write-up under Step 33 (Phase 4) |
 
 Do NOT mark M2/M4 as completed without explicit approval or real evidence respectively. M1/M3/M5 are resolved — see their write-ups.
@@ -755,6 +755,61 @@ rule — flagging for your decision: get/provide a PSI API key, approve
 enabling Speed Insights, or accept that this will resolve itself
 naturally once the site has more real traffic.
 
+**✅ Vercel Speed Insights enabled (2026-08-24), approved by user —
+partially resolves M4.**
+
+**Cost verified before enabling, per instruction.** Two independent
+confirmations, both before any toggle was touched: (1) official Vercel
+docs (`vercel.com/docs/speed-insights/limits-and-pricing`) state Speed
+Insights is free on the Hobby plan for one project — first 10,000
+events/month included; if that cap is hit, Vercel pauses recording until
+the next day, it does **not** auto-charge or force an upgrade. (2) The
+Vercel dashboard's own "Enable Speed Insights" dialog showed, before the
+button was clicked: **"Monthly Fee: Free on Hobby"** / **"Fee per 10k
+Data Points: Free on Hobby."** No charge, upgrade, or billing commitment
+was ever presented — nothing to stop before accepting.
+
+**Commit:** `a46f42f` — feat(seo): enable Vercel Speed Insights (M4).
+
+**Implemented:** enabled the feature for the `digitalwerk` project via
+the Vercel dashboard, then installed `@vercel/speed-insights` and mounted
+`<SpeedInsights />` once in `components/layout/site-shell.tsx` — the
+single shared shell both `app/(de)/layout.tsx` and `app/en/layout.tsx`
+already render, so every route in both locales is covered without
+duplicating the mount, same pattern already used there for `<Analytics
+/>`. `components/layout/site-shell.tsx` was confirmed clean of
+pre-existing unrelated changes before staging (diffed against last
+commit — lesson from the earlier `en/solutions/page.tsx` isolation
+mistake, applied here proactively).
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `rm -rf .next && npm run build` — 54/54 routes,
+all still static) → Committed → Pushed → Deployed
+(`dpl_EAF9NB2bJ9q4ztPsjNTAmTq4hS56`, READY, aliased to
+`www.digitalwerkk.de`) → Production Verified (partial — see below).
+
+**Production verification (2026-08-24):**
+- Live network trace on the homepage confirmed the collector script
+  (`/d3b7b1aefc240b69/script.js`) loads successfully (200) — **same-origin**,
+  which is why the existing CSP Report-Only policy needed **no change**:
+  `script-src 'self'` already covers it.
+- **Not yet confirmed: the Speed Insights dashboard showing collected
+  data.** Checked twice, several minutes apart, after visiting multiple
+  pages (homepage, `/ki-agenten`, `/loesungen/seo`, `/kontakt`) to
+  trigger page-lifecycle vitals reporting — dashboard still showed "No
+  data available" both times. This is most consistent with normal
+  aggregation lag (GA4 showed the same kind of processing delay earlier
+  in this project) rather than a broken integration, since the script
+  itself is confirmed loading correctly — but this is **not proven yet**,
+  only the more likely explanation. **Needs a follow-up check** (e.g., in
+  a few hours, once genuine visits have accumulated) to fully confirm
+  end-to-end data collection before this can be marked complete.
+
+**STATUS: M4 partially resolved.** The platform-level blocker (no access
+to real CWV data) is removed — Speed Insights is enabled, free, and its
+collector script is verified loading. Full resolution (confirmed data
+flowing into the dashboard) is pending a later check.
+
 Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
 - Body content already mentions the primary "KI-Agenten" keyword cluster
@@ -1045,6 +1100,7 @@ Verified — all 5 stages complete.
 | `5c0e0f5` | feat(seo): add Digital Marketing and Leadgenerierung service pages | Phase 4 (gap pages) | Pushed; deployment FAILED (see process note) |
 | `90e35dc` | fix(seo): remove accidentally-committed unrelated changes from en/solutions/page.tsx | Phase 4 (gap pages, isolation fix) | Pushed, deployed, production verified |
 | `c7dea46` | fix(seo): align existing service-page titles/descriptions with real keyword data | Phase 4 (Steps 34-38) | Pushed, deployed, production verified |
+| `a46f42f` | feat(seo): enable Vercel Speed Insights (M4) | Phase 2 (M4, partial) | Pushed, deployed; collector script verified live, dashboard data pending |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
