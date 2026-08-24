@@ -1283,8 +1283,10 @@ required), all submitted and pending Google's review (~up to 24h):**
   keywords, and not changed at all without confirmation this is the
   intended real-world name
 - **Phone number mismatch**: GBP shows `01522 9083532`; the website
-  shows `+49 160 5667490` — don't know which is the real, current,
-  monitored number
+  shows `+49 160 5667490`. **Decision (user, 2026-08-24): leave the GBP
+  phone number unchanged — the user will update it later themselves.**
+  Not touched, and not to be touched in a future pass unless
+  instructed — this is now a closed decision, not an open question.
 - **Hours** (currently 24/7) — don't know the real operating/response
   hours
 - **Service area** (Würzburg, Göttingen included alongside Ansbach) —
