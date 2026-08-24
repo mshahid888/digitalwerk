@@ -437,7 +437,7 @@ action on M3 unless/until the user revisits the A/B/C decision.
 
 ## PHASE 3 — GOOGLE SEARCH CONSOLE & MEASUREMENT
 
-**STATUS: IN PROGRESS** — 6 of 10 steps COMPLETE + VERIFIED (23, 24, 25, 26, 30, 31); 1 not authorized (27); 2 blocked on Google-side processing (28, 29); 1 undefined scope (32). This section reflects real GSC/GA4 evidence gathered 2026-08-23, superseding the earlier "NOT STARTED" placeholder — see `.claude/SEO-AGENT.md` for the operating rules driving this phase going forward.
+**STATUS: IN PROGRESS** — 6 of 10 steps COMPLETE + VERIFIED (23, 24, 25, 26, 30, 31); 1 CLOSED as not currently required (32, 2026-08-24); 1 not authorized (27); 2 blocked on Google-side processing (28, 29). This section reflects real GSC/GA4 evidence gathered 2026-08-23, superseding the earlier "NOT STARTED" placeholder — see `.claude/SEO-AGENT.md` for the operating rules driving this phase going forward.
 
 **Step 23 — Google Search Console: ✅ COMPLETE + VERIFIED**
 Domain property created for `digitalwerkk.de` under the account's Google identity.
@@ -468,8 +468,46 @@ GSC → Security & Manual Actions, both sub-reports checked directly (not gated 
 **Step 31 — GA4: ✅ COMPLETE + VERIFIED**
 Account "DigitalWerk", property "DigitalWerk" (Internet & Telecom, Germany, EUR), web stream "DigitalWerk Website" → `https://www.digitalwerkk.de`. Measurement ID `G-YXGMNDPP14` wired into `components/analytics/analytics.tsx` via `NEXT_PUBLIC_GA_MEASUREMENT_ID` (Vercel Production + Preview). Confirmed live: GA4 Realtime overview showed 1 active user in the last 30 minutes from real production traffic.
 
-**Step 32 — Connect other required analytics: SCOPE UNDEFINED**
-Not started — "other required analytics" isn't defined anywhere in this plan or by the user yet. `components/analytics/analytics.tsx` already supports GTM/Meta Pixel/TikTok Pixel/Clarity (all inactive, gated behind unset env vars) if/when one of these is actually decided as needed. Do not activate any of them without an explicit decision on what's required.
+**Step 32 — Connect other required analytics: ✅ CLOSED as "not currently
+required" (2026-08-24)**
+
+Re-evaluated per instruction: determine whether this can be formally
+closed based on the existing analytics architecture, or whether it
+genuinely needs a strategic decision.
+
+**Reasoning:**
+- The one analytics platform actually required for baseline SEO/traffic
+  measurement — GA4 — is connected and verified (Step 31, ✅ COMPLETE +
+  VERIFIED, confirmed live with real production traffic).
+- `components/analytics/analytics.tsx` (re-confirmed unchanged this
+  session) already has full, working support for four additional
+  integrations — GTM (`NEXT_PUBLIC_GTM_ID`), Meta Pixel
+  (`NEXT_PUBLIC_META_PIXEL_ID`), TikTok Pixel
+  (`NEXT_PUBLIC_TIKTOK_PIXEL_ID`), and Microsoft Clarity
+  (`NEXT_PUBLIC_CLARITY_ID`) — each gated behind its own env var, each
+  fully coded and ready. **Activating any of them requires zero code
+  changes** — setting the corresponding env var in Vercel is the entire
+  activation step.
+- No business requirement for any of these four has ever been stated —
+  "other required analytics" was never defined in the roadmap or by the
+  user. Nothing is actually blocked or waiting on a technical
+  implementation right now.
+- The real open question — *which* of these platforms DigitalWerk should
+  actually use (e.g., running Meta/TikTok ads would justify their
+  pixels; wanting session-replay data would justify Clarity) — is a
+  business/marketing decision about what channels to run, not a
+  technical one, and nothing in this project currently depends on the
+  answer.
+
+**Conclusion: formally closed as "not currently required."** The
+technical readiness question (can the codebase support this?) is fully
+resolved — yes, trivially, via env var. The remaining question (should
+any of these be turned on?) is a genuine business decision, but not one
+this step needs to force now: nothing is blocked by leaving it open, and
+it can be revisited the moment a real need arises (e.g., "we're
+launching Meta Ads, activate the pixel") without any code work. Not
+re-opening this as a pending item unless a concrete business need is
+stated.
 
 **SEMrush**: evaluated and explicitly excluded from the workflow (not necessary at DigitalWerk's current stage — see prior audit). A "RankyTools" group-buy/shared-account service was also investigated and rejected (no official SEMrush relationship, no API/MCP, likely violates SEMrush's own Terms of Service). Neither is depended on anywhere in this plan.
 
@@ -1138,6 +1176,35 @@ Verified — all 5 stages complete.
 `addressLocality":"Ansbach"`, `addressRegion":"Bayern"`,
 `postalCode":"91522"`, confirmed present in the live page's JSON-LD.
 
+**✅ GeoCoordinates follow-up closed (2026-08-24).** The one open item
+from this finding — `GeoCoordinates` deliberately left out for lack of a
+verified source — is now resolved.
+
+**Commit:** `a02717b` — fix(seo): add real GeoCoordinates to Organization
+schema.
+
+**Implemented:** looked up real coordinates for the confirmed address
+(Martin-Luther-Platz 14, 91522 Ansbach) via OpenStreetMap Nominatim (a
+public, real geocoding source — not invented, not estimated):
+**49.3031391, 10.5717758**. Added as `geo: { "@type": "GeoCoordinates",
+latitude, longitude }` on the `PostalAddress` in
+`buildOrganizationJsonLd()`, the standard schema.org
+LocalBusiness/Organization convention. The other open item from this
+finding — a Google Business Profile URL for `sameAs` — remains
+unresolved: that requires creating/confirming an external account
+listing, outside this session's authority (code-only), not attempted.
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `rm -rf .next && npm run build` — 54/54 routes,
+`geo` field confirmed correct in local build output) → Committed →
+Pushed → Deployed (`dpl_eyAdyhHJbrgzzSALNiiQL4r94pLu`, READY, aliased to
+`www.digitalwerkk.de`) → Production Verified — all 5 stages complete.
+
+**Production verification (2026-08-24):** fresh `curl` against
+`https://www.digitalwerkk.de/` — `"geo":{"@type":"GeoCoordinates",
+"latitude":49.3031391,"longitude":10.5717758}` present in the live
+page's Organization JSON-LD, exactly matching the Nominatim lookup.
+
 ---
 
 ## COMMIT / DEPLOYMENT HISTORY
@@ -1156,6 +1223,7 @@ Verified — all 5 stages complete.
 | `90e35dc` | fix(seo): remove accidentally-committed unrelated changes from en/solutions/page.tsx | Phase 4 (gap pages, isolation fix) | Pushed, deployed, production verified |
 | `c7dea46` | fix(seo): align existing service-page titles/descriptions with real keyword data | Phase 4 (Steps 34-38) | Pushed, deployed, production verified |
 | `a46f42f` | feat(seo): enable Vercel Speed Insights (M4) | Phase 2 (M4, partial) | Pushed, deployed; collector script verified live, dashboard data pending |
+| `a02717b` | fix(seo): add real GeoCoordinates to Organization schema | Phase 4 (local schema follow-up) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
