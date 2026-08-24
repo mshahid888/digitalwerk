@@ -874,6 +874,73 @@ value — the exact pattern the "don't build for keywords alone" rule
 exists to catch. Neither is disqualified; this is a recommendation for
 your review, not a go/no-go call made here.
 
+**✅ IMPLEMENTED + VERIFIED (2026-08-23), approved by user.** Both pages
+built per the strategy above.
+
+**Commits:** `5c0e0f5` (initial implementation), `90e35dc` (isolation
+fix — see "Process note" below).
+
+**New routes (all statically generated):** `/loesungen/digital-marketing`,
+`/en/solutions/digital-marketing`, `/loesungen/leadgenerierung`,
+`/en/solutions/lead-generation`. Both follow the exact same pattern as
+their `/loesungen/*` siblings (SEO, Webentwicklung, GMB, Content
+Creation) — plain `ServicePageTemplate`, no bespoke Service JSON-LD (kept
+consistent with those pages rather than the special KI-Agenten
+treatment). No pricing was invented for either — both omit `hero.pricing`
+and `ComparisonItem.price` since no real DigitalWerk price exists yet for
+either service.
+
+**Navigation/internal linking, based on existing site architecture:**
+- `lib/navigation.ts`: added to `footerServiceLinks`/`footerServiceLinksEn`
+  — the same pattern already used for the `/ki-agenten/*` supporting
+  pages. **Deliberately not added** to `primaryNav`/`primaryNavEn`'s
+  Lösungen dropdown — that 5-item list is locked navigation architecture,
+  and the same footer-only precedent was already set for the KI-Agenten
+  supporting pages, resolving the earlier open nav-placement question by
+  following existing precedent rather than inventing a new pattern.
+- `app/(de)/loesungen/page.tsx`, `app/en/solutions/page.tsx`: added both
+  as `ComparisonList` cards on the Lösungen/Solutions overview page — the
+  established internal-linking hub for individually-bookable services.
+- `lib/site-structure.ts`: breadcrumb entries (DE + EN).
+- `app/sitemap.ts`: both routes registered with DE/EN hreflang alternates.
+
+**Lifecycle:** Implemented → Validated locally (tsc/lint/build clean,
+54/54 routes) → Committed → Pushed → **Deployed: FAILED** (see process
+note) → Fixed → Re-validated → Committed → Pushed → Deployed
+(`dpl_6dRYuvjMsCfWJf3k1r9WevZg3Q3c`, READY) → Production Verified — all
+stages now complete.
+
+**Production verification (2026-08-23):** all four new routes return
+HTTP 200 with correct, keyword-targeted titles; sitemap.xml contains all
+four; CSP Report-Only header still present and unaffected;
+`/en/solutions` overview page still loads correctly (200) after the fix.
+
+**Process note — a real isolation mistake, caught and corrected the same
+session.** The first push (`5c0e0f5`) failed Vercel's build
+(`TS2322` at `RelatedServices`/`CTA` call sites in
+`app/en/solutions/page.tsx`) despite a clean local build. Root cause:
+`app/en/solutions/page.tsx` was already one of this session's known
+pre-existing unrelated dirty files (present in the original working-tree
+state before this session began, alongside `components/ui/cta.tsx` and
+`components/solutions/related-services.tsx` — an in-progress,
+never-committed `locale` prop addition to those two components). Editing
+that file's `services` array and then staging/committing the *whole
+file* pulled in those unrelated, uncommitted `locale`-prop usages too —
+committing code that called a prop the actually-committed component
+definitions don't support. The local build didn't catch this because the
+local working tree still had the matching (also uncommitted) component
+changes; Vercel builds from git only, so it hit the real mismatch. Fixed
+in `90e35dc`: reverted the file to its last real commit (`de7cbc7`) plus
+only this task's own two-item addition, isolating the unrelated edit back
+out — then restored that unrelated edit to the working tree as an
+uncommitted change again (`git diff` confirmed byte-identical to its
+pre-session state), so nothing the user had in progress was lost, per
+`.claude/SEO-AGENT.md`'s isolation rule. **Lesson applied going forward:**
+before staging a file for an SEO commit, diff it against its last commit
+first when it's known to have pre-existing uncommitted changes — don't
+assume an edit to one region of a file is isolated from unrelated changes
+elsewhere in that same file.
+
 **Local/Ansbach opportunity analysis (expanded):** the only *measured*
 local search number anywhere in the project is "seo agentur ansbach"
 (30/mo) — real evidence against building multiple thin per-keyword local
@@ -932,6 +999,8 @@ Verified — all 5 stages complete.
 | `b86ee47` | fix(seo): add local Ansbach/Bavaria signals to Organization schema | Phase 4 (keyword strategy → local finding) | Pushed, deployed, production verified |
 | `2ca18f9` | feat(seo): add Content-Security-Policy in Report-Only mode | Phase 2 (M3) | Pushed, deployed, production verified |
 | `c60da5b` | fix(seo): merge openGraph/twitter defensively, fix duplicate brand name in OG title | Phase 2 (M5) / Phase 4 (Step 33 OG finding) | Pushed, deployed, production verified |
+| `5c0e0f5` | feat(seo): add Digital Marketing and Leadgenerierung service pages | Phase 4 (gap pages) | Pushed; deployment FAILED (see process note) |
+| `90e35dc` | fix(seo): remove accidentally-committed unrelated changes from en/solutions/page.tsx | Phase 4 (gap pages, isolation fix) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
