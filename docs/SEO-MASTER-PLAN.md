@@ -1549,14 +1549,73 @@ programmatically or on a schedule from within this session.
 
 ## PHASE 9 — MEASUREMENT
 
-**STATUS: IN PROGRESS.** **1 of 11 steps COMPLETE + VERIFIED** (90).
-Remaining steps depend on infrastructure already live: GSC (Steps
-23-26, 30-31) and GA4 (Step 31) are connected and verified; Vercel
-Speed Insights (M4) is enabled and awaiting data. Establishing the
-full Phase 9 baseline (Step 85) has not been done.
+**STATUS: IN PROGRESS.** **2 of 11 steps COMPLETE** (85, 90); **1
+substantially complete** (92, existing Phase 2 coverage); **8 blocked**
+(86-89, 91, 93-95) — each genuinely time/tool/business-decision-gated,
+detailed per-step below, not forced.
 
-**85. Establish SEO baseline**
-**86. Rank tracking**
+**85. Establish SEO baseline — ✅ COMPLETE (2026-08-24, synthesized from
+already-recorded real evidence — no new GSC/Speed Insights polling
+performed, per instruction)**
+
+A one-time consolidated snapshot, built entirely from evidence already
+gathered and verified earlier in this document (re-stated here, not
+re-measured) plus two cheap, allowed direct checks (`sitemap.xml`,
+route-file count) that aren't covered by the "don't repeatedly poll
+GSC/Speed Insights" restriction:
+
+- **Indexing (GSC, Step 25/28)**: sitemap submitted, status Success, 36
+  discovered pages at submission time (2026-08-23). Pages/Index-coverage
+  report still Google-side "processing" as of the last check
+  (2026-08-24) — not re-checked again here.
+- **Live sitemap (fetched 2026-08-24)**: `https://www.digitalwerkk.de/sitemap.xml`
+  currently lists **38** indexable URLs. The codebase has 46 `page.tsx`
+  route files total; the difference is explained by the 6 legal pages
+  correctly marked `noindex` (Phase 2 finding) plus a couple of
+  non-sitemap route types — consistent, not investigated further since
+  Phase 2 already confirmed sitemap/route parity has no orphans or gaps.
+- **Traffic (GA4, Step 31)**: connected and verified live, but real
+  traffic remains minimal — Realtime showed only 1 active user on last
+  check. Consistent with a domain property verified only days ago.
+- **Core Web Vitals (M4)**: Vercel Speed Insights enabled, collector
+  script confirmed loading in production; dashboard has not yet
+  accumulated data. GSC's own CrUX-backed report: "not enough usage data
+  in the last 90 days" on both Desktop and Mobile. Three independent
+  tools (GA4, GSC CrUX, Speed Insights) all show the same "too new, too
+  little traffic" pattern — not re-polled again here.
+- **Technical health (Phase 2 audit)**: 0 critical issues, 2 high-priority
+  issues (resolved: H1/H2), 5 medium/low issues (M1/M3/M5 closed, M2 needs
+  a DNS decision, M4 partially resolved as above).
+- **Conversions (Step 90)**: GA4 `generate_lead` tracking live and
+  verified in production as of today (see above) — the one conversion
+  signal now in place.
+- **Backlinks**: zero built or measured (Phase 7, not started — needs a
+  paid tool or outreach permission).
+- **Local presence**: no Google Business Profile exists yet for
+  DigitalWerk (Phase 5, Step 47, blocked) — no local-pack/Maps
+  visibility to measure.
+- **AI visibility**: not measurable this session (Phase 8, no tool access
+  to query ChatGPT/Google AI/Gemini/Perplexity directly).
+
+**Honest summary**: this is a genuinely early-stage property (site
+launched/verified only days before this baseline) with sound technical
+foundations (schema, crawlability, on-page structure, one working
+conversion signal) but almost no accumulated real-world traffic,
+ranking, or backlink data yet — exactly what you'd expect this soon
+after launch, not a sign of anything broken. Steps 86-89 and 91-95
+below remain genuinely blocked on either more elapsed time (for
+GSC/GA4/CrUX data to accumulate) or tooling/business decisions already
+flagged elsewhere in this document — restated per-step rather than
+duplicated.
+
+**86. Rank tracking — BLOCKED (needs a paid rank-tracking tool; no
+organic rankings exist yet for a property this new to track)**
+**87. Organic traffic — BLOCKED (depends on GSC Performance data, which
+requires real indexed/ranking pages that don't exist yet — property too
+new)**
+**88. Search impressions — BLOCKED, same GSC Performance-data
+prerequisite as 87**
+**89. CTR — BLOCKED, same GSC Performance-data prerequisite as 87**
 **87. Organic traffic**
 **88. Search impressions**
 **89. CTR**
@@ -1612,11 +1671,25 @@ from Google's endpoint, not a DigitalWerk-side defect: the client-side
 request was built and sent correctly, which is the part this codebase is
 responsible for.)
 
-**91. Indexed pages**
-**92. Technical health**
-**93. Backlinks**
-**94. Local rankings**
-**95. AI visibility**
+**91. Indexed pages — BLOCKED (duplicate of Step 28's GSC Pages report,
+still Google-side processing — not re-checked here)**
+
+**92. Technical health — ✅ SUBSTANTIALLY COMPLETE (existing coverage)**
+Already fully covered by the Phase 2 technical SEO audit (crawlability,
+indexability, metadata, canonicals, internal linking, HTTP/URL health,
+sitemap, schema, performance, mobile SEO, rendering, security basics) —
+see Phase 2 above for the full finding set and M1-M5 tracking. Not
+re-audited from scratch; this step tracks the same open items already
+recorded there (M2 needs a DNS decision, M4 awaiting CWV data).
+
+**93. Backlinks — BLOCKED, duplicate of Phase 7 Step 74 (nothing built
+yet, needs a paid monitoring tool)**
+
+**94. Local rankings — BLOCKED, depends on Phase 5 Step 47 (no Google
+Business Profile exists yet to have local-pack/Maps rankings)**
+
+**95. AI visibility — NOT MEASURABLE this session, duplicate of Phase 8
+Step 84 (no tool access to query AI systems)**
 
 ---
 
