@@ -141,6 +141,11 @@ const content: ServicePageContent = {
         title: "We don't disappear after launch",
         description: "We keep supporting your website after it goes live.",
       },
+      {
+        title: "Regionally rooted",
+        description:
+          "Based in Ansbach, we build websites for businesses across Mittelfranken — in person locally or remotely.",
+      },
     ],
   },
   faq: {

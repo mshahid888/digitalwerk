@@ -132,6 +132,11 @@ const content: ServicePageContent = {
         title: "A system, not just a campaign",
         description: "Lead generation is set up as an ongoing system, not a one-off push.",
       },
+      {
+        title: "Regionally rooted",
+        description:
+          "Based in Ansbach, we help businesses across Mittelfranken and Bavaria build a predictable flow of leads.",
+      },
     ],
   },
   faq: {

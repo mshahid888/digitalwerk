@@ -139,6 +139,11 @@ const content: ServicePageContent = {
         description:
           "Wir betreuen Ihre Website auch nach dem Start weiter.",
       },
+      {
+        title: "Regional verwurzelt",
+        description:
+          "Mit Sitz in Ansbach entwickeln wir Websites für Unternehmen in ganz Mittelfranken – persönlich vor Ort oder remote.",
+      },
     ],
   },
   faq: {

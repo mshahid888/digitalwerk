@@ -133,6 +133,11 @@ const content: ServicePageContent = {
         description:
           "Leadgenerierung ist bei uns dauerhaft eingerichtet, nicht nur eine einmalige Aktion.",
       },
+      {
+        title: "Regional verwurzelt",
+        description:
+          "Mit Sitz in Ansbach unterstützen wir Unternehmen in ganz Mittelfranken und Bayern bei planbarer Leadgenerierung.",
+      },
     ],
   },
   faq: {
