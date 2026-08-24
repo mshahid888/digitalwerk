@@ -134,6 +134,11 @@ const content: ServicePageContent = {
         title: "Built for the long term",
         description: "For us, SEO is a partnership, not a one-off task.",
       },
+      {
+        title: "Regionally rooted",
+        description:
+          "Based in Ansbach, we work with businesses across Mittelfranken — from Nuremberg to Fürth to Rothenburg ob der Tauber.",
+      },
     ],
   },
   faq: {

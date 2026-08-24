@@ -139,6 +139,11 @@ const content: ServicePageContent = {
         description:
           "SEO ist für uns eine Partnerschaft, keine einmalige Maßnahme.",
       },
+      {
+        title: "Regional verwurzelt",
+        description:
+          "Mit Sitz in Ansbach betreuen wir Unternehmen in ganz Mittelfranken – von Nürnberg über Fürth bis Rothenburg ob der Tauber.",
+      },
     ],
   },
   faq: {
