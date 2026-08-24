@@ -457,6 +457,7 @@ Requires explicit per-instance user approval every time — never assumed, even 
 **Step 28 — Check indexed/excluded pages: BLOCKED**
 GSC → Indexing → Pages report has not finished processing for this newly-verified property: "Processing data, please check again in a day or so" (both the summary widget and the "Why pages aren't indexed" breakdown table are empty). Not a technical fault — Google-side processing delay. Retry later; do not loop on it repeatedly.
 **Re-checked 2026-08-23 (later same day): unchanged, still processing.** Not retrying again this session.
+**Re-checked 2026-08-24 (next calendar day — the "check again in a day or so" window): still unchanged, still processing.** Genuinely a Google-side delay outside this project's control; not retrying again until meaningfully more time has passed.
 
 **Step 29 — Google-selected canonical: BLOCKED (depends on Step 28)**
 For the homepage, both "User-declared canonical" and "Google-selected canonical" show `N/A` in the Index view — expected, since Google assigns a canonical only after indexing. Not yet checked for other pages.
