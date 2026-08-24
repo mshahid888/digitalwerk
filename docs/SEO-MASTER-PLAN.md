@@ -959,6 +959,43 @@ into FAQ or body sections of existing pages) remains a larger, lower-
 urgency task not undertaken here, since it goes beyond the same-scope
 precedent this pass deliberately stayed within.
 
+**✅ Partially picked up (2026-08-24), commit `0499ced`.** With Phase
+5–9 genuinely exhausted of executable steps for now, resumed this
+lower-urgency body-copy work rather than leave it indefinitely
+deferred. Re-checked every page in the KEYWORD-STRATEGY.md tiers for
+the same "Regional verwurzelt" local-service-area content Step 51
+added to `/loesungen/seo`: `/loesungen/digital-marketing` already had
+it; `/loesungen/webentwicklung` and `/loesungen/leadgenerierung` did
+not, despite `KEYWORD-STRATEGY.md` explicitly naming "Webdesign
+Ansbach" / "Webentwicklung Ansbach" as real recovered local terms for
+the former, and Leadgenerierung carrying the highest CPC signal in the
+whole keyword universe with zero regional content of any kind.
+
+**Implemented:** one additive `whyDigitalWerk.points` entry per page
+(DE + EN, 4 files total), following the exact established pattern —
+same real claim (Ansbach-based, serving Mittelfranken/Bavaria) already
+used on the SEO and Digital Marketing pages, phrased distinctly per
+page to avoid duplicate content across pages. No new business claims,
+no restructuring, no other sections touched.
+
+**Lifecycle:** Implemented → Validated (`npx tsc --noEmit` clean,
+`npm run lint` clean, `rm -rf .next && npm run build` — all routes
+still static) → Committed → Pushed → Deployed
+(`dpl_JAhiPLfh5biFUhL5S43Vp9nQgJAU`, READY, aliased to
+`www.digitalwerkk.de`) → Production Verified — all 5 stages complete.
+
+**Production verification (2026-08-24):** fresh `curl` against all
+four live URLs (`/loesungen/webentwicklung`, `/loesungen/leadgenerierung`,
+`/en/solutions/web-development`, `/en/solutions/lead-generation`) —
+the new heading and body text confirmed present and correct on all
+four.
+
+**Still not done** (genuinely lower-priority, no evidenced gap found):
+E-Commerce, KI-Agenten, and the remaining `/loesungen/*` pages weren't
+explicitly flagged with a missing local/regional term in
+KEYWORD-STRATEGY.md the way Webentwicklung and Leadgenerierung were —
+not adding an unevidenced bullet there just for consistency.
+
 ### Keyword strategy (2026-08-23)
 
 **Status: proposal, not implemented.** Following the two prior research
@@ -1808,6 +1845,7 @@ is an ongoing cycle, not a one-time task, and only begins once Phases
 | `a468d0c` | feat(seo): add regional service-area point to SEO page (Phase 5, Step 51) | Phase 5 (Step 51) | Pushed, deployed, production verified |
 | `918ad4b` | docs(seo): record Phase 5 Steps 47/48/51 findings (GBP blocked, NAP consistent, regional content live) | Phase 5 (docs) | Pushed, deployed, production verified |
 | `3badbf4` | feat(seo): track contact form submissions as GA4 conversions (Phase 9, Step 90) | Phase 9 (Step 90) | Pushed, deployed, production verified |
+| `0499ced` | feat(seo): add regional service-area content to Webentwicklung and Leadgenerierung pages | Phase 4 (Steps 34-38) | Pushed, deployed, production verified |
 
 For each commit above, all five lifecycle stages are complete: **Implemented → Committed → Pushed → Deployed → Production Verified.**
 
