@@ -46,6 +46,14 @@ export function buildOrganizationJsonLd(
       postalCode: "91522",
       addressCountry: "DE",
     },
+    // Real coordinates for the confirmed address (Martin-Luther-Platz 14,
+    // 91522 Ansbach), looked up via OpenStreetMap Nominatim — not invented.
+    // See docs/SEO-MASTER-PLAN.md for the source lookup.
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 49.3031391,
+      longitude: 10.5717758,
+    },
     sameAs: [
       siteConfig.social.instagram,
       siteConfig.social.linkedin,
