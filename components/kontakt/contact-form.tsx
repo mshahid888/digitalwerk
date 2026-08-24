@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { Check, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site-config";
+import { trackEvent } from "@/components/analytics/track-event";
 
 const fieldClasses =
   "w-full rounded-md border border-primary-200 bg-white px-4 py-2.5 text-sm text-foreground placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2";
@@ -110,9 +111,11 @@ export function ContactForm({ locale = "de" }: { locale?: Locale }) {
 
       form.reset();
       setState("sent");
+      trackEvent("generate_lead", { method: "contact_form" });
     } catch {
       window.location.href = buildMailtoUrl(t, name, email, phone, message);
       setState("sent-via-mailto");
+      trackEvent("generate_lead", { method: "contact_form_mailto_fallback" });
     }
   }
 
