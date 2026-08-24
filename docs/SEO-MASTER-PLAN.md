@@ -456,6 +456,7 @@ Requires explicit per-instance user approval every time — never assumed, even 
 
 **Step 28 — Check indexed/excluded pages: BLOCKED**
 GSC → Indexing → Pages report has not finished processing for this newly-verified property: "Processing data, please check again in a day or so" (both the summary widget and the "Why pages aren't indexed" breakdown table are empty). Not a technical fault — Google-side processing delay. Retry later; do not loop on it repeatedly.
+**Re-checked 2026-08-23 (later same day): unchanged, still processing.** Not retrying again this session.
 
 **Step 29 — Google-selected canonical: BLOCKED (depends on Step 28)**
 For the homepage, both "User-declared canonical" and "Google-selected canonical" show `N/A` in the Index view — expected, since Google assigns a canonical only after indexing. Not yet checked for other pages.
@@ -731,12 +732,28 @@ session rather than restating the old "no API key" note unchanged:
   `.claude/SEO-AGENT.md`'s GA4/GSC rule against fabricating or estimating
   performance data as real applies here too.
 
-**STATUS: remains BLOCKED.** No further action possible without either a
-real Google API key (external account action) or a decision to enable
-Vercel Speed Insights (real cost/product decision). Not retrying again
-this session per the "don't loop on a known blocker" rule — flagging for
-your decision: get/provide a PSI API key, or approve enabling Speed
-Insights, whichever you'd prefer.
+**Fourth avenue checked (2026-08-23): GSC's own Core Web Vitals report**
+(Experience → Core Web Vitals in the left nav) — a genuinely free, no-key,
+real-field-data source that hadn't been checked yet this session. Both
+Mobile and Desktop show: **"Not enough usage data in the last 90 days for
+this device type."** This is GSC surfacing Chrome UX Report (CrUX) field
+data, which requires meaningful real-world traffic volume to populate —
+consistent with GA4 showing only a handful of real visitors so far (this
+is a newly-verified property). Not a missing-access problem this time;
+the site genuinely doesn't have enough traffic yet for CrUX to report on.
+
+**STATUS: remains BLOCKED — now for four independently-confirmed
+reasons**, not just the original one: (1) unauthenticated PSI quota
+exhausted, (2) Vercel Speed Insights not enabled (cost/product decision
+needed), (3) a single-sample browser extraction is not credible CWV
+evidence, (4) GSC's own CrUX-backed report has insufficient real-world
+traffic to report anything yet. No further action possible without
+either a real Google API key, a decision to enable Vercel Speed Insights,
+or simply more time/traffic for CrUX to accumulate data naturally. Not
+retrying again this session per the "don't loop on a known blocker"
+rule — flagging for your decision: get/provide a PSI API key, approve
+enabling Speed Insights, or accept that this will resolve itself
+naturally once the site has more real traffic.
 
 Original write-up before the decision (kept for the historical record):
 Live source audit of the homepage (`app/(de)/page.tsx` + `components/home/*`):
