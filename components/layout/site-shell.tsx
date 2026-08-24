@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { SkipLink } from "./skip-link";
@@ -33,6 +34,7 @@ export function SiteShell({
       </main>
       <Footer />
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }
