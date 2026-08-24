@@ -10,7 +10,6 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { CTA } from "@/components/ui/cta";
-import { RelatedServices } from "@/components/solutions/related-services";
 
 export const metadata: Metadata = buildMetadata(
   {
@@ -131,10 +130,7 @@ export default function Page() {
         intro="Don't need the complete package? Every service is also available on its own."
         highlightLabel="A good fit if"
         items={services}
-        linkLabel="Learn more"
       />
-
-      <RelatedServices locale="en" />
 
       <div className="py-16 md:py-24">
         <CTA
@@ -144,7 +140,6 @@ export default function Page() {
           primaryHref="/en/contact"
           secondaryHref="/en/contact"
           secondaryLabel="Request a Project"
-          locale="en"
         />
       </div>
     </>
