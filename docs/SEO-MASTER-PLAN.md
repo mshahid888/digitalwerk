@@ -1207,6 +1207,150 @@ page's Organization JSON-LD, exactly matching the Nominatim lookup.
 
 ---
 
+## PHASE 5 — LOCAL SEO
+
+**STATUS: IN PROGRESS (structure added 2026-08-24, per the original
+106-step roadmap supplied by the user — not invented).** Initial status
+for every step below is `NOT STARTED` unless existing evidence from
+earlier phases already proves otherwise, per instruction. Several Phase 5
+items overlap with local-schema and local-keyword work already done in
+Phase 4 — where that's true, it's recorded here with a pointer, not
+repeated.
+
+**47. Google Business Profile — NOT STARTED**
+
+**48. Business information consistency — NOT STARTED**
+
+**49. Local keywords — PARTIALLY COMPLETE (existing work)**
+Already substantially addressed in Phase 4's keyword strategy: real and
+recovered local/regional terms identified across every tier (see
+`docs/keyword-research/KEYWORD-STRATEGY.md` and
+`GAP-PAGE-STRATEGY.md` §3). Not repeating that research; this step
+tracks whether further local-keyword work is needed as Phase 5 proceeds.
+
+**50. Ansbach landing strategy — COMPLETE (strategy decided, 2026-08-23)**
+`GAP-PAGE-STRATEGY.md` §3.3 already concluded, with evidence (only one
+*measured* local number exists anywhere in the project — 30/mo for "seo
+agentur ansbach"), that dedicated per-keyword local landing pages are
+**not** justified by real volume, and recommended concentrating local
+signal on schema + Google Business Profile + in-page copy instead. That
+recommendation stands as this phase's Ansbach strategy.
+
+**51. Relevant surrounding locations — PARTIALLY COMPLETE (existing work)**
+Regional terms (Nürnberg, Fürth, Rothenburg o.d. Tauber, Mittelfranken)
+already identified in `KEYWORD-STRATEGY.md`'s SEO tier; Mittelfranken and
+Bayern already added to the Organization schema's `areaServed` (commit
+`b86ee47`). Not yet worked into on-page body copy anywhere.
+
+**52. LocalBusiness schema — COMPLETE + VERIFIED (existing implementation)**
+`buildOrganizationJsonLd()` already emits `"@type": ["Organization",
+"ProfessionalService"]` — `ProfessionalService` is a schema.org subtype
+of `LocalBusiness`, so this entity already validates as a LocalBusiness.
+It carries a full, real, verified `PostalAddress` (street, locality,
+region, postal code, country — commit `b86ee47`) and `GeoCoordinates`
+(commit `a02717b`). No further schema-type change needed for this step.
+
+**53. Reviews/reputation — NOT STARTED**
+
+**54. Local citations — NOT STARTED**
+
+**55. Google Maps visibility — NOT STARTED (depends on Step 47)**
+
+---
+
+## PHASE 6 — CONTENT & TOPICAL AUTHORITY
+
+**STATUS: NOT STARTED.** All steps below are `NOT STARTED`.
+
+**56. Content-gap research**
+**57. AI-agent topic cluster**
+**58. Digital-marketing topic cluster**
+**59. Local-business topics**
+**60. Industry-specific AI topics**
+**61. Content calendar**
+**62. Create cornerstone content**
+**63. Create supporting content**
+**64. Internal-link clusters**
+**65. Publish and index**
+**66. Measure and improve**
+
+---
+
+## PHASE 7 — AUTHORITY & BACKLINKS
+
+**STATUS: NOT STARTED.** All steps below are `NOT STARTED`.
+
+**67. Competitor backlink analysis**
+**68. Backlink opportunities**
+**69. Local citations**
+**70. Business/industry directories**
+**71. Digital PR**
+**72. Partnerships**
+**73. Link-worthy assets**
+**74. Monitor backlinks**
+
+---
+
+## PHASE 8 — AI SEARCH / GEO (GENERATIVE ENGINE OPTIMIZATION)
+
+**STATUS: NOT STARTED.** All steps below are `NOT STARTED`.
+
+**75. AI-search baseline**
+**76. ChatGPT visibility**
+**77. Google AI visibility**
+**78. Gemini visibility**
+**79. Perplexity visibility**
+**80. Entity optimization**
+**81. AI-readable content**
+**82. Citation/source optimization**
+**83. AI-agent topical authority**
+**84. Monitor AI visibility**
+
+---
+
+## PHASE 9 — MEASUREMENT
+
+**STATUS: NOT STARTED (some prerequisites already exist from earlier
+phases).** All steps below are `NOT STARTED` as Phase 9 tasks, though
+several depend on infrastructure already live: GSC (Steps 23-26,
+30-31) and GA4 (Step 31) are connected and verified; Vercel Speed
+Insights (M4) is enabled and awaiting data. Establishing the actual
+Phase 9 *baseline* has not been done.
+
+**85. Establish SEO baseline**
+**86. Rank tracking**
+**87. Organic traffic**
+**88. Search impressions**
+**89. CTR**
+**90. Conversions/leads**
+**91. Indexed pages**
+**92. Technical health**
+**93. Backlinks**
+**94. Local rankings**
+**95. AI visibility**
+
+---
+
+## PHASE 10 — CONTINUOUS SEO
+
+**STATUS: NOT STARTED.** All steps below are `NOT STARTED` — this phase
+is an ongoing cycle, not a one-time task, and only begins once Phases
+5–9 have enough in place to cycle through.
+
+**96. Monthly technical audit**
+**97. Keyword opportunity analysis**
+**98. Content refreshes**
+**99. New content**
+**100. Competitor monitoring**
+**101. Backlink/authority growth**
+**102. Local SEO improvement**
+**103. AI-search optimization**
+**104. Conversion optimization**
+**105. Monthly SEO reporting**
+**106. Repeat the cycle**
+
+---
+
 ## COMMIT / DEPLOYMENT HISTORY
 
 | Commit | Message | Phase | Status |
