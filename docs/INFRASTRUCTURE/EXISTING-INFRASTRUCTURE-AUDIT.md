@@ -5,13 +5,119 @@
 
 ---
 
-## Important limitation — the live audit could not be completed
+## LIVE INSPECTION — completed 2026-09-06 (SSH `deploy@2.28.53.174` + Hetzner Console)
+
+The first pass could not reach the server; a second pass with SSH granted
+**did** run the read-only commands, and the Hetzner Cloud Console was checked
+in the browser. Real measurements below **supersede** the reconstructed
+figures in §2/§4.
+
+### Server (Hetzner Console + OS)
+- **CX23** (`x86`, shared vCPU), `ubuntu-4gb-nbg1-1`, IP `2.28.53.174`,
+  **Nuremberg (`eu-central`, `nbg1-dc3`)**, created ~5 days ago.
+- **Ubuntu 26.04.1 LTS**, kernel `7.0.0-30-generic`. `unattended-upgrades`
+  **active**; 0 pending / 0 security updates — **but `/var/run/reboot-required`
+  is set** (a newer kernel is installed and not yet activated).
+- No attached Volumes, no private Networks, no Load Balancers, no Snapshots.
+
+### CPU (live + `sar` history, ~3 h window)
+- 2 vCPU (Intel Xeon Skylake). Load average **0.15 / 0.15 / 0.15**.
+- `sar`: **~2.5 % total CPU, ~97.4 % idle**, 0 % iowait, steady. (No PDF job
+  ran during the window; a 50-image job briefly uses ~1 vCPU on `api`.)
+
+### RAM (live `free -m` + `sar -r`)
+| | MB |
+|---|---|
+| Total | **3814** |
+| Used | ~1082 |
+| **Available** | **~2732** |
+| buff/cache | ~2666 |
+| Swap total / used | 2047 / **219** (2 GB swapfile; no active swapping in the window) |
+
+Actual container RSS: caddy **13.8 MB**, api **173.9 MB**, web-prod **62.9 MB**,
+web **56.9 MB** → **~307 MB total** (vs. ~3 GB of configured `mem_limit`s).
+`sar` shows `%memused` flat at ~39 %, `kbavail` flat at ~2.35 GB. **The box
+has large, stable headroom** — the earlier paper-limit math was misleading.
+
+### Disk (`df -h`)
+- `/dev/sda1` **38 GB total, 14 GB used (37 %), 23 GB free**. `/var/lib/docker`
+  is on the same filesystem.
+- `docker system df`: Images 9.4 GB (6.8 GB reclaimable — old rollback tags),
+  Build Cache **5.3 GB**, Volumes 22 KB. Housekeeping could free ~10 GB.
+
+### Docker (live)
+- Docker **29.1.3**, Compose **2.40.3**. 4 containers, all `Up 18 hours (healthy)`:
+  `pdfwandler-caddy-1` (caddy:2.8-alpine), `pdfwandler-api-1` (pdfwandler-api:dbf7da1),
+  `pdfwandler-web-prod-1` / `pdfwandler-web-1` (pdfwandler-web[-prod]:8751b23).
+- Networks: `pdfwandler_edge` (bridge) + defaults. Volumes: `pdfwandler_caddy_data`,
+  `_caddy_config`, `_api_uploads`, `_api_temp` (all near-empty).
+- Runtime hardening confirmed live: `ReadonlyRootfs=true`, `CapDrop=[ALL]`
+  (caddy adds `CAP_NET_BIND_SERVICE`), `PidsLimit` 100/200, `restart=unless-stopped`
+  on every container.
+- The `deploy` user is **not** in the `docker` group but has **passwordless
+  sudo** (group `sudo`).
+
+### PostgreSQL / Redis — **NONE (confirmed live)**
+No `postgresql`/`redis` packages, `postgresql`/`redis` services `inactive`,
+no `psql`/`redis-cli` binaries, no `postgres`/`redis` containers, nothing
+listening on 5432/6379.
+
+### Listening ports (`ss -tlnp`)
+Public: **22 (sshd), 80 & 443 (docker-proxy → caddy)** only. `systemd-resolved`
+on 127.0.0.53/54:53 (localhost). `api:8000` / `web:5000` are **container-internal
+only** (not published) — confirmed.
+
+### Firewall
+- **Hetzner Cloud Firewall `main-server-firewall`** — "Fully applied", **4
+  inbound rules**: TCP 22, TCP 80, TCP 443, UDP 443 — **all with source `Any
+  IPv4 / Any IPv6`** (no IP restriction, incl. on SSH). Outbound: all allowed.
+- Host **UFW inactive** (by design). nftables carries only Docker's
+  auto-generated chains (`FORWARD` policy `drop`, `DOCKER-USER` empty).
+
+### SSH policy (`sshd_config`)
+- `PasswordAuthentication no` ✅. `PermitRootLogin` not set (Ubuntu 26.04
+  default = `prohibit-password`, key-only). `X11Forwarding yes` (harmless
+  here). No `AllowUsers`/`AllowGroups`. **`fail2ban` not installed.**
+
+### Backups — **effectively none for a database**
+- **Hetzner Cloud Backups: NOT enabled** ("No backups have been enabled yet").
+- **Hetzner Snapshots: none.**
+- `backup_state.sh` — weekly (Sun 04:30 UTC, `deploy` crontab). Backs up
+  **only** `caddy_data` + `caddy_config` + `deploy/.env` (image tags/domains,
+  no secrets) + `compose.yml` + `Caddyfile` + a deployed-image/git manifest.
+  ~16 KB tarballs, `KEEP=7`, currently 2 archives. The script's own comment:
+  *"Same-disk only — this is corruption/fat-finger protection, not off-site DR."*
+- **There is no database, so there is no database backup. There is no
+  off-server copy of anything. If `/dev/sda1` fails, recovery is a manual
+  rebuild from Git + re-issue TLS + re-point DNS (hours), tolerable only
+  because nothing stateful lives here.**
+
+### Monitoring
+- `healthcheck_monitor.sh` — cron `*/5` (`deploy` crontab). Checks container
+  health + restart deltas, disk 80/90 % thresholds, TLS 14-day expiry, and
+  external `GET /health` for staging + www; daily heartbeat; self-trimming
+  `monitor.log`. **It only writes to a local log file — there is NO alert
+  channel** (no email/webhook/push). A CRITICAL line sits unseen until a
+  human looks.
+- `sysstat` is collecting (historical `sar` data available). Standard Ubuntu
+  timers (`fstrim` weekly, `logrotate`, `apt-daily`).
+- No external uptime monitor, no error tracking, no metrics stack.
+
+### DigitalWerk on Hetzner — **NONE** (only `pdfwandler-backend2` +
+`pdfwandler-frontend2` checkouts exist under `/opt/apps/pdfwandler/`).
+
+---
+
+## (Superseded) first-pass limitation
+
+The section below was written before SSH access was granted. Kept for the
+record; the live figures above are authoritative.
 
 A direct read-only inspection of the Hetzner server (`ssh deploy@2.28.53.174`,
 `docker ps`, `df -h`, `free -m`, `systemctl`, `ss -tlnp`, `ufw status`, …)
-**was blocked by the environment's permission policy**, and no Hetzner Cloud
-API token was available. This audit therefore reconstructs the Hetzner state
-from **authoritative, recent, in-repo sources** rather than a live probe:
+was initially **blocked by the environment's permission policy**, and no
+Hetzner Cloud API token was available. That pass reconstructed the Hetzner
+state from **authoritative, recent, in-repo sources**:
 
 | Source | What it gave us |
 |---|---|
@@ -36,13 +142,15 @@ paste the output to finalise this document.
   two Next.js frontend containers + one FastAPI backend. `www.pdfwandler.de`
   is **live** on it. There is **no database, no Redis, no message queue** —
   by design (PDF processing is synchronous).
-- **Committed container memory is ~3.0 GB of ~4 GB.** Real free RAM is
-  unknown until measured, but the headroom on paper is ~1 GB + 2 GB swap.
+- **Measured (live): ~2.7 GB RAM available, containers use only ~307 MB
+  actual RSS, CPU ~97 % idle, 23 GB disk free.** The box is lightly loaded
+  with large, stable headroom.
 - **The Hetzner box CAN host a small PostgreSQL for the DigitalWerk chat
   agent** (leads / handoffs / session metadata — low volume, tiny data)
-  as one more hardened container, **if** current free RAM ≥ ~700 MB. It
-  should be confirmed by measurement first, and it needs an **off-server
-  backup** added (none exists today).
+  as one more hardened container — **capacity is confirmed sufficient on
+  the CX23 as-is.** It needs an **off-server backup** added first (none
+  exists today — Hetzner Cloud Backups are OFF and the only backup is a
+  same-disk 16 KB state tarball).
 - It should **not** also take the DigitalWerk Next.js app yet — no RAM
   headroom, and it would couple two unrelated products on one un-replicated
   box. A one-size-up resize (**CX33: 4 vCPU / 8 GB / €8.49/mo**) removes
