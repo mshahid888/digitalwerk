@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    return Response.json({ ok: true, ...chatAgentHealth() });
+    return Response.json({ ok: true, ...(await chatAgentHealth()) });
   } catch (error) {
     console.error("Chat health: failed to build snapshot:", error);
     return Response.json({ ok: false }, { status: 500 });

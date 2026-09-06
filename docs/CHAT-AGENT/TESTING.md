@@ -20,7 +20,10 @@ keeps every test deterministic and cost-free.
 | F. Handoff (explicit request, complex, unknown, existing client) | `orchestrator.test.ts`, `service.test.ts`, `handoff` cases |
 | G. Security (prompt injection, system-prompt/secret extraction, oversized, repetition, output leak) | `guardrails.test.ts`, `orchestrator.test.ts` |
 | Provider abstraction / graceful degradation | `llm-provider.test.ts`, `orchestrator.test.ts` |
-| Persistence + service layer (session, message, lead capture, handoff record, message cap) | `service.test.ts` |
+| Persistence + service layer (session, message, lead capture, handoff record, dedup, retention, message cap) | `service.test.ts` |
+| Postgres store — mappers, parameterised SQL, migrations, purge queries (fake `SqlClient`) + store factory + memory retention | `persistence.test.ts` |
+| Notification channels — selection, no-op safety, Resend adapter (mocked `fetch`), retryable vs. permanent failure, email templates | `notifications.test.ts` |
+| Admin API auth — 503 when disabled, 401/403/200, constant-time compare | `admin-auth.test.ts` |
 
 `test/fixtures.ts` holds the shared conversation fixtures grouped by
 category — extend these first when adding cases.
@@ -34,4 +37,9 @@ scoring, guardrails, or the provider layer.
 ## Not yet covered
 
 - React widget component tests (needs jsdom + Testing Library).
-- Live-provider contract tests (needs a key; deferred with the cost gate).
+- Live-provider contract tests for Anthropic (needs a key).
+- **Integration tests against a real Postgres.** The Postgres store is
+  tested via a fake `SqlClient` that verifies the SQL shape and row
+  mapping, not against a live database. Run a smoke test against a real
+  Neon instance once `CHAT_AGENT_DATABASE_URL` is available.
+- Live Resend delivery (needs `RESEND_API_KEY` + a verified domain).

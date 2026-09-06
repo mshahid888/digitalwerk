@@ -23,7 +23,7 @@ export default function Page() {
   return (
     <LegalPage
       title="Privacy Policy"
-      notice="This page is an English translation of the German Datenschutzerklärung, prepared based on the current technical setup of this website. It still contains placeholders for certain details (e.g. legal form, data protection officer if applicable) and has not yet been separately reviewed by legal counsel. The German version remains the legally binding text."
+      notice="This page is an English translation of the German Datenschutzerklärung, prepared based on the current technical setup of this website. It still contains placeholders for certain details (e.g. legal form, data protection officer, hosting provider and processors in sections 3 and 5) and has not yet been separately reviewed by legal counsel — in particular the AI chat assistant section. The German version remains the legally binding text."
       sections={[
         {
           heading: "1. Controller",
@@ -99,12 +99,86 @@ export default function Page() {
               transmission occurs exclusively through your own email
               program once you send the email from there. Should
               server-side form processing be introduced in the future,
-              this section will be updated accordingly.
+              this section will be updated accordingly. For the separate
+              processing in the AI chat assistant, see section 5.
             </p>
           ),
         },
         {
-          heading: "5. Cookies",
+          heading: "5. AI Chat Assistant on This Website",
+          content: (
+            <>
+              <p className="rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm text-accent-900">
+                Note: this section describes the technical implementation of
+                the AI chat assistant, which is a preview version. Before any
+                launch with active data storage or a connected external AI
+                service, the legal bases, the specific processors used (AI
+                provider, hosting, email delivery, database) and any transfer
+                to a third country must be reviewed by legal counsel and named
+                here.
+              </p>
+              <p>
+                This website offers an AI-powered chat assistant. The
+                assistant is an AI system, not a staff member. It answers
+                questions about DigitalWerk, helps categorise an inquiry, and
+                can hand the conversation over to the DigitalWerk team.
+              </p>
+              <p>
+                <strong>Data processed:</strong> the messages you enter in the
+                chat and technical session data (e.g. a random session
+                identifier, timestamps, detected language). If you voluntarily
+                provide contact or company details in the conversation (e.g.
+                name, company, email address, your inquiry), these are stored
+                to process your request. Please do not enter special categories
+                of personal data (Art. 9 GDPR) into the chat.
+              </p>
+              <p>
+                <strong>Purposes:</strong> answering your questions,
+                categorising your inquiry, preparing and carrying out contact
+                by the DigitalWerk team.
+              </p>
+              <p>
+                <strong>Legal basis:</strong> Art. 6(1)(f) GDPR (legitimate
+                interest in answering inquiries and efficiently initiating
+                business relationships) and, where the communication is aimed
+                at entering into or performing a contract, Art. 6(1)(b) GDPR.
+                The legal bases will be finalised during the legal review.
+              </p>
+              <p>
+                <strong>Retention:</strong> the data required for lead
+                handling (contact details, company information, inquiry,
+                conversation summary, internal classification, timestamps) is
+                kept for as long as necessary for processing and the
+                subsequent business relationship, and is then deleted or
+                blocked. Full conversation transcripts (raw transcripts) — if
+                stored at all, for operations and debugging — are
+                automatically deleted after at most 30 days. The permanent
+                lead record is not affected.
+              </p>
+              <p>
+                <strong>Recipients / processors:</strong> the server-side
+                components run on this website&apos;s hosting infrastructure
+                (see section 3). Where a database for storage and a service
+                for sending notification emails to the team are used, these
+                are processors within the meaning of Art. 28 GDPR; the
+                respective providers will be added here once determined. An
+                external AI service may be used to generate responses; that
+                provider, the legal basis for any transfer and any
+                third-country transfer will likewise be named here before
+                productive use. Until then, the assistant operates without a
+                connected external AI service.
+              </p>
+              <p>
+                <strong>Your rights:</strong> the data subject rights listed
+                in section 9 apply. An informal message to{" "}
+                {siteConfig.contact.email} is sufficient to request access to
+                or deletion of the data processed in the chat.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "6. Cookies",
           content: (
             <p>
               This website currently does not use cookies for analytics,
@@ -121,7 +195,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "6. External Links and Services",
+          heading: "7. External Links and Services",
           content: (
             <p>
               Our website contains a link to WhatsApp (Meta Platforms
@@ -134,7 +208,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "7. Fonts",
+          heading: "8. Fonts",
           content: (
             <p>
               This website uses the font “Geist”, which is delivered
@@ -146,7 +220,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "8. Your Rights as a Data Subject",
+          heading: "9. Your Rights as a Data Subject",
           content: (
             <>
               <p>
@@ -169,7 +243,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "9. Changes to This Privacy Policy",
+          heading: "10. Changes to This Privacy Policy",
           content: (
             <p>
               We will update this Privacy Policy as soon as our website

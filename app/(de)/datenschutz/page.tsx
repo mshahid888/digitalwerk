@@ -18,7 +18,7 @@ export default function Page() {
   return (
     <LegalPage
       title="Datenschutzerklärung"
-      notice="Diese Datenschutzerklärung wurde auf Basis der aktuellen technischen Umsetzung dieser Website erstellt. Bitte ergänzen Sie die als Platzhalter gekennzeichneten Angaben (z. B. Rechtsform, ggf. Datenschutzbeauftragter) und lassen Sie den Inhalt vor Veröffentlichung rechtlich prüfen."
+      notice="Diese Datenschutzerklärung wurde auf Basis der aktuellen technischen Umsetzung dieser Website erstellt. Bitte ergänzen Sie die als Platzhalter gekennzeichneten Angaben (z. B. Rechtsform, ggf. Datenschutzbeauftragter), vervollständigen Sie die Angaben zu Hosting und Auftragsverarbeitern (Abschnitt 3 und 5) und lassen Sie den Inhalt – insbesondere den Abschnitt zum KI-Chat-Assistenten – vor Veröffentlichung rechtlich prüfen."
       sections={[
         {
           heading: "1. Verantwortlicher",
@@ -95,12 +95,95 @@ export default function Page() {
               eigenes E-Mail-Programm, sobald Sie die E-Mail von dort aus
               versenden. Sollte künftig eine serverseitige Formularverarbeitung
               eingeführt werden, wird dieser Abschnitt entsprechend
-              aktualisiert.
+              aktualisiert. Für die separate Verarbeitung im KI-Chat-Assistenten
+              siehe Abschnitt 5.
             </p>
           ),
         },
         {
-          heading: "5. Cookies",
+          heading: "5. KI-Chat-Assistent auf dieser Website",
+          content: (
+            <>
+              <p className="rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm text-accent-900">
+                Hinweis: Dieser Abschnitt beschreibt die technische Umsetzung
+                des KI-Chat-Assistenten. Der Assistent ist eine
+                Vorabversion. Vor einer Veröffentlichung mit aktiver
+                Datenspeicherung oder Anbindung eines externen KI-Dienstes
+                sind die Rechtsgrundlagen, die konkret eingesetzten
+                Auftragsverarbeiter (KI-Anbieter, Hosting, E-Mail-Versand,
+                Datenbank) sowie ein etwaiger Drittlandtransfer rechtlich zu
+                prüfen und hier namentlich zu ergänzen.
+              </p>
+              <p>
+                Diese Website bietet einen KI-gestützten Chat-Assistenten an.
+                Der Assistent ist ein KI-System und kein Mitarbeiter. Er
+                beantwortet Fragen zu DigitalWerk, hilft dabei, ein Anliegen
+                einzuordnen, und kann das Gespräch an das Team von DigitalWerk
+                übergeben.
+              </p>
+              <p>
+                <strong>Verarbeitete Daten:</strong> die von Ihnen im Chat
+                eingegebenen Nachrichten sowie technische Sitzungsdaten (z. B.
+                eine zufällige Sitzungskennung, Zeitstempel, erkannte Sprache).
+                Wenn Sie im Gespräch freiwillig Kontakt- oder
+                Unternehmensangaben machen (z. B. Name, Unternehmen,
+                E-Mail-Adresse, Ihr Anliegen), werden diese für die Bearbeitung
+                Ihrer Anfrage gespeichert. Bitte geben Sie keine besonderen
+                Kategorien personenbezogener Daten (Art. 9 DSGVO) in den Chat
+                ein.
+              </p>
+              <p>
+                <strong>Zwecke:</strong> Beantwortung Ihrer Fragen, Einordnung
+                Ihres Anliegens, Vorbereitung und Durchführung einer
+                Kontaktaufnahme durch das Team von DigitalWerk.
+              </p>
+              <p>
+                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
+                (berechtigtes Interesse an der Beantwortung von Anfragen und an
+                der effizienten Anbahnung von Geschäftsbeziehungen) sowie, wenn
+                die Kommunikation auf die Anbahnung oder Durchführung eines
+                Vertrags gerichtet ist, Art. 6 Abs. 1 lit. b DSGVO. Die
+                endgültige Festlegung der Rechtsgrundlagen erfolgt im Rahmen der
+                rechtlichen Prüfung.
+              </p>
+              <p>
+                <strong>Speicherdauer:</strong> Die für die Lead-Bearbeitung
+                erforderlichen Angaben (Kontaktdaten, Unternehmensangaben,
+                Anliegen, Zusammenfassung des Gesprächs, interne
+                Einstufung, Zeitstempel) werden so lange gespeichert, wie es
+                für die Bearbeitung und die anschließende Geschäftsbeziehung
+                erforderlich ist, und anschließend gelöscht bzw. gesperrt.
+                Vollständige Gesprächsverläufe (Rohtranskripte) werden – sofern
+                sie für Betrieb und Fehleranalyse überhaupt gespeichert werden
+                – nach spätestens 30 Tagen automatisch gelöscht. Die
+                dauerhafte Lead-Akte bleibt davon unberührt.
+              </p>
+              <p>
+                <strong>Empfänger / Auftragsverarbeiter:</strong> Die
+                serverseitigen Komponenten laufen auf der Hosting-Infrastruktur
+                dieser Website (siehe Abschnitt 3). Sofern eine Datenbank zur
+                Speicherung sowie ein Dienst zum E-Mail-Versand von
+                Benachrichtigungen an das Team eingesetzt werden, handelt es
+                sich um Auftragsverarbeiter im Sinne des Art. 28 DSGVO; die
+                jeweiligen Anbieter werden hier ergänzt, sobald sie
+                feststehen. Für die Erzeugung der Antworten kann ein externer
+                KI-Dienst eingesetzt werden; auch dieser Anbieter, die
+                Rechtsgrundlage einer Übermittlung und ein etwaiger
+                Drittlandtransfer werden vor einer produktiven Nutzung hier
+                benannt. Bis dahin arbeitet der Assistent ohne Anbindung eines
+                externen KI-Dienstes.
+              </p>
+              <p>
+                <strong>Ihre Rechte:</strong> Es gelten die in Abschnitt 9
+                genannten Betroffenenrechte. Für Auskunft oder Löschung Ihrer
+                im Chat verarbeiteten Daten genügt eine formlose Nachricht an{" "}
+                {siteConfig.contact.email}.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "6. Cookies",
           content: (
             <p>
               Diese Website setzt aktuell keine Cookies zu Analyse-,
@@ -117,7 +200,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "6. Externe Links und Dienste",
+          heading: "7. Externe Links und Dienste",
           content: (
             <p>
               Unsere Website enthält einen Link zu WhatsApp (Meta Platforms
@@ -131,7 +214,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "7. Schriftarten",
+          heading: "8. Schriftarten",
           content: (
             <p>
               Diese Website verwendet die Schriftart „Geist“, die lokal über
@@ -144,7 +227,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "8. Ihre Rechte als betroffene Person",
+          heading: "9. Ihre Rechte als betroffene Person",
           content: (
             <>
               <p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf:</p>
@@ -161,7 +244,7 @@ export default function Page() {
           ),
         },
         {
-          heading: "9. Änderungen dieser Datenschutzerklärung",
+          heading: "10. Änderungen dieser Datenschutzerklärung",
           content: (
             <p>
               Wir passen diese Datenschutzerklärung an, sobald sich unser

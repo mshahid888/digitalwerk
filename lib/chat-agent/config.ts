@@ -24,7 +24,43 @@ export type ChatAgentConfig = {
   maxHistoryTurns: number;
   /** Whether an Anthropic key is present in the environment. */
   anthropicKeyPresent: boolean;
+
+  // --- Persistence ---
+  /** Postgres connection string, if configured. Absent -> in-memory store. */
+  databaseUrl: string | undefined;
+  /** Whether a database connection string is present. */
+  databaseConfigured: boolean;
+
+  // --- Retention (privacy) — the single source of truth for retention. ---
+  /**
+   * Days to keep raw conversation transcripts before automatic deletion.
+   * Hard-capped at 30 (privacy decision). The permanent lead record is
+   * unaffected and remains useful after the transcript is purged.
+   */
+  transcriptRetentionDays: number;
+  /** Days to keep raw analytics events. Also capped at 30. */
+  eventRetentionDays: number;
+
+  // --- Notifications / handoff ---
+  /** Configured handoff notification channel id, e.g. "resend". Unset -> no-op. */
+  handoffChannel: string | undefined;
+  /** Whether a Resend API key is present in the environment. */
+  resendKeyPresent: boolean;
+  /** Recipient for lead / handoff notification emails. */
+  notificationRecipient: string;
+  /** From address for notification emails (must be verified with Resend). */
+  notificationFrom: string;
+  /** Max delivery attempts before a notification is left for manual follow-up. */
+  notificationMaxAttempts: number;
+
+  // --- Admin API ---
+  /** Bearer token that guards the /api/chat/admin/* endpoints. Unset -> endpoints disabled. */
+  adminToken: string | undefined;
+  /** Secret Vercel Cron sends in the Authorization header. Unset -> cron auth is skipped (dev). */
+  cronSecret: string | undefined;
 };
+
+const RETENTION_MAX_DAYS = 30;
 
 function readInt(name: string, fallback: number): number {
   const raw = process.env[name];
@@ -40,6 +76,20 @@ function readFloat(name: string, fallback: number): number {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
+/** Retention days: at least 1, never more than the privacy cap of 30. */
+function readRetentionDays(name: string, fallback: number): number {
+  const value = readInt(name, fallback);
+  return Math.min(RETENTION_MAX_DAYS, Math.max(1, value));
+}
+
+function firstEnv(...names: string[]): string | undefined {
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+    if (value) return value;
+  }
+  return undefined;
+}
+
 export function getChatAgentConfig(): ChatAgentConfig {
   const anthropicKeyPresent = Boolean(process.env.ANTHROPIC_API_KEY?.trim());
 
@@ -52,6 +102,17 @@ export function getChatAgentConfig(): ChatAgentConfig {
     provider = "anthropic";
   }
 
+  // Accept the common Vercel/Neon connection-string names as well as our own.
+  const databaseUrl = firstEnv(
+    "CHAT_AGENT_DATABASE_URL",
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "POSTGRES_PRISMA_URL",
+  );
+
+  const resendKeyPresent = Boolean(process.env.RESEND_API_KEY?.trim());
+  const handoffChannel = process.env.CHAT_AGENT_HANDOFF_CHANNEL?.trim().toLowerCase() || undefined;
+
   return {
     provider,
     model:
@@ -63,5 +124,26 @@ export function getChatAgentConfig(): ChatAgentConfig {
     maxMessagesPerSession: readInt("CHAT_AGENT_MAX_MESSAGES_PER_SESSION", 40),
     maxHistoryTurns: readInt("CHAT_AGENT_MAX_HISTORY_TURNS", 16),
     anthropicKeyPresent,
+
+    databaseUrl,
+    databaseConfigured: Boolean(databaseUrl),
+
+    transcriptRetentionDays: readRetentionDays(
+      "CHAT_AGENT_TRANSCRIPT_RETENTION_DAYS",
+      RETENTION_MAX_DAYS,
+    ),
+    eventRetentionDays: readRetentionDays(
+      "CHAT_AGENT_EVENT_RETENTION_DAYS",
+      RETENTION_MAX_DAYS,
+    ),
+
+    handoffChannel,
+    resendKeyPresent,
+    notificationRecipient: firstEnv("CHAT_AGENT_NOTIFY_TO", "CONTACT_TO_EMAIL") ?? "info@digitalwerkk.de",
+    notificationFrom: firstEnv("CHAT_AGENT_NOTIFY_FROM", "CONTACT_FROM_EMAIL") ?? "onboarding@resend.dev",
+    notificationMaxAttempts: readInt("CHAT_AGENT_NOTIFY_MAX_ATTEMPTS", 5),
+
+    adminToken: process.env.CHAT_AGENT_ADMIN_TOKEN?.trim() || undefined,
+    cronSecret: process.env.CRON_SECRET?.trim() || undefined,
   };
 }

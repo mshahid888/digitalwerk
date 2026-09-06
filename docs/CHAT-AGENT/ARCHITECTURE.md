@@ -1,7 +1,10 @@
 # DigitalWerk Chat Agent — Architecture
 
-Status: **Phase 1 foundation** (provider-independent, mock LLM). No paid
-resource is required to run, develop or test any of this.
+Status: **Phase 2** — provider-independent foundation + Neon Postgres
+persistence + Resend notification channel + retention. Every external
+dependency (LLM, database, email) degrades to a safe default when its
+credentials are absent, so the whole system still runs, develops and tests
+with **no paid resource**.
 
 ## Where it lives
 
@@ -40,10 +43,24 @@ lib/chat-agent/
     compose-reply.ts     deterministic reply composer (mock + fallback)
     orchestrator.ts      runAgentTurn() — one visitor turn, end to end
 
-  persistence/         store interfaces + in-memory implementation
-    types.ts             ConversationStore, LeadStore, HandoffStore, EventStore
-    memory-store.ts      in-memory (dev / preview only)
-    index.ts             getChatAgentStore()
+  persistence/         store interfaces + two implementations
+    types.ts             Conversation/Lead/Handoff/Event stores + PurgeResult
+    memory-store.ts      in-memory (dev / preview / tests; not durable)
+    postgres/
+      client.ts          SqlClient interface + postgres.js adapter
+      schema.ts          SCHEMA_STATEMENTS + migrate() (CREATE TABLE IF NOT EXISTS)
+      schema.sql         reference DDL (kept in sync with schema.ts)
+      store.ts           PostgresChatAgentStore (row <-> type mappers)
+    index.ts             getChatAgentStore() — picks postgres if a URL is set
+
+  notifications/       outbound notification abstraction
+    types.ts             NotificationChannel interface
+    noop-channel.ts      records only, never sends (default / fallback)
+    resend-channel.ts    Resend email adapter (fetch, no SDK; safe w/o key)
+    templates.ts         handoff + lead email bodies (minimal fields, no transcript)
+    index.ts             getNotificationChannel() factory
+
+  admin-auth.ts        Bearer-token guard for the admin API
 
 app/api/chat/
   session/route.ts      POST  start a session
@@ -51,6 +68,13 @@ app/api/chat/
   lead/route.ts         POST  attach/update lead facts
   handoff/route.ts      POST  explicit "talk to a human"
   health/route.ts       GET   non-secret status snapshot
+  admin/leads/route.ts     GET  list leads          (Bearer CHAT_AGENT_ADMIN_TOKEN)
+  admin/handoffs/route.ts  GET  list handoffs; POST retry pending deliveries
+  admin/purge/route.ts     POST run the retention sweep manually
+app/api/cron/
+  purge-transcripts/route.ts  GET/POST  daily maintenance (Vercel Cron)
+
+vercel.json             one cron entry -> /api/cron/purge-transcripts @ 03:00
 
 components/chat/
   chat-widget.tsx       launcher + panel, mounted once in site-shell.tsx
@@ -89,10 +113,69 @@ Deterministic logic runs first; the LLM only phrases the final reply.
    hard-fails a turn.
 10. **Output guardrails** — `checkOutput()` replaces any reply that leaks a
     key, an env var name or the system prompt.
-11. **Persist** — the turn is appended to the session; `service.ts` records
-    an analytics event, upserts a lead once the score leaves the
-    `informational` band, and creates a durable handoff record on
-    escalation.
+11. **Persist** — `service.ts` (`await getChatAgentStore()`) saves the
+    session, records an analytics event, upserts a lead once the score
+    leaves the `informational` band, and on escalation creates a durable
+    handoff record (deduped within a 10-minute window per session+reason)
+    then attempts its notification.
+
+## Persistence
+
+`getChatAgentStore()` returns a `ChatAgentStore` chosen by environment:
+
+- a Postgres connection string set (`CHAT_AGENT_DATABASE_URL`, or Vercel's
+  `DATABASE_URL` / `POSTGRES_URL` / `POSTGRES_PRISMA_URL`) → **Neon
+  Postgres** (`PostgresChatAgentStore`). Connects lazily and runs
+  `CREATE TABLE IF NOT EXISTS` on first use. If the DB is unreachable at
+  startup it logs and falls back to the memory store for that instance —
+  the conversation still works, only persistence is lost.
+- otherwise → **in-memory** store (dev, preview, tests).
+
+The store depends only on a small `SqlClient` interface (`query`, `end`),
+not on any Neon-specific API — `postgres.js` is the current driver and works
+with any Postgres via Neon's pooled endpoint. Swapping it (or adding Redis
+for sessions later) is one file. Four tables: `chat_sessions` (metadata +
+raw transcript), `chat_leads` (the permanent record, minimum fields),
+`chat_handoffs` (record + delivery state), `chat_events`. See
+`PERSISTENCE.md` and `postgres/schema.sql`.
+
+## Retention (privacy)
+
+Single source of truth: `CHAT_AGENT_TRANSCRIPT_RETENTION_DAYS` /
+`CHAT_AGENT_EVENT_RETENTION_DAYS` in `config.ts`, both defaulting to and
+**hard-capped at 30**. `conversations.purgeExpired()` nulls the raw
+transcript (`messages → []`) on sessions older than the window and deletes
+old events; **session metadata and the lead record are kept**. Runs daily
+via Vercel Cron (`/api/cron/purge-transcripts`) and on demand via
+`POST /api/chat/admin/purge`.
+
+## Notifications / handoff delivery
+
+`getNotificationChannel()`:
+
+- `CHAT_AGENT_HANDOFF_CHANNEL` unset → `NoopNotificationChannel` (records
+  only).
+- `= "resend"` + `RESEND_API_KEY` set → `ResendNotificationChannel` (email,
+  `fetch`, no SDK).
+- `= "resend"` without a key → no-op (safe).
+
+Retry-safe: a handoff whose notification fails stays `dispatched = false`
+with `dispatch_attempts` incremented and `last_dispatch_error` recorded;
+`retryPendingHandoffs()` (cron + `POST /api/chat/admin/handoffs`) re-sends
+up to `CHAT_AGENT_NOTIFY_MAX_ATTEMPTS`, and skips entirely when no channel
+is ready. Duplicate suppression: the per-session+reason dedup window plus an
+`X-Entity-Ref-ID` mail header. Lead notifications fire once per lead (an
+`lead_notification_sent` event is the idempotency marker) — the durable lead
+record + admin listing is the source of truth, so a failed lead ping is not
+retried.
+
+## Admin API
+
+`GET /api/chat/admin/leads`, `GET/POST /api/chat/admin/handoffs`,
+`POST /api/chat/admin/purge` — all require
+`Authorization: Bearer <CHAT_AGENT_ADMIN_TOKEN>` (constant-time compare) and
+return **503 when the token env var is unset** (disabled by default, since
+they expose lead PII).
 
 ## Design decisions
 
@@ -116,8 +199,11 @@ Deterministic logic runs first; the LLM only phrases the final reply.
 | Area | Now | Later |
 |---|---|---|
 | LLM provider | mock | Anthropic (needs a funded key) |
-| Persistence | in-memory | durable store (Postgres/KV) — `PERSISTENCE.md` |
-| Handoff delivery | recorded only | email / Slack / CRM behind `dispatchHandoff()` |
+| Persistence | Postgres store built; runs in-memory until a Neon URL is set | provision Neon (free tier), set the URL |
+| Handoff / lead delivery | Resend adapter built; no-op until `RESEND_API_KEY` is set | set the key + verify a sending domain |
+| Notification channels | Resend only | Slack / CRM = new file + one branch in `notifications/index.ts` |
+| Session store | Postgres (same as leads) | Redis only if scale proves the need — `SqlClient` seam is separate from a KV seam |
 | Retrieval | lexical | vector, only if conversation data justifies it |
 | Rate limiting | per-session message cap | edge rate limit + WAF |
+| Admin UI | JSON endpoints + bearer token | a real dashboard + proper auth |
 | Widget component tests | none | jsdom + Testing Library |

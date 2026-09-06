@@ -50,6 +50,34 @@ not break the chat.
 Implement `LlmProvider` in a new file under `llm/`, add a branch to
 `getLlmProvider()`, and a `CHAT_AGENT_PROVIDER` value. Nothing else changes.
 
+## Connecting the Resend email channel
+
+Same shape as the LLM: built, off until credentialed.
+
+1. Create a Resend account + API key, and verify a sending domain (Resend's
+   shared `onboarding@resend.dev` works for testing only).
+2. Set in Vercel (or `.env.local`):
+   ```
+   CHAT_AGENT_HANDOFF_CHANNEL=resend
+   RESEND_API_KEY=re_...
+   CHAT_AGENT_NOTIFY_TO=team@digitalwerkk.de
+   CHAT_AGENT_NOTIFY_FROM=chat@digitalwerkk.de   # a verified domain
+   ```
+3. `GET /api/chat/health` → `notifications.ready: true`.
+4. Handoffs recorded while the channel was a no-op are queued; run
+   `POST /api/chat/admin/handoffs` (or wait for the daily cron) to deliver
+   them.
+
+Adding Slack / a CRM later: new file under `notifications/`, one branch in
+`notifications/index.ts`. The handoff flow does not change.
+
+## Connecting Neon Postgres
+
+See `PERSISTENCE.md` → "Provisioning Neon". In short: create a Neon
+database, set its pooled connection string as `DATABASE_URL` (or
+`CHAT_AGENT_DATABASE_URL`) in Vercel, redeploy. The schema self-applies on
+first use.
+
 ## Cost controls already in place
 
 - `CHAT_AGENT_MAX_OUTPUT_TOKENS` (default 700) caps tokens per reply.
