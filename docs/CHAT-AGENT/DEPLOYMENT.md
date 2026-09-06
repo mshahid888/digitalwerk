@@ -58,7 +58,8 @@ Full step-by-step is in **`deploy/digitalwerk/README.md`**. Summary:
 5. Apply `lib/chat-agent/persistence/postgres/schema.sql` (or let it
    self-apply on first request).
 6. Add the `agent.digitalwerkk.de` DNS A-record → `2.28.53.174`
-   (**BLOCKED — Vercel-managed DNS**).
+   (**BLOCKED — add in the IONOS DNS panel; the `digitalwerkk.de` zone is
+   hosted at IONOS, not Vercel**).
 7. Add the Caddy vhost + `docker network connect digitalwerk_edge pdfwandler-caddy-1`.
 8. On Vercel: `AGENT_API_URL=https://agent.digitalwerkk.de` +
    `AGENT_API_SECRET=<same>`. The Next routes start proxying.

@@ -61,7 +61,17 @@ sudo docker exec digitalwerk-agent-api-1 wget -qO- http://127.0.0.1:8080/api/cha
 
 ## Wire the host Caddy (one added site block — the only PDF Wandler change)
 
-`agent.digitalwerkk.de` must resolve to `2.28.53.174` (A record — Vercel DNS).
+`agent.digitalwerkk.de` must resolve to `2.28.53.174`. The `digitalwerkk.de`
+zone is hosted at **IONOS** (authoritative NS `ns10xx.ui-dns.{org,com,de,biz}`;
+the Vercel A/CNAME records for the apex + `www` live inside that IONOS zone),
+so the record is added in the **IONOS DNS panel**, not Vercel:
+
+```
+Type  A
+Host  agent
+Value 2.28.53.174
+TTL   3600
+```
 Then add to the **pdfwandler** Caddyfile (`/opt/apps/pdfwandler/pdfwandler-backend2/deploy/Caddyfile`):
 
 ```
