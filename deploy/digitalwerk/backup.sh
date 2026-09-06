@@ -14,8 +14,13 @@ set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR"
+# Only the non-secret knobs are read from .env here (rclone / healthcheck /
+# retention). The Postgres credentials are NOT sourced onto the host — they
+# are read from the container's own environment inside `docker exec` so they
+# never appear in the host process list or the sudo/journal log.
 set -a; [ -f .env ] && . ./.env; set +a
 
+PG="${POSTGRES_CONTAINER:-digitalwerk-postgres-1}"
 BACKUP_DIR="${DIR}/backups"
 DAILY_KEEP=7
 WEEKLY_KEEP=4
@@ -28,9 +33,10 @@ DEST="${BACKUP_DIR}/digitalwerk-${TS}.sql.gz"
 log() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $*"; }
 
 log "dump start -> $DEST"
-sudo docker exec -e PGPASSWORD="${POSTGRES_PASSWORD}" digitalwerk-postgres-1 \
-  pg_dump --no-owner --no-privileges -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" \
-  | gzip -9 > "$DEST"
+sudo docker exec "$PG" sh -c '
+  PGPASSWORD="$POSTGRES_PASSWORD" pg_dump --no-owner --no-privileges \
+    -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+' | gzip -9 > "$DEST"
 chmod 600 "$DEST"
 SIZE="$(du -h "$DEST" | cut -f1)"
 log "dump ok ($SIZE)"

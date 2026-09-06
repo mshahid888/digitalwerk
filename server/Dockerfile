@@ -37,8 +37,12 @@ USER app
 EXPOSE 8080
 ENV PORT=8080
 
-# Liveness: the health route needs no auth and returns 200 / 503.
+# Container liveness only — "is the process serving HTTP". GET / returns
+# {ok:true} unconditionally. Full readiness (DB reachable, LLM configured,
+# …) is GET /api/chat/health, which returns 503 when degraded and is what
+# the Vercel proxy / monitoring watch — a DB blip should not flap the
+# container to "unhealthy".
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD wget -q -O /dev/null "http://127.0.0.1:8080/api/chat/health" || exit 1
+  CMD wget -q -O /dev/null "http://127.0.0.1:8080/" || exit 1
 
 CMD ["node", "--import", "tsx", "server/index.ts"]

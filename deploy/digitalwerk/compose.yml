@@ -132,13 +132,16 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
+      # Liveness only (GET / -> {ok:true} unconditionally). Full readiness is
+      # GET /api/chat/health (503 when degraded) — watched by the proxy /
+      # monitoring, not by Docker, so a DB blip doesn't flap the container.
       test:
         - "CMD"
         - "wget"
         - "-q"
         - "-O"
         - "/dev/null"
-        - "http://127.0.0.1:8080/api/chat/health"
+        - "http://127.0.0.1:8080/"
       interval: 30s
       timeout: 5s
       retries: 3
