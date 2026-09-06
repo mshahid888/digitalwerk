@@ -1,0 +1,149 @@
+# =============================================================================
+# DigitalWerk — isolated single-host stack on the existing Hetzner CX23.
+#
+#   Vercel (www.digitalwerkk.de)  --HTTPS-->  Caddy (pdfwandler stack)
+#         proxies agent.digitalwerkk.de  -->  agent-api:8080  (this project)
+#                                    agent-api  -->  postgres:5432  (internal only)
+#                                    agent-api  -->  OmniRoute (outbound HTTPS)
+#
+# Deliberately SEPARATE from the pdfwandler compose project:
+#   - its own project name  (digitalwerk)
+#   - its own bridge network (digitalwerk_internal)
+#   - its own volume         (digitalwerk_pgdata)
+# The only shared resource is the host Caddy, which reaches agent-api over a
+# second network it is attached to (see deploy/digitalwerk/README.md).
+#
+# Nothing here exposes a public port. Postgres is never published. agent-api
+# is only reachable from Caddy and from the digitalwerk network.
+#
+# Config: copy .env.example -> .env (mode 600). Real secrets live only there.
+# Image tag: AGENT_IMAGE_TAG defaults to "local"; set it to the built commit SHA.
+# =============================================================================
+
+name: digitalwerk
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-hardening: &hardening
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    <<: *hardening
+    # Not read_only: the official image writes to several runtime paths; the
+    # data volume + tmpfs below are the writable surface, everything else is
+    # covered by no-new-privileges / cap_drop / pids_limit / mem_limit.
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set a strong POSTGRES_PASSWORD in .env}
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      TZ: ${TZ:-Europe/Berlin}
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=96MB"
+      - "-c"
+      - "effective_cache_size=256MB"
+      - "-c"
+      - "max_connections=40"
+      - "-c"
+      - "work_mem=4MB"
+      - "-c"
+      - "listen_addresses=*"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -q"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - internal
+    mem_limit: 384m
+    pids_limit: 100
+    logging: *logging
+
+  agent-api:
+    image: digitalwerk-agent-api:${AGENT_IMAGE_TAG:-local}
+    build:
+      context: ../..
+      dockerfile: server/Dockerfile
+    <<: *hardening
+    read_only: true
+    environment:
+      PORT: "8080"
+      NODE_ENV: production
+      TZ: ${TZ:-Europe/Berlin}
+      # --- persistence ---
+      CHAT_AGENT_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      # --- LLM (OmniRoute / any OpenAI-compatible gateway) ---
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_TIMEOUT_MS: ${LLM_TIMEOUT_MS:-30000}
+      LLM_MAX_RETRIES: ${LLM_MAX_RETRIES:-1}
+      # --- request auth from the Vercel proxy ---
+      AGENT_API_SECRET: ${AGENT_API_SECRET:?set AGENT_API_SECRET in .env}
+      AGENT_API_ALLOWED_ORIGINS: ${AGENT_API_ALLOWED_ORIGINS:-https://www.digitalwerkk.de,https://digitalwerkk.de}
+      CHAT_AGENT_RATE_LIMIT_PER_MINUTE: ${CHAT_AGENT_RATE_LIMIT_PER_MINUTE:-20}
+      # --- admin + cron ---
+      CHAT_AGENT_ADMIN_TOKEN: ${CHAT_AGENT_ADMIN_TOKEN:-}
+      CRON_SECRET: ${CRON_SECRET:-}
+      # --- notifications (Resend) ---
+      CHAT_AGENT_HANDOFF_CHANNEL: ${CHAT_AGENT_HANDOFF_CHANNEL:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      CHAT_AGENT_NOTIFY_TO: ${CHAT_AGENT_NOTIFY_TO:-info@digitalwerkk.de}
+      CHAT_AGENT_NOTIFY_FROM: ${CHAT_AGENT_NOTIFY_FROM:-onboarding@resend.dev}
+      # --- retention (privacy) ---
+      CHAT_AGENT_TRANSCRIPT_RETENTION_DAYS: ${CHAT_AGENT_TRANSCRIPT_RETENTION_DAYS:-30}
+      CHAT_AGENT_EVENT_RETENTION_DAYS: ${CHAT_AGENT_EVENT_RETENTION_DAYS:-30}
+    tmpfs:
+      - /tmp
+    expose:
+      - "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - "CMD"
+        - "wget"
+        - "-q"
+        - "-O"
+        - "/dev/null"
+        - "http://127.0.0.1:8080/api/chat/health"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - internal
+      - edge # Caddy reaches agent-api on this network — see README
+    mem_limit: 256m
+    pids_limit: 200
+    logging: *logging
+
+networks:
+  internal:
+    name: digitalwerk_internal
+    internal: true # no outbound from this network — postgres can't reach the internet
+  edge:
+    name: digitalwerk_edge
+
+volumes:
+  pgdata:
+    name: digitalwerk_pgdata
