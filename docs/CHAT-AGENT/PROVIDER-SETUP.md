@@ -1,11 +1,12 @@
-# Chat Agent — Connecting a Real LLM Provider
+# Chat Agent — LLM Provider (provider-agnostic)
 
-The agent runs on the deterministic **mock provider** by default. Connecting
-Anthropic requires no application code changes.
+The agent is **not tied to any vendor.** Its business logic depends only on
+`getLlmProvider()`; it never imports an SDK. Which model provider is used is
+**configuration only.**
 
 ## The interface
 
-`lib/chat-agent/llm/types.ts` defines `LlmProvider`:
+`lib/chat-agent/llm/types.ts`:
 
 ```ts
 interface LlmProvider {
@@ -15,78 +16,97 @@ interface LlmProvider {
 }
 ```
 
-`getLlmProvider()` (`llm/index.ts`) resolves the active provider from
-config and memoizes it. If the provider is `anthropic` but no key is
-present, it returns the **mock** provider instead of a broken one.
+Adapters that ship:
 
-## Connecting Anthropic
+| Adapter | File | For |
+|---|---|---|
+| `MockLlmProvider` | `mock-provider.ts` | dev, CI, any env without credentials — deterministic, no network |
+| `OpenAiCompatibleLlmProvider` | `openai-compatible-provider.ts` | **OmniRoute** (the production gateway), OpenAI, Groq, Together, LiteLLM, vLLM, Ollama, … — anything speaking the OpenAI `/v1/chat/completions` shape |
+| `AnthropicLlmProvider` | `anthropic-provider.ts` | optional direct Anthropic (kept clean as a fallback; **not** the production path) |
 
-> This incurs usage cost. Do it only when the cost gate is cleared.
+`getLlmProvider()` resolves the adapter from env and memoizes it. If a
+provider is selected but its credentials are missing it returns the **mock**
+provider, so nothing is ever broken — `GET /api/chat/health` shows which is
+actually live (`llm.provider`, `llm.configured`, `llm.live`).
 
-1. Create an Anthropic account and API key (this is the human/business step
-   — the agent code never does this).
-2. Set environment variables (locally in `.env.local`, on Vercel in Project
-   Settings):
+## Configuration
+
+| Var | Meaning |
+|---|---|
+| `LLM_PROVIDER` | A label. `mock` / `anthropic` pick those adapters; **any other value** (`omniroute`, `openai`, `groq`, …) selects the OpenAI-compatible adapter. |
+| `LLM_BASE_URL` | The `…/v1` base of the OpenAI-compatible endpoint. |
+| `LLM_API_KEY` | Gateway API key. **Server-side only — never a `NEXT_PUBLIC_` var, never sent to the browser.** |
+| `LLM_MODEL` | Model id, passed through verbatim (e.g. `cc/claude-sonnet-4-6`). |
+| `LLM_TIMEOUT_MS` | Per-request timeout (default 30000). |
+| `LLM_MAX_RETRIES` | Retries on timeout / 5xx / network error (default 1, max 3). |
+| `LLM_TEMPERATURE`, `LLM_MAX_OUTPUT_TOKENS` | Generation tuning. |
+
+Legacy aliases still honoured (the `LLM_*` names win): `CHAT_AGENT_PROVIDER`,
+`CHAT_AGENT_MODEL`, `CHAT_AGENT_TEMPERATURE`, `CHAT_AGENT_MAX_OUTPUT_TOKENS`.
+
+## Connecting OmniRoute (production default)
+
+> **BLOCKED until an OmniRoute deployment + API key exist.** Until then
+> `LLM_PROVIDER=mock` and the agent runs fully on the mock provider.
+
+1. Stand up / obtain access to an OmniRoute instance (it is an
+   OpenAI-compatible gateway — self-hostable via npm/Docker, or a hosted
+   one). Create an API key in its dashboard.
+2. On the **Hetzner Agent API** (`deploy/digitalwerk/.env`):
    ```
-   CHAT_AGENT_PROVIDER=anthropic
-   ANTHROPIC_API_KEY=sk-ant-...
-   # optional:
-   CHAT_AGENT_MODEL=claude-sonnet-5
+   LLM_PROVIDER=omniroute
+   LLM_BASE_URL=https://<omniroute-host>/v1
+   LLM_API_KEY=<key>
+   LLM_MODEL=<provider/model-id>
    ```
-3. Redeploy / restart. `GET /api/chat/health` should show
-   `provider.active: "anthropic"` and `provider.liveLlm: true`.
-4. Run `npm test` — the suite still passes on the mock (tests clear the key
-   in `beforeEach`); add live contract tests separately if wanted.
+   `docker compose up -d agent-api`. That's it — no code change.
+3. `GET https://agent.digitalwerkk.de/api/chat/health` →
+   `llm.provider: "omniroute"`, `llm.configured: "configured"`, `llm.live: true`.
+4. Switching provider later (OpenAI, Gemini via OmniRoute, direct Anthropic)
+   is the same three env vars.
 
-The adapter (`anthropic-provider.ts`) calls the Messages API with `fetch`
-(no SDK). It sends the system prompt + per-turn directives + conversation
-and returns the text. On any failure it throws
-`LlmProviderUnavailableError`, and the orchestrator falls back to the
-deterministic composed reply — a provider outage degrades quality, it does
-not break the chat.
+On any gateway failure the adapter throws `LlmProviderUnavailableError` and
+the orchestrator returns the deterministic composed reply — an outage
+degrades quality, it never breaks the chat.
 
-## Adding a different provider
+## Optional: direct Anthropic
 
-Implement `LlmProvider` in a new file under `llm/`, add a branch to
-`getLlmProvider()`, and a `CHAT_AGENT_PROVIDER` value. Nothing else changes.
+```
+LLM_PROVIDER=anthropic
+ANTHROPIC_API_KEY=sk-ant-...
+LLM_MODEL=claude-sonnet-5   # optional
+```
 
-## Connecting the Resend email channel
+## Resend email channel
 
-Same shape as the LLM: built, off until credentialed.
+Built; off until credentialed.
 
-1. Create a Resend account + API key, and verify a sending domain (Resend's
-   shared `onboarding@resend.dev` works for testing only).
-2. Set in Vercel (or `.env.local`):
-   ```
-   CHAT_AGENT_HANDOFF_CHANNEL=resend
-   RESEND_API_KEY=re_...
-   CHAT_AGENT_NOTIFY_TO=team@digitalwerkk.de
-   CHAT_AGENT_NOTIFY_FROM=chat@digitalwerkk.de   # a verified domain
-   ```
-3. `GET /api/chat/health` → `notifications.ready: true`.
-4. Handoffs recorded while the channel was a no-op are queued; run
-   `POST /api/chat/admin/handoffs` (or wait for the daily cron) to deliver
-   them.
+```
+CHAT_AGENT_HANDOFF_CHANNEL=resend
+RESEND_API_KEY=re_...
+CHAT_AGENT_NOTIFY_TO=team@digitalwerkk.de
+CHAT_AGENT_NOTIFY_FROM=chat@digitalwerkk.de   # a Resend-verified domain
+```
 
-Adding Slack / a CRM later: new file under `notifications/`, one branch in
-`notifications/index.ts`. The handoff flow does not change.
+`GET …/api/chat/health` → `notifications.configured: "configured"`. Handoffs
+recorded while it was a no-op are queued; `POST /api/chat/admin/handoffs`
+(or the daily maintenance timer) delivers them. Slack / CRM later = a new
+file under `notifications/` + one branch — the handoff flow is unchanged.
 
-## Connecting Neon Postgres
+## Postgres
 
-See `PERSISTENCE.md` → "Provisioning Neon". In short: create a Neon
-database, set its pooled connection string as `DATABASE_URL` (or
-`CHAT_AGENT_DATABASE_URL`) in Vercel, redeploy. The schema self-applies on
-first use.
+Production Postgres is **self-hosted on the existing Hetzner server**
+(`deploy/digitalwerk/`), reached only by the Hetzner Agent API over a
+private Docker network — never exposed to Vercel. See `DEPLOYMENT.md` and
+`PERSISTENCE.md`. Any standard `postgresql://` connection string works via
+`CHAT_AGENT_DATABASE_URL`.
 
-## Cost controls already in place
+## Cost / abuse controls in place
 
-- `CHAT_AGENT_MAX_OUTPUT_TOKENS` (default 700) caps tokens per reply.
-- `CHAT_AGENT_MAX_INPUT_CHARS` (default 4000) caps input size.
-- `CHAT_AGENT_MAX_MESSAGES_PER_SESSION` (default 40) caps a session, then
-  routes to the team.
-- `CHAT_AGENT_MAX_HISTORY_TURNS` (default 16) caps context sent per turn.
-- Prompt-injection / probe messages are answered **without** calling the
-  model.
-
-Before a public launch, add an edge rate limit and Vercel WAF rules — see
-`16_GAP_ANALYSIS.md` (planning package) risk table.
+- `LLM_MAX_OUTPUT_TOKENS` (700), `CHAT_AGENT_MAX_INPUT_CHARS` (4000),
+  `CHAT_AGENT_MAX_MESSAGES_PER_SESSION` (40), `CHAT_AGENT_MAX_HISTORY_TURNS` (16).
+- Prompt-injection / probe messages are answered **without** calling the model.
+- The Agent API applies a per-IP rate limit (`CHAT_AGENT_RATE_LIMIT_PER_MINUTE`,
+  default 20) on `session` + `message`.
+- The Agent API only accepts requests carrying the `X-Agent-Auth` shared
+  secret (from the Vercel proxy) — the browser never reaches it directly.

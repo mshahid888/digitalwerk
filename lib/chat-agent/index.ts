@@ -10,13 +10,19 @@
 //   notifications/   channel abstraction + Resend adapter
 //   service.ts       application service used by the API routes
 
-export { getChatAgentConfig, type ChatAgentConfig } from "./config";
+export {
+  getChatAgentConfig,
+  type ChatAgentConfig,
+  type LlmConfig,
+  type LlmProviderKind,
+} from "./config";
 export { checkAdminAuth, type AdminAuth } from "./admin-auth";
 
 export {
   getLlmProvider,
   resetLlmProviderCache,
   MockLlmProvider,
+  OpenAiCompatibleLlmProvider,
   AnthropicLlmProvider,
   LlmProviderUnavailableError,
   type LlmProvider,
@@ -83,29 +89,70 @@ export async function chatAgentHealth() {
   const channel = getNotificationChannel();
 
   let storeKind: "memory" | "postgres" | "error" = "memory";
+  let dbReachable: boolean | null = null;
   try {
-    storeKind = (await getChatAgentStore()).kind;
+    const store = await getChatAgentStore();
+    storeKind = store.kind;
+    if (store.kind === "postgres") {
+      try {
+        await store.init();
+        dbReachable = true;
+      } catch {
+        dbReachable = false;
+      }
+    }
   } catch {
     storeKind = "error";
   }
 
+  const llm = config.llm;
+  // openai-compatible needs a base URL + key + model; anthropic needs a key.
+  const llmConfigured =
+    llm.kind === "mock"
+      ? true
+      : llm.kind === "openai-compatible"
+        ? Boolean(llm.baseUrl && llm.apiKeyPresent && llm.model)
+        : llm.apiKeyPresent;
+  const llmLive = provider.id !== "mock";
+
+  // Overall status: "ok" unless something configured is unreachable.
+  const status =
+    storeKind === "error" || dbReachable === false
+      ? "degraded"
+      : "ok";
+
   return {
+    status,
+    llm: {
+      // Free-text label from LLM_PROVIDER — "omniroute", "openai", "mock", …
+      provider: llm.label,
+      kind: llm.kind,
+      model: provider.model,
+      active: provider.id,
+      baseUrlConfigured: Boolean(llm.baseUrl),
+      apiKeyPresent: llm.apiKeyPresent,
+      configured: llmConfigured ? "configured" : "unconfigured",
+      live: llmLive,
+    },
+    // Back-compat shape for older callers / the previous health consumers.
     provider: {
-      configured: config.provider,
+      configured: llm.label,
       active: provider.id,
       model: provider.model,
-      anthropicKeyPresent: config.anthropicKeyPresent,
-      liveLlm: provider.id === "anthropic",
+      liveLlm: llmLive,
     },
+    database: dbReachable === null ? (storeKind === "memory" ? "memory" : storeKind) : dbReachable ? "ok" : "unavailable",
     persistence: {
       configured: config.databaseConfigured ? "postgres" : "memory",
       active: storeKind,
       durable: storeKind === "postgres",
+      reachable: dbReachable,
     },
     notifications: {
       configuredChannel: config.handoffChannel ?? null,
       activeChannel: channel.id,
       ready: channel.ready,
+      configured: channel.ready ? "configured" : "unconfigured",
       resendKeyPresent: config.resendKeyPresent,
     },
     retention: {
@@ -117,6 +164,8 @@ export async function chatAgentHealth() {
       maxInputChars: config.maxInputChars,
       maxMessagesPerSession: config.maxMessagesPerSession,
       maxHistoryTurns: config.maxHistoryTurns,
+      llmTimeoutMs: llm.timeoutMs,
+      llmMaxRetries: llm.maxRetries,
     },
   };
 }

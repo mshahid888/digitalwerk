@@ -11,8 +11,12 @@ import {
 } from "./fixtures";
 
 beforeEach(() => {
-  delete process.env.ANTHROPIC_API_KEY;
-  delete process.env.CHAT_AGENT_PROVIDER;
+  for (const k of [
+    "ANTHROPIC_API_KEY", "CHAT_AGENT_PROVIDER", "CHAT_AGENT_MODEL",
+    "LLM_PROVIDER", "LLM_BASE_URL", "LLM_API_KEY", "LLM_MODEL",
+  ]) {
+    delete process.env[k];
+  }
   resetLlmProviderCache();
 });
 
@@ -100,16 +104,21 @@ describe("orchestrator — end to end on the mock provider", () => {
     }
   });
 
-  it("degrades gracefully to the composed reply if the provider errors", async () => {
-    // Force the anthropic adapter with a key that will fail the network call,
-    // then confirm we still get the deterministic fallback (no throw).
-    process.env.ANTHROPIC_API_KEY = "sk-ant-invalid-key-for-test";
-    process.env.CHAT_AGENT_PROVIDER = "anthropic";
+  it("degrades gracefully to the composed reply when the LLM gateway is unreachable", async () => {
+    // Point the openai-compatible adapter at a dead host, then confirm we
+    // still get the deterministic fallback reply (no throw, no crash).
+    process.env.LLM_PROVIDER = "omniroute";
+    process.env.LLM_BASE_URL = "http://127.0.0.1:1/v1";
+    process.env.LLM_API_KEY = "not-real";
+    process.env.LLM_MODEL = "x/y";
+    process.env.LLM_MAX_RETRIES = "0";
+    process.env.LLM_TIMEOUT_MS = "800";
     resetLlmProviderCache();
     const session = createSession("s8", "de");
     const result = await runAgentTurn(session, "Welche Leistungen bietet ihr an?", "de");
     expect(result.reply.length).toBeGreaterThan(0);
-    expect(result.usage?.provider).toMatch(/anthropic/);
+    expect(result.reply.toLowerCase()).toMatch(/digitalwerk|leistung|erreichen|helfen/);
+    expect(result.usage?.provider).toMatch(/omniroute/);
   }, 15000);
 
   it("keeps the internal lead score out of the reply text", async () => {
