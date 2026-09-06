@@ -30,10 +30,16 @@ lib/chat-agent/
   service.ts           application service used by the API routes
 
   llm/                  provider-independent LLM interface
-    types.ts             LlmProvider, LlmMessage, LlmResponse, ...
+    types.ts             LlmProvider, LlmMessage, LlmResponse, LlmProviderUnavailableError
     mock-provider.ts     deterministic, offline, no cost
-    anthropic-provider.ts  fetch adapter for the Messages API (no SDK)
-    index.ts             getLlmProvider() factory (falls back to mock)
+    openai-compatible-provider.ts  generic /v1/chat/completions adapter — OmniRoute + others (no SDK)
+    anthropic-provider.ts  optional direct Anthropic (no SDK; not the production path)
+    index.ts             getLlmProvider() factory — configuration-driven, memoised, falls back to mock
+
+  http/                 framework-agnostic HTTP layer (shared by both transports)
+    handlers.ts          session/message/lead/handoff/health/admin/cron — all validation + logic
+    proxy.ts             proxyToAgentApi() — Vercel route → Hetzner Agent API
+    next-route.ts        toResponse()/readJson()/proxyOrLocal() glue for app/api/chat/*
 
   knowledge/           approved knowledge base + retrieval
     types.ts             KnowledgeEntry + source/verification metadata
@@ -73,17 +79,24 @@ lib/chat-agent/
 
   admin-auth.ts        Bearer-token guard for the admin API
 
-app/api/chat/
-  session/route.ts      POST  start a session
-  message/route.ts      POST  send a message, get the reply
-  lead/route.ts         POST  attach/update lead facts
-  handoff/route.ts      POST  explicit "talk to a human"
-  health/route.ts       GET   non-secret status snapshot
-  admin/leads/route.ts     GET  list leads          (Bearer CHAT_AGENT_ADMIN_TOKEN)
-  admin/handoffs/route.ts  GET  list handoffs; POST retry pending deliveries
-  admin/purge/route.ts     POST run the retention sweep manually
+app/api/chat/               thin wrappers — proxyOrLocal(): proxy to the Hetzner
+  session|message|lead|      Agent API when AGENT_API_URL is set, else run in-process.
+  handoff|health/route.ts    Never talk to Postgres from here in production.
+  admin/leads|handoffs|purge/route.ts  Bearer CHAT_AGENT_ADMIN_TOKEN
 app/api/cron/
-  purge-transcripts/route.ts  GET/POST  daily maintenance (Vercel Cron)
+  purge-transcripts/route.ts  GET/POST  maintenance (Vercel Cron OR Hetzner timer)
+
+server/                    the standalone DigitalWerk Agent API (Hetzner)
+  app.ts                   Hono app: CORS, request-id logging, X-Agent-Auth gate,
+                           per-IP rate limit — routes call lib/chat-agent/http/handlers
+  index.ts                 @hono/node-server entry (tsx, no build step)
+  rate-limit.ts            in-memory sliding-window limiter
+  Dockerfile               node:22-alpine, non-root, healthcheck
+
+deploy/digitalwerk/        isolated Compose project for the existing Hetzner box
+  compose.yml              postgres (internal-only net) + agent-api (hardened)
+  backup.sh restore.sh maintenance.sh   pg_dump / restore test / retention sweep
+  systemd/                 digitalwerk-backup.timer (04:15) + -maintenance.timer (03:30)
 
 vercel.json             one cron entry -> /api/cron/purge-transcripts @ 03:00
 
@@ -134,21 +147,25 @@ Deterministic logic runs first; the LLM only phrases the final reply.
 
 `getChatAgentStore()` returns a `ChatAgentStore` chosen by environment:
 
-- a Postgres connection string set (`CHAT_AGENT_DATABASE_URL`, or Vercel's
-  `DATABASE_URL` / `POSTGRES_URL` / `POSTGRES_PRISMA_URL`) → **Neon
-  Postgres** (`PostgresChatAgentStore`). Connects lazily and runs
+- a Postgres connection string set (`CHAT_AGENT_DATABASE_URL`, or
+  `DATABASE_URL` / `POSTGRES_URL` / `POSTGRES_PRISMA_URL`) →
+  `PostgresChatAgentStore`. **In production this is the self-hosted
+  Postgres 16 on the Hetzner box** (`deploy/digitalwerk/`), reached only by
+  the Agent API over a private `internal: true` Docker network — never
+  published, never reachable from Vercel or the browser. Any standard
+  `postgresql://` string works. Connects lazily and runs
   `CREATE TABLE IF NOT EXISTS` on first use. If the DB is unreachable at
-  startup it logs and falls back to the memory store for that instance —
-  the conversation still works, only persistence is lost.
+  startup it logs and falls back to the memory store for that instance.
 - otherwise → **in-memory** store (dev, preview, tests).
 
-The store depends only on a small `SqlClient` interface (`query`, `end`),
-not on any Neon-specific API — `postgres.js` is the current driver and works
-with any Postgres via Neon's pooled endpoint. Swapping it (or adding Redis
-for sessions later) is one file. Four tables: `chat_sessions` (metadata +
-raw transcript), `chat_leads` (the permanent record, minimum fields),
-`chat_handoffs` (record + delivery state), `chat_events`. See
-`PERSISTENCE.md` and `postgres/schema.sql`.
+The store depends only on a small `SqlClient` interface (`query`, `end`) —
+no vendor-specific API. `postgres.js` is the current driver and works with
+any Postgres. `store.ping()` is a live `SELECT 1` used by the health
+endpoint so a database that drops *after* startup is reported as
+`unavailable` (HTTP 503), not a stale `ok`. Four tables: `chat_sessions`
+(metadata + raw transcript), `chat_leads` (the permanent record, minimum
+fields), `chat_handoffs` (record + delivery state), `chat_events`. See
+`DEPLOYMENT.md`, `PERSISTENCE.md` and `postgres/schema.sql`.
 
 ## Retention (privacy)
 
@@ -209,12 +226,12 @@ they expose lead PII).
 
 | Area | Now | Later |
 |---|---|---|
-| LLM provider | mock | Anthropic (needs a funded key) |
-| Persistence | Postgres store built; runs in-memory until a Neon URL is set | provision Neon (free tier), set the URL |
+| LLM provider | mock | OmniRoute / any OpenAI-compatible gateway (needs a key + base URL); adapter already built |
+| Persistence | self-hosted Postgres on Hetzner (`deploy/digitalwerk/`), deployed in mock-LLM mode | point Vercel `AGENT_API_URL` at it once DNS + the Caddy vhost exist |
 | Handoff / lead delivery | Resend adapter built; no-op until `RESEND_API_KEY` is set | set the key + verify a sending domain |
 | Notification channels | Resend only | Slack / CRM = new file + one branch in `notifications/index.ts` |
 | Session store | Postgres (same as leads) | Redis only if scale proves the need — `SqlClient` seam is separate from a KV seam |
 | Retrieval | lexical | vector, only if conversation data justifies it |
-| Rate limiting | per-session message cap | edge rate limit + WAF |
+| Rate limiting | per-session message cap + per-IP sliding window on the Agent API | edge rate limit + WAF |
 | Admin UI | JSON endpoints + bearer token | a real dashboard + proper auth |
 | Widget component tests | none | jsdom + Testing Library |

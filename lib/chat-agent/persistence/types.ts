@@ -105,6 +105,13 @@ export interface ChatAgentStore {
   events: EventStore;
   /** Best-effort readiness check (memory: always ready; postgres: SELECT 1 + migrate). */
   init(): Promise<void>;
+  /**
+   * Live liveness probe. Unlike init() this is never memoised: it runs a
+   * real round-trip every call (postgres: `SELECT 1`), so a health endpoint
+   * can detect a database that went away after a successful startup. Memory:
+   * always resolves.
+   */
+  ping(): Promise<void>;
   /** Release resources (postgres: close the pool). No-op for memory. */
   close(): Promise<void>;
 }

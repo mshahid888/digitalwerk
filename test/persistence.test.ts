@@ -90,6 +90,21 @@ describe("PostgresChatAgentStore (fake SQL client)", () => {
     expect(store.kind).toBe("postgres");
   });
 
+  it("ping() runs a fresh SELECT 1 on every call and propagates failure", async () => {
+    const sql = new FakeSqlClient();
+    const store = new PostgresChatAgentStore(sql);
+    await store.init();
+    await store.ping();
+    await store.ping();
+    // one from init + two from ping
+    expect(sql.calls.filter((c) => c.text.includes("SELECT 1"))).toHaveLength(3);
+
+    sql.query = async () => {
+      throw new Error("connection terminated unexpectedly");
+    };
+    await expect(store.ping()).rejects.toThrow(/connection terminated/);
+  });
+
   it("conversations.create issues a parameterised INSERT", async () => {
     const sql = new FakeSqlClient();
     const store = new PostgresChatAgentStore(sql);

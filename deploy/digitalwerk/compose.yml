@@ -42,6 +42,19 @@ services:
     # Not read_only: the official image writes to several runtime paths; the
     # data volume + tmpfs below are the writable surface, everything else is
     # covered by no-new-privileges / cap_drop / pids_limit / mem_limit.
+    #
+    # The official entrypoint starts as root and drops to the `postgres`
+    # user via gosu, and chowns the data dir on first init — so the blanket
+    # `cap_drop: ALL` from *hardening needs these five capabilities added
+    # back, or the container dies with "operation not permitted". This is
+    # the documented minimal set for the official image; no-new-privileges
+    # stays on (gosu relies on CAP_SETUID/SETGID, not a setuid bit).
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
     environment:
       POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
       POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}

@@ -465,6 +465,11 @@ export class PostgresChatAgentStore implements ChatAgentStore {
     return this.initialized;
   }
 
+  /** Live probe — always a fresh round-trip, never memoised. */
+  async ping(): Promise<void> {
+    await this.sql.query("SELECT 1");
+  }
+
   async close(): Promise<void> {
     await this.sql.end();
   }

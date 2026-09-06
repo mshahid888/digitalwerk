@@ -175,6 +175,7 @@ export function createMemoryStore(): ChatAgentStore {
     handoffs: new MemoryHandoffStore(),
     events: new MemoryEventStore(events),
     async init() {},
+    async ping() {},
     async close() {},
   };
 }

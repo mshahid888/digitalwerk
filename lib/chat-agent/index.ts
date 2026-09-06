@@ -95,7 +95,11 @@ export async function chatAgentHealth() {
     storeKind = store.kind;
     if (store.kind === "postgres") {
       try {
+        // init() self-applies the schema (memoised); ping() is a live
+        // round-trip every call, so a DB that dropped after startup is
+        // reported as unreachable instead of a stale "ok".
         await store.init();
+        await store.ping();
         dbReachable = true;
       } catch {
         dbReachable = false;

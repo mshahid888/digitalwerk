@@ -110,11 +110,17 @@ persistence there).
 Install the timers:
 
 ```bash
+chmod +x backup.sh restore.sh maintenance.sh
 sudo cp systemd/digitalwerk-*.{service,timer} /etc/systemd/system/
-# edit the ExecStart paths in the .service files to the real checkout path
+# edit the ExecStart paths in the .service files if the checkout path differs
 sudo systemctl daemon-reload
 sudo systemctl enable --now digitalwerk-backup.timer digitalwerk-maintenance.timer
 ```
+
+`maintenance.sh` calls the retention/handoff-retry cron endpoint **inside**
+the container over loopback, so it works before `agent.digitalwerkk.de` DNS
+exists. `backup.sh` and `maintenance.sh` use passwordless `sudo docker` (the
+`deploy` user already has it).
 
 ## Deploy an update
 
