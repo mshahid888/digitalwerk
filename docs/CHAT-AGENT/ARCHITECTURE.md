@@ -1,16 +1,27 @@
 # DigitalWerk Chat Agent — Architecture
 
-Status: **Phase 2** — provider-independent foundation + Neon Postgres
-persistence + Resend notification channel + retention. Every external
-dependency (LLM, database, email) degrades to a safe default when its
-credentials are absent, so the whole system still runs, develops and tests
-with **no paid resource**.
+Status: **Phase 3** — provider-agnostic LLM layer (OmniRoute / any
+OpenAI-compatible gateway; **not tied to Anthropic**), a standalone Agent
+API for the existing Hetzner server, isolated self-hosted Postgres, retry-
+safe Resend notifications, 30-day retention. Every external dependency
+(LLM, database, email) degrades to a safe default when its credentials are
+absent, so the whole system still runs, develops and tests with **no paid
+resource**.
 
 ## Where it lives
 
-The chat agent is part of the existing Next.js 16 app — no separate service,
-no second deployment. It follows the repo's conventions (`Request`/`Response`
-route handlers like `app/api/kontakt`, `lib/*` modules, `@/` path alias).
+The agent's **logic** is framework-agnostic TypeScript in `lib/chat-agent/`.
+Two transports call it:
+
+1. **Next.js route handlers** (`app/api/chat/*`, on Vercel) — thin. Either
+   run the agent in-process (dev / pre-split) or **proxy** to the Hetzner
+   Agent API when `AGENT_API_URL` is set.
+2. **The standalone Agent API** (`server/`, a small Hono app run with
+   `tsx`, on Hetzner) — the production path. Sits in front of the private
+   Postgres; the browser never reaches it directly (see `DEPLOYMENT.md`).
+
+Both call `lib/chat-agent/http/handlers.ts` — one implementation, no
+duplicated validation or business logic.
 
 ```
 lib/chat-agent/

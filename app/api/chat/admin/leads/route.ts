@@ -1,34 +1,28 @@
-import { checkAdminAuth, listLeads } from "@/lib/chat-agent";
+import { adminLeadsHandler } from "@/lib/chat-agent/http/handlers";
+import { proxyToAgentApi } from "@/lib/chat-agent/http/proxy";
+import { toResponse } from "@/lib/chat-agent/http/next-route";
 
 // GET /api/chat/admin/leads?limit=100&status=new
-// Requires: Authorization: Bearer <CHAT_AGENT_ADMIN_TOKEN>
-// Disabled (503) when the token env var is unset.
+// Requires: Authorization: Bearer <CHAT_AGENT_ADMIN_TOKEN>. 503 when unset.
 
 export const dynamic = "force-dynamic";
 
-const STATUSES = ["new", "contacted", "closed"] as const;
-
 export async function GET(request: Request) {
-  const auth = checkAdminAuth(request);
-  if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
-  }
+  const search = new URL(request.url).searchParams;
+  const authHeader = request.headers.get("authorization");
 
-  const url = new URL(request.url);
-  const limitParam = Number.parseInt(url.searchParams.get("limit") ?? "", 10);
-  const limit = Number.isFinite(limitParam)
-    ? Math.min(500, Math.max(1, limitParam))
-    : 100;
-  const statusParam = url.searchParams.get("status");
-  const status = STATUSES.includes(statusParam as (typeof STATUSES)[number])
-    ? (statusParam as (typeof STATUSES)[number])
-    : undefined;
+  const proxied = await proxyToAgentApi("/api/chat/admin/leads", {
+    method: "GET",
+    authHeader,
+    search: search.toString(),
+  });
+  if (proxied) return toResponse(proxied);
 
-  try {
-    const leads = await listLeads({ limit, status });
-    return Response.json({ count: leads.length, leads });
-  } catch (error) {
-    console.error("Chat admin leads: query failed:", error);
-    return Response.json({ error: "Failed to load leads." }, { status: 500 });
-  }
+  return toResponse(
+    await adminLeadsHandler({
+      authHeader,
+      limit: search.get("limit"),
+      status: search.get("status"),
+    }),
+  );
 }

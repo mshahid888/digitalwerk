@@ -1,17 +1,12 @@
-import { chatAgentHealth } from "@/lib/chat-agent";
+import { healthHandler } from "@/lib/chat-agent/http/handlers";
+import { proxyOrLocal } from "@/lib/chat-agent/http/next-route";
 
-// GET /api/chat/health — non-secret status of the chat agent: which LLM
-// provider is active (mock vs. anthropic), knowledge base size and limits.
-// Used by the checkpoint report and for a quick post-deploy smoke check.
-// Contains no secrets — only whether a key is present.
+// GET /api/chat/health — non-secret status: LLM provider, database
+// reachability, notification channel, retention. When AGENT_API_URL is set
+// this reflects the Hetzner Agent API's own health.
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  try {
-    return Response.json({ ok: true, ...(await chatAgentHealth()) });
-  } catch (error) {
-    console.error("Chat health: failed to build snapshot:", error);
-    return Response.json({ ok: false }, { status: 500 });
-  }
+export function GET(request: Request) {
+  return proxyOrLocal(request, "/api/chat/health", () => healthHandler());
 }

@@ -14,12 +14,14 @@ import { resetLlmProviderCache } from "@/lib/chat-agent/llm";
 import { resetNotificationChannelCache } from "@/lib/chat-agent/notifications";
 
 beforeEach(() => {
-  delete process.env.ANTHROPIC_API_KEY;
-  delete process.env.CHAT_AGENT_PROVIDER;
-  delete process.env.CHAT_AGENT_HANDOFF_CHANNEL;
-  delete process.env.RESEND_API_KEY;
-  delete process.env.CHAT_AGENT_DATABASE_URL;
-  delete process.env.DATABASE_URL;
+  for (const k of [
+    "ANTHROPIC_API_KEY", "CHAT_AGENT_PROVIDER", "CHAT_AGENT_HANDOFF_CHANNEL",
+    "RESEND_API_KEY", "CHAT_AGENT_DATABASE_URL", "DATABASE_URL", "POSTGRES_URL",
+    "LLM_PROVIDER", "LLM_BASE_URL", "LLM_API_KEY", "LLM_MODEL",
+    "AGENT_API_URL", "AGENT_API_SECRET",
+  ]) {
+    delete process.env[k];
+  }
   resetLlmProviderCache();
   resetNotificationChannelCache();
   resetChatAgentStore();

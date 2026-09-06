@@ -1,23 +1,19 @@
-import { checkAdminAuth, purgeExpiredData } from "@/lib/chat-agent";
+import { adminPurgeHandler } from "@/lib/chat-agent/http/handlers";
+import { proxyToAgentApi } from "@/lib/chat-agent/http/proxy";
+import { toResponse } from "@/lib/chat-agent/http/next-route";
 
-// POST /api/chat/admin/purge
-// Manually run the retention sweep (also runs daily via Vercel Cron —
-// see app/api/cron/purge-transcripts/route.ts).
-// Requires: Authorization: Bearer <CHAT_AGENT_ADMIN_TOKEN>
+// POST /api/chat/admin/purge — run the retention sweep on demand.
+// Requires: Authorization: Bearer <CHAT_AGENT_ADMIN_TOKEN>.
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const auth = checkAdminAuth(request);
-  if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
-  }
-
-  try {
-    const result = await purgeExpiredData();
-    return Response.json({ ok: true, ...result });
-  } catch (error) {
-    console.error("Chat admin purge: failed:", error);
-    return Response.json({ error: "Purge failed." }, { status: 500 });
-  }
+  const authHeader = request.headers.get("authorization");
+  const proxied = await proxyToAgentApi("/api/chat/admin/purge", {
+    method: "POST",
+    authHeader,
+    body: {},
+  });
+  if (proxied) return toResponse(proxied);
+  return toResponse(await adminPurgeHandler({ authHeader }));
 }

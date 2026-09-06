@@ -1,40 +1,12 @@
-import { startSession } from "@/lib/chat-agent";
-import type { Language } from "@/lib/chat-agent";
+import { sessionHandler } from "@/lib/chat-agent/http/handlers";
+import { proxyOrLocal } from "@/lib/chat-agent/http/next-route";
 
-// POST /api/chat/session — start a new chat session.
-// Body (optional): { locale?: "de" | "en" }
-// Returns: { sessionId, language, greeting }
+// POST /api/chat/session — start a chat session.
+// Proxies to the Hetzner Agent API when AGENT_API_URL is set; otherwise
+// runs the agent in-process. The browser only ever calls this same-origin.
 
 export const dynamic = "force-dynamic";
 
-function parseLocale(value: unknown): Language | undefined {
-  return value === "de" || value === "en" ? value : undefined;
-}
-
-export async function POST(request: Request) {
-  let body: unknown = {};
-  try {
-    const text = await request.text();
-    body = text ? JSON.parse(text) : {};
-  } catch {
-    // An empty or invalid body is fine here — locale is optional.
-    body = {};
-  }
-
-  const locale = parseLocale(
-    typeof body === "object" && body !== null
-      ? (body as Record<string, unknown>).locale
-      : undefined,
-  );
-
-  try {
-    const result = await startSession(locale);
-    return Response.json(result, { status: 201 });
-  } catch (error) {
-    console.error("Chat session: failed to start session:", error);
-    return Response.json(
-      { error: "Die Sitzung konnte nicht gestartet werden." },
-      { status: 500 },
-    );
-  }
+export function POST(request: Request) {
+  return proxyOrLocal(request, "/api/chat/session", sessionHandler);
 }
