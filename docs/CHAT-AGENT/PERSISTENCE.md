@@ -7,15 +7,17 @@
 
 | Environment | Store | Durable? |
 |---|---|---|
-| a Postgres connection string is set | `PostgresChatAgentStore` (Neon) | yes |
+| a Postgres connection string is set | `PostgresChatAgentStore` | yes |
 | nothing set | in-memory | no — lost on cold start / redeploy |
 
 Accepted connection-string vars, in priority order:
 `CHAT_AGENT_DATABASE_URL`, `DATABASE_URL`, `POSTGRES_URL`,
-`POSTGRES_PRISMA_URL`. Use Neon's **pooled** endpoint (`-pooler` in the
-host). The store connects lazily and, if the database is unreachable at
-init, logs and falls back to the in-memory store for that instance — the
-conversation keeps working; only persistence is affected.
+`POSTGRES_PRISMA_URL`. In production this is the **self-hosted Postgres 16
+on the Hetzner box** (`deploy/digitalwerk/`), reached only by the Hetzner
+Agent API over a private `internal: true` Docker network. The store
+connects lazily and, if the database is unreachable at init, logs and falls
+back to the in-memory store for that instance — the conversation keeps
+working; only persistence is affected.
 
 ## What is stored where
 
@@ -44,27 +46,24 @@ The lead record stays complete and useful after the transcript is purged.
 ## Driver decoupling
 
 `store.ts` depends only on the `SqlClient` interface (`query(text, params)`,
-`end()`) in `postgres/client.ts` — never on a Neon-specific API. The
-current adapter wraps `postgres.js` with serverless-friendly settings
-(`max: 1`, `prepare: false` for the transaction pooler). Swapping to another
-Postgres driver, or to Neon's HTTP driver for edge, is a change to that one
-file. A future Redis session store would be a **separate** seam (a new
-`SessionStore` impl selected in `persistence/index.ts`), not a change here.
+`end()`) in `postgres/client.ts` — no vendor-specific API. The current
+adapter wraps `postgres.js`. Swapping to another Postgres driver is a change
+to that one file. A future Redis session store would be a **separate** seam
+(a new `SessionStore` impl selected in `persistence/index.ts`), not a change
+here.
 
-## Provisioning Neon (when the datastore decision is executed)
+## Provisioning (production: the Hetzner Postgres)
 
-1. Create a Neon project (free tier). Nothing in this repo does this.
-2. Copy the **pooled** connection string.
-3. Set it as `DATABASE_URL` (or `CHAT_AGENT_DATABASE_URL`) in Vercel →
-   Settings → Environment Variables, for the environments that should
-   persist (typically Production, optionally Preview).
-4. Redeploy. First request runs the migration. `GET /api/chat/health`
-   should then show `persistence.active: "postgres"`.
-5. (Optional) run `schema.sql` manually first if you want the tables to
-   exist before traffic.
+The production database is stood up by `deploy/digitalwerk/compose.yml`
+(`postgres:16-alpine`, tuned for a small box, on an `internal: true` Docker
+network, never published). Full runbook: `deploy/digitalwerk/README.md`.
+The Hetzner Agent API's `.env` sets
+`CHAT_AGENT_DATABASE_URL=postgresql://…@postgres:5432/digitalwerk`; the
+schema self-applies on the first request. `GET /api/chat/health` then shows
+`persistence.active: "postgres"`, `database: "ok"`.
 
-No plan upgrade is required for the expected volume; Neon's free tier
-covers it.
+The Vercel deployment does **not** get a database URL — its `/api/chat/*`
+routes proxy to the Hetzner Agent API instead (see `DEPLOYMENT.md`).
 
 ## Local development against Postgres (optional)
 

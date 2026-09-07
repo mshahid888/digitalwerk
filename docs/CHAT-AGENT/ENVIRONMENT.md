@@ -23,17 +23,18 @@ for the canonical list.
 | `CHAT_AGENT_MAX_MESSAGES_PER_SESSION` | `40` | Abuse guard — session then routes to the team. |
 | `CHAT_AGENT_MAX_HISTORY_TURNS` | `16` | Turns kept in the model context window. |
 
-## Persistence (Neon Postgres)
+## Persistence (Postgres)
 
 | Variable | Default | Purpose |
 |---|---|---|
 | `CHAT_AGENT_DATABASE_URL` | — | Postgres connection string. **Unset → in-memory store** (not durable). Takes precedence over the names below. |
-| `DATABASE_URL` / `POSTGRES_URL` / `POSTGRES_PRISMA_URL` | — | Also accepted — these are what Vercel's Neon integration sets. |
+| `DATABASE_URL` / `POSTGRES_URL` / `POSTGRES_PRISMA_URL` | — | Also accepted (e.g. a Vercel storage integration). |
 
-Use Neon's **pooled** connection string (host contains `-pooler`). The
-schema is created automatically on first use; `postgres/schema.sql` is the
-reference DDL. Nothing is provisioned by this code — a Neon database must be
-created first (its free tier is sufficient).
+Any standard `postgresql://` string works. **In production this points at
+the self-hosted Postgres 16 on the Hetzner box** (`deploy/digitalwerk/`),
+reached only by the Hetzner Agent API over a private Docker network — see
+`DEPLOYMENT.md`. The schema is created automatically on first use;
+`postgres/schema.sql` is the reference DDL.
 
 ## Retention (privacy)
 

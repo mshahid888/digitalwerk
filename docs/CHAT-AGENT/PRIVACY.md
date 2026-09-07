@@ -59,19 +59,26 @@ and the legal review have a factual basis. It is **not** legal advice.
 
 (mirrored in the privacy-page notice)
 
-- Name the **hosting provider** and complete the server-log processing
-  terms (pre-existing gap, section 3 of the privacy page).
-- Name the **sub-processors** actually used: the database (Neon), the email
-  provider (Resend), and — if Anthropic is connected — the **AI provider**,
-  including the legal basis for the transfer and any **third-country
-  transfer** mechanism (Anthropic is US-based).
+- Name the **hosting providers** and complete the processing terms
+  (pre-existing gap, section 3 of the privacy page). The actual setup:
+  **Vercel** hosts the static site + the thin `/api/chat/*` proxy;
+  **Hetzner** (Nürnberg, EU) hosts the Agent API + the PostgreSQL database.
+- Name the **sub-processors** actually used, with a DPA (Art. 28) for each:
+  Hetzner (hosting + database), Resend (email — **only if** a key is set;
+  currently disabled), and — **only if** OmniRoute / an upstream model
+  provider is connected — the **AI provider**, including the legal basis for
+  any transfer and any **third-country transfer** mechanism. Until then the
+  assistant runs on the local mock provider with no external AI call.
 - Confirm the **legal bases** stated (Art. 6(1)(f) / 6(1)(b)) and the
   balancing test for the legitimate-interest basis.
 - Decide whether an **AI Act** transparency obligation applies and whether
   the current in-widget "this is an AI assistant, not a staff member"
   disclosure is sufficient.
-- Confirm the **retention periods** (30-day transcript cap; "kept as long
-  as necessary" for the lead record — a concrete period may be preferable).
+- Confirm the **retention periods** (30-day raw-transcript cap; "kept as
+  long as necessary" for the lead record — a concrete period may be
+  preferable) and the **extent of the verbatim conversation excerpt**
+  retained in the permanent lead record (`summary.ts` keeps the last up to 8
+  messages; the notification e-mail no longer includes it).
 - Data-processing agreements (Art. 28) with each processor.
 - Whether the chat should be gated behind cookie/consent (it currently
   sets no cookies and uses no `localStorage`).

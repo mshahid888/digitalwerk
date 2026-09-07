@@ -37,9 +37,13 @@ scoring, guardrails, or the provider layer.
 ## Not yet covered
 
 - React widget component tests (needs jsdom + Testing Library).
-- Live-provider contract tests for Anthropic (needs a key).
+- Live-provider contract tests for OmniRoute / the chosen gateway (needs a
+  key). The OpenAI-compatible adapter is covered by mocked-`fetch` tests
+  (request shape, retry, timeout, malformed response, fallback-to-mock).
 - **Integration tests against a real Postgres.** The Postgres store is
   tested via a fake `SqlClient` that verifies the SQL shape and row
-  mapping, not against a live database. Run a smoke test against a real
-  Neon instance once `CHAT_AGENT_DATABASE_URL` is available.
+  mapping, not against a live database. The full HTTP → agent → Postgres
+  path was verified manually against the Hetzner deployment (see
+  `PHASE-4-REPORT.md`); a scripted smoke test lives at
+  `deploy/digitalwerk/verify-https-endpoint.sh`.
 - Live Resend delivery (needs `RESEND_API_KEY` + a verified domain).
