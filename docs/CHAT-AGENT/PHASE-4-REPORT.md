@@ -1,22 +1,63 @@
 # DigitalWerk AI Chat Agent — Phase 4: Production Activation
 
-Date: 2026-09-06
+Date: 2026-09-06 … 2026-09-07
 Branch: `feat/chat-agent-foundation` (PR #1, **not merged**)
-Deployed commit on Hetzner: `5aa0df5`
+Deployed commit on Hetzner: `761c931`
 
 ---
 
-## Status
+## Status (updated 2026-09-07 — DNS live, HTTPS + Vercel wiring complete)
 
 ```
-Engineering:          ~96%
-Production readiness:  ~70%
+Engineering:          ~98%
+Production readiness:  ~80%
 ```
 
-The full stack is **deployed and verified on the existing Hetzner box in
-mock-LLM mode**. What remains is external: an OmniRoute key, one DNS record,
-the Caddy vhost + Vercel env wiring, a Resend key, an off-server backup
-target, the Vercel plan, and legal sign-off.
+The full public path is **live and verified end to end**:
+
+```
+browser → Vercel /api/chat/*  →  https://agent.digitalwerkk.de  (Let's Encrypt, host Caddy)
+        →  Hetzner agent-api  →  private PostgreSQL      (LLM: mock, until OmniRoute)
+```
+
+Verified through the Vercel preview of `feat/chat-agent-foundation`: DE + EN
+replies grounded in the knowledge base, lead qualification + scoring, human
+handoff, and **every session / lead / handoff row confirmed in the Hetzner
+Postgres** (handoff IDs returned by the Vercel API matched the DB rows).
+`AGENT_API_SECRET` / `AGENT_API_URL` are set on the Vercel `digitalwerk`
+project for **all environments** (secret is write-only); neither appears in
+any client bundle or the page HTML. Production (`www.digitalwerkk.de`) was
+redeployed and is healthy, but still serves `main` — the chat agent reaches
+production only when PR #1 is merged (the env wiring is already in place for
+that).
+
+What remains is external: an **OmniRoute key** (agent runs on the mock
+provider until then), a **Resend key**, an **off-server backup target**, the
+**Vercel plan** decision, **PR #1 merge**, and **legal sign-off**.
+
+### Phase 4 addendum — what was done 2026-09-07
+
+- **DNS**: `A agent → 2.28.53.174` added in the IONOS panel (by the owner);
+  propagated after ~1h40m.
+- **HTTPS**: `deploy/digitalwerk/apply-caddy-vhost.sh` appended the
+  `agent.digitalwerkk.de` vhost to the shared pdfwandler Caddyfile; Let's
+  Encrypt cert issued; PDF Wandler never went down (config pushed via
+  Caddy's admin API, then one ~2 s Caddy recreate to persist it).
+- **Networking fix** (`4d2d18d`): the agent-api container now joins the
+  existing `pdfwandler_edge` network itself (`external: true`) instead of a
+  manual `docker network connect`, so the Caddy↔agent link survives a Caddy
+  recreate. Active health checks removed from the vhost (single upstream,
+  nothing to fail over to, 30 s recovery lag). `digitalwerk_edge` removed.
+- **Bug fix** (`761c931`): a non-UUID `sessionId` reached the Postgres
+  `uuid` column and came back as a 500; the handlers now reject a
+  malformed `sessionId` with 400 before it hits the DB (a well-formed but
+  unknown id still returns 404). +2 tests → **117 passing**.
+- **Vercel**: `AGENT_API_URL` (Config) + `AGENT_API_SECRET` (Secret) added
+  to all environments via the dashboard; preview and production both
+  redeployed; the secret value was moved server→clipboard→form, never into
+  chat/logs/git; local copies deleted afterwards.
+- Bind-mount gotcha (single-file Caddyfile mount serving a stale inode after
+  `sed -i`) documented in `deploy/digitalwerk/README.md`.
 
 ---
 
@@ -100,6 +141,13 @@ not Vercel — Vercel's apex/`www` records live inside that IONOS zone. The
 ## Remaining blockers
 
 ```
+✅ DONE 2026-09-07 — DNS record (A agent → 2.28.53.174, IONOS panel).
+✅ DONE 2026-09-07 — HTTPS vhost on the shared Caddy (agent.digitalwerkk.de,
+   Let's Encrypt, PDF Wandler untouched — apply-caddy-vhost.sh).
+✅ DONE 2026-09-07 — Vercel wiring (AGENT_API_URL + AGENT_API_SECRET on the
+   digitalwerk project, all environments; preview + production redeployed;
+   full public E2E verified against the preview → Hetzner Postgres).
+
 1. BLOCKER — OmniRoute credentials
    Owner:  DigitalWerk / account owner
    Exact action:  Obtain an OmniRoute instance + API key. On the server, in
@@ -108,27 +156,14 @@ not Vercel — Vercel's apex/`www` records live inside that IONOS zone. The
    LLM_MODEL=<provider/model-id>; then `sudo docker compose up -d agent-api`.
    Verify: health shows llm.provider "omniroute", configured, live:true.
 
-2. BLOCKER — DNS record
-   Owner:  whoever holds the IONOS login for digitalwerkk.de
-   Exact action:  Add  A  agent  → 2.28.53.174  (TTL 3600) in the IONOS DNS
-   panel. Wait for it to resolve.
+2. BLOCKER — PR #1 merge (agent → production)
+   Owner:  DigitalWerk (after legal sign-off, #5)
+   Exact action:  Merge feat/chat-agent-foundation to main. Vercel then
+   auto-deploys main to production WITH the AGENT_API_URL / AGENT_API_SECRET
+   already set, and www.digitalwerkk.de/api/chat/* starts proxying to
+   Hetzner. Until then production serves the pre-agent site.
 
-3. BLOCKER — HTTPS vhost on the shared Caddy  (do after #2)
-   Owner:  ops (has server access)
-   Exact action:  Add the `agent.digitalwerkk.de` block from
-   deploy/digitalwerk/README.md to the pdfwandler Caddyfile, then
-   `sudo docker network connect digitalwerk_edge pdfwandler-caddy-1` and
-   `sudo docker exec pdfwandler-caddy-1 caddy reload --config /etc/caddy/Caddyfile`.
-   Verify: `curl https://agent.digitalwerkk.de/api/chat/health` → 200.
-
-4. BLOCKER — Vercel wiring  (do after #3)
-   Owner:  Vercel account owner
-   Exact action:  Set env vars on the `digitalwerk` project —
-   AGENT_API_URL=https://agent.digitalwerkk.de and AGENT_API_SECRET=<the
-   value from the server .env> — then redeploy. The Next routes start
-   proxying to Hetzner.
-
-5. BLOCKER — Resend
+3. BLOCKER — Resend
    Owner:  DigitalWerk
    Exact action:  Create a Resend API key, verify a sending domain
    (e.g. mail.digitalwerkk.de). In the server .env set
@@ -137,7 +172,7 @@ not Vercel — Vercel's apex/`www` records live inside that IONOS zone. The
    `docker compose up -d agent-api`. Queued handoffs deliver on the next
    maintenance run (or `POST /api/chat/admin/handoffs`).
 
-6. BLOCKER — Off-server backups
+4. BLOCKER — Off-server backups
    Owner:  ops
    Exact action:  `rclone config` a remote (Cloudflare R2 / Backblaze B2
    free tier, or a Hetzner Storage Box). Set BACKUP_RCLONE_REMOTE (and
@@ -145,23 +180,24 @@ not Vercel — Vercel's apex/`www` records live inside that IONOS zone. The
    server .env. Also enable Hetzner Cloud Backups on the CX23 (~€1/mo — a
    paid item, flagged not purchased).
 
-7. BLOCKER — Vercel plan (commercial use)
-   Owner:  Vercel account owner
-   Exact action:  Vercel team is on Hobby, which prohibits commercial use;
-   www.digitalwerkk.de is commercial. Upgrade to Pro (a paid item — not
-   done). Moving the agent to Hetzner does not by itself resolve this.
-
-8. BLOCKER — Legal / business sign-off
+5. BLOCKER — Legal / business sign-off
    Owner:  DigitalWerk + counsel
    Exact action:  Verify the `provisional` pricing entries; name the
    sub-processors (OmniRoute + upstream model provider, Hetzner, Resend) in
    /datenschutz and /en/privacy-policy; confirm legal bases + third-country
-   transfer; DPAs; AI Act transparency assessment. Then merge PR #1.
+   transfer; DPAs; AI Act transparency assessment. Then merge PR #1 (#2).
+
+6. BLOCKER — Vercel plan (commercial use)
+   Owner:  Vercel account owner
+   Exact action:  Vercel team is on Hobby, which prohibits commercial use;
+   www.digitalwerkk.de is commercial. Upgrade to Pro (a paid item — not
+   done). Moving the agent to Hetzner does not by itself resolve this.
 ```
 
 ## Next action (requires you)
 
-**Add one DNS record** in the IONOS panel for `digitalwerkk.de`:
-`A  agent  →  2.28.53.174`. That unblocks #3 and #4, which I can then do.
-Everything else on the list is a credential or a paid upgrade only you can
-authorise.
+**Provide an OmniRoute instance + API key** (blocker #1). Set the four
+`LLM_*` values in `/opt/apps/digitalwerk/digitalwerk/deploy/digitalwerk/.env`
+on the server and `sudo docker compose up -d agent-api` — the agent switches
+off the mock provider with no code change. Everything else is a credential,
+a paid upgrade, or a legal/merge decision only you can make.
