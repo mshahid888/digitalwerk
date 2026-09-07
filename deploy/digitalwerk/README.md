@@ -54,10 +54,13 @@ sed -i "s/^AGENT_IMAGE_TAG=.*/AGENT_IMAGE_TAG=$SHA/" .env
 
 sudo docker compose up -d --no-build
 
-# schema self-applies on first request; or apply it explicitly:
-gunzip -c /dev/null 2>/dev/null; # (schema is CREATE TABLE IF NOT EXISTS — idempotent)
-sudo docker exec -e PGPASSWORD="$(grep ^POSTGRES_PASSWORD .env|cut -d= -f2)" digitalwerk-postgres-1 \
-  psql -U digitalwerk -d digitalwerk -f - < ../../lib/chat-agent/persistence/postgres/schema.sql
+# The schema self-applies on the first request (CREATE TABLE IF NOT EXISTS —
+# idempotent). To apply it explicitly, pipe it into psql *inside* the
+# container so the password stays in the container's own environment and
+# never lands on the host command line / sudo log:
+sudo docker exec -i digitalwerk-postgres-1 sh -c \
+  'PGPASSWORD="$POSTGRES_PASSWORD" psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' \
+  < ../../lib/chat-agent/persistence/postgres/schema.sql
 
 # verify internally (no public route needed yet):
 sudo docker exec digitalwerk-agent-api-1 wget -qO- http://127.0.0.1:8080/api/chat/health
