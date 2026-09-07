@@ -3,8 +3,19 @@ import type { StoredLead } from "../persistence/types";
 import type { NotificationMessage } from "./types";
 
 // Plain-text notification bodies built from the agent's own structured
-// state. Privacy note: these contain the same minimal fields kept in the
-// permanent lead record — no raw transcript.
+// state.
+//
+// Privacy note: the stored conversation summary ends with a "Gesprächsauszug:"
+// block — the last few messages verbatim — which is useful in the durable
+// handoff/lead record (the team sees it in the admin API) but should NOT
+// leave the retention boundary in an e-mail inbox. `withoutTranscript()`
+// strips that block so the notification carries only the structured fields
+// (problem, intent, contact, score, recommendation).
+
+/** Drop the trailing verbatim-transcript block from a rendered summary. */
+export function withoutTranscript(summary: string): string {
+  return summary.replace(/\n*Gesprächsauszug:[\s\S]*$/u, "").trimEnd();
+}
 
 const REASON_LABEL: Record<string, string> = {
   visitor_requested: "Besucher möchte mit einem Menschen sprechen",
@@ -65,8 +76,9 @@ export function renderHandoffNotification(
       : `Offene Punkte: —`,
     ``,
     `— Gesprächszusammenfassung —`,
-    payload.conversationSummary,
+    withoutTranscript(payload.conversationSummary),
     ``,
+    `Der vollständige Chat-Verlauf liegt in der Übergabe-Akte (Admin-API).`,
     `Referenz: handoff ${handoffId}`,
   ].join("\n");
 
@@ -95,7 +107,7 @@ export function renderLeadNotification(lead: StoredLead): NotificationMessage {
     factsBlock(lead.facts) || "keine Angaben",
     ``,
     lead.conversationSummary
-      ? `— Gesprächszusammenfassung —\n${lead.conversationSummary}`
+      ? `— Gesprächszusammenfassung —\n${withoutTranscript(lead.conversationSummary)}`
       : ``,
     ``,
     `Referenz: lead ${lead.id}`,

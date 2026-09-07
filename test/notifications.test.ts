@@ -140,18 +140,39 @@ describe("ResendNotificationChannel", () => {
   });
 });
 
+// A realistic stored summary: structured fields, then the verbatim excerpt
+// block that buildConversationSummary / renderSummaryText actually append.
+const SECRET_VISITOR_PHRASE = "unsere Umsätze sind letztes Quartal eingebrochen";
+const SUMMARY_WITH_TRANSCRIPT = [
+  "Sprache: DE",
+  "Intent: PRICING",
+  "Unternehmen: Muster GmbH",
+  "Lead-Score (intern): 72/100 (qualified)",
+  "",
+  "Gesprächsauszug:",
+  `Besucher: ${SECRET_VISITOR_PHRASE}, könnt ihr helfen?`,
+  "Agent: KI-Agenten: 699 € Einrichtung ...",
+].join("\n");
+
 describe("notification templates", () => {
-  it("renders a handoff email with the minimal fields and no transcript", () => {
-    const msg = renderHandoffNotification("h-1", payload);
+  it("renders a handoff email with the minimal fields and NO verbatim transcript", () => {
+    const msg = renderHandoffNotification("h-1", {
+      ...payload,
+      conversationSummary: SUMMARY_WITH_TRANSCRIPT,
+    });
     expect(msg.subject).toContain("Anna Muster");
     expect(msg.subject).toContain("DRINGEND");
     expect(msg.text).toContain("Muster GmbH");
     expect(msg.text).toContain("72/100");
+    // structured summary kept, verbatim visitor messages stripped
+    expect(msg.text).toContain("Intent: PRICING");
+    expect(msg.text).not.toContain("Gesprächsauszug:");
+    expect(msg.text).not.toContain(SECRET_VISITOR_PHRASE);
     expect(msg.replyTo).toBe("anna@muster.de");
     expect(msg.referenceId).toBe("h-1");
   });
 
-  it("renders a lead email", () => {
+  it("renders a lead email without the verbatim transcript block", () => {
     const lead: StoredLead = {
       id: "lead-1",
       sessionId: "s-1",
@@ -165,12 +186,14 @@ describe("notification templates", () => {
       },
       intent: "SEO",
       recommendedServiceSlug: "seo",
-      conversationSummary: "Intent: SEO",
+      conversationSummary: SUMMARY_WITH_TRANSCRIPT,
       status: "new",
     };
     const msg = renderLeadNotification(lead);
     expect(msg.subject).toContain("Ben");
     expect(msg.subject).toContain("60");
     expect(msg.text).toContain("seo");
+    expect(msg.text).not.toContain("Gesprächsauszug:");
+    expect(msg.text).not.toContain(SECRET_VISITOR_PHRASE);
   });
 });
