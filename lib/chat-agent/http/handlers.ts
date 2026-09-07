@@ -29,6 +29,15 @@ function isObj(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null;
 }
 
+// Session ids are always crypto.randomUUID(). Enforcing the shape here keeps
+// a malformed id from reaching Postgres, where `WHERE id = $1` on a uuid
+// column would raise 22P02 and surface as a 500 instead of a clean 400.
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function isSessionId(v: unknown): v is string {
+  return typeof v === "string" && UUID_RE.test(v);
+}
+
 // ---------------------------------------------------------------- session
 
 export async function sessionHandler(body: unknown): Promise<HttpResult> {
@@ -49,7 +58,7 @@ export async function messageHandler(body: unknown): Promise<HttpResult> {
   const config = getChatAgentConfig();
   const { sessionId, message, locale } = body;
 
-  if (typeof sessionId !== "string" || sessionId.length < 8 || sessionId.length > 100) {
+  if (!isSessionId(sessionId)) {
     return { status: 400, body: { error: "Ungültige Sitzung." } };
   }
   if (typeof message !== "string" || message.trim().length === 0) {
@@ -88,7 +97,7 @@ const LEAD_FIELDS: (keyof LeadFacts)[] = [
 export async function leadHandler(body: unknown): Promise<HttpResult> {
   if (!isObj(body)) return { status: 400, body: { error: "Ungültige Anfrage." } };
   const { sessionId, facts } = body;
-  if (typeof sessionId !== "string" || sessionId.length < 8) {
+  if (!isSessionId(sessionId)) {
     return { status: 400, body: { error: "Ungültige Sitzung." } };
   }
   if (!isObj(facts)) return { status: 400, body: { error: "Keine Angaben übermittelt." } };
@@ -129,7 +138,7 @@ const HANDOFF_REASONS: HandoffReason[] = [
 export async function handoffHandler(body: unknown): Promise<HttpResult> {
   if (!isObj(body)) return { status: 400, body: { error: "Ungültige Anfrage." } };
   const { sessionId, reason, note } = body;
-  if (typeof sessionId !== "string" || sessionId.length < 8) {
+  if (!isSessionId(sessionId)) {
     return { status: 400, body: { error: "Ungültige Sitzung." } };
   }
   const safeReason =

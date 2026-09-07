@@ -112,4 +112,22 @@ describe("DigitalWerk Agent API", () => {
     const res = await a.request("/api/chat/message", json({ sessionId, message: "" }));
     expect(res.status).toBe(400);
   });
+
+  it("rejects a non-UUID sessionId with 400, not 500 (Postgres uuid guard)", async () => {
+    const a = app();
+    const res = await a.request(
+      "/api/chat/message",
+      json({ sessionId: "does-not-exist-1234567", message: "hi" }),
+    );
+    expect(res.status).toBe(400);
+  });
+
+  it("returns 404 for a well-formed but unknown sessionId", async () => {
+    const a = app();
+    const res = await a.request(
+      "/api/chat/message",
+      json({ sessionId: "00000000-0000-4000-8000-000000000000", message: "hi" }),
+    );
+    expect(res.status).toBe(404);
+  });
 });
