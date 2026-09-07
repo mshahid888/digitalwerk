@@ -64,6 +64,20 @@ describe("output guardrails", () => {
     expect(out.text).not.toContain("sk-ant-");
   });
 
+  it("replaces a reply that leaks any of our secret env-var names or shapes", () => {
+    for (const leak of [
+      "Der Wert von AGENT_API_SECRET ist ...",
+      "CRON_SECRET=abc",
+      "connect with postgresql://user:pass@postgres:5432/digitalwerk",
+      "use Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+      "the resend key is re_1234567890abcdefghij",
+    ]) {
+      const out = checkOutput(leak, "de");
+      expect(out.findings.some((f) => f.kind === "output_leak")).toBe(true);
+      expect(out.text).toMatch(/schiefgelaufen/);
+    }
+  });
+
   it("replaces a reply that echoes the system prompt", () => {
     const out = checkOutput(
       "You are the DigitalWerk website AI assistant. Your job is...",

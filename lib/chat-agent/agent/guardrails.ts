@@ -38,13 +38,22 @@ const SECRET_PROBES: RegExp[] = [
   /\bsk-ant-/i,
 ];
 
-// Patterns that must NEVER appear in an outbound reply.
+// Patterns that must NEVER appear in an outbound reply. The model is never
+// given a secret (the system prompt and knowledge base carry none), so this
+// is defence in depth against a future prompt-injection or a mistaken
+// knowledge entry — a match replaces the whole reply.
 const OUTPUT_LEAK_PATTERNS: RegExp[] = [
+  // provider / API key shapes
   /sk-ant-[a-z0-9-]+/i,
-  /process\.env\.[A-Z_]+/,
-  /ANTHROPIC_API_KEY/,
-  /RESEND_API_KEY/,
+  /\bsk-[a-z0-9]{16,}\b/i, // OpenAI-style
+  /\bre_[A-Za-z0-9]{16,}\b/, // Resend
   /-----BEGIN [A-Z ]+PRIVATE KEY-----/,
+  /\bBearer\s+[A-Za-z0-9._\-]{20,}/,
+  // any of our own secret env-var names, or a generic process.env read
+  /process\.env\.[A-Z_]+/,
+  /\b(ANTHROPIC_API_KEY|RESEND_API_KEY|LLM_API_KEY|AGENT_API_SECRET|CHAT_AGENT_ADMIN_TOKEN|CRON_SECRET|POSTGRES_PASSWORD|CHAT_AGENT_DATABASE_URL|DATABASE_URL)\b/,
+  // a Postgres connection string (would carry the password)
+  /\bpostgres(?:ql)?:\/\/[^\s]+/i,
   /You are the DigitalWerk website AI assistant/i, // our own system-prompt opener
 ];
 
