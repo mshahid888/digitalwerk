@@ -13,11 +13,15 @@ Vercel (www.digitalwerkk.de, Next.js)
 
 - **Postgres is never published** and its network (`digitalwerk_internal`)
   has `internal: true` — it cannot even reach the internet.
-- **agent-api** is only reachable from Caddy (`digitalwerk_edge`) and never
-  from the browser. The browser only ever calls the Vercel same-origin
-  `/api/chat/*`, which proxies here.
-- Separate compose project (`digitalwerk`), separate network, separate
-  volume. The **only** shared resource is the host Caddy.
+- **agent-api** is only reachable from Caddy and never from the browser. It
+  attaches to the pre-existing `pdfwandler_edge` network (declared
+  `external: true`) so the shared host Caddy can resolve
+  `digitalwerk-agent-api-1:8080` by name with no manual `docker network
+  connect` — this survives a Caddy container recreate. The browser only
+  ever calls the Vercel same-origin `/api/chat/*`, which proxies here.
+- Separate compose project (`digitalwerk`), own internal network, own
+  volume. The shared resources are the host Caddy and its `pdfwandler_edge`
+  bridge — nothing else touches the pdfwandler stack.
 
 ## Layout on the server
 
@@ -72,27 +76,31 @@ Host  agent
 Value 2.28.53.174
 TTL   3600
 ```
-Then add to the **pdfwandler** Caddyfile (`/opt/apps/pdfwandler/pdfwandler-backend2/deploy/Caddyfile`):
-
-```
-agent.digitalwerkk.de {
-    import security_headers
-    reverse_proxy digitalwerk-agent-api-1:8080 {
-        transport http { dial_timeout 10s response_header_timeout 40s }
-    }
-    log { output stdout; format console }
-}
-```
-
-and connect the pdfwandler Caddy container to this project's edge network:
+Then run the helper — it appends `deploy/digitalwerk/caddy-vhost.conf` to the
+pdfwandler Caddyfile (timestamped backup), `caddy validate`s, hot-reloads,
+and auto-rolls-back on failure:
 
 ```bash
-sudo docker network connect digitalwerk_edge pdfwandler-caddy-1
-cd /opt/apps/pdfwandler/pdfwandler-backend2/deploy
-sudo docker exec pdfwandler-caddy-1 caddy reload --config /etc/caddy/Caddyfile
+deploy/digitalwerk/apply-caddy-vhost.sh
 ```
 
-(Reversible: `docker network disconnect digitalwerk_edge pdfwandler-caddy-1` + revert the Caddyfile block.)
+No `docker network connect` is needed: the agent-api container joins
+`pdfwandler_edge` itself (`external: true` in compose.yml), so Caddy can
+reach `digitalwerk-agent-api-1:8080` by name and it survives a Caddy
+recreate.
+
+> **Single-file bind-mount gotcha.** The pdfwandler Caddyfile is bind-mounted
+> as a *file*. If the host file's inode changes after the Caddy container
+> started (an editor writing via rename, etc.), the container keeps serving
+> the *old* content and `caddy reload` reads that stale copy. If the appended
+> vhost doesn't show up in `caddy adapt`, recreate just Caddy once to
+> re-resolve the mount (certs persist in the `caddy_data` volume, ~2 s):
+> `cd /opt/apps/pdfwandler/pdfwandler-backend2/deploy && sudo docker compose up -d --force-recreate --no-deps caddy`
+
+(Reversible: revert the Caddyfile block + `apply-caddy-vhost.sh`'s backup,
+`caddy reload`.)
+
+Verify end to end: `deploy/digitalwerk/verify-https-endpoint.sh`.
 
 Then on **Vercel** set `AGENT_API_URL=https://agent.digitalwerkk.de` and
 `AGENT_API_SECRET=<same value>` — the Next `/api/chat/*` routes start

@@ -148,7 +148,11 @@ services:
       start_period: 20s
     networks:
       - internal
-      - edge # Caddy reaches agent-api on this network — see README
+      # Join the pdfwandler stack's edge network directly, so the shared host
+      # Caddy (always attached to pdfwandler_edge) can reach this container by
+      # name with no manual `docker network connect` — survives a Caddy
+      # recreate. This is the ONLY point of contact with the pdfwandler stack.
+      - pdfwandler_edge
     mem_limit: 256m
     pids_limit: 200
     logging: *logging
@@ -157,8 +161,8 @@ networks:
   internal:
     name: digitalwerk_internal
     internal: true # no outbound from this network — postgres can't reach the internet
-  edge:
-    name: digitalwerk_edge
+  pdfwandler_edge:
+    external: true # created by the pdfwandler compose project
 
 volumes:
   pgdata:

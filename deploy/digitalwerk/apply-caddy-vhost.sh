@@ -9,7 +9,7 @@
 #
 # Prereqs (the script checks them):
 #   - agent.digitalwerkk.de resolves to this server
-#   - pdfwandler-caddy-1 is on the digitalwerk_edge network
+#   - the digitalwerk stack is up (agent-api joins pdfwandler_edge itself)
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -28,9 +28,11 @@ if ! getent hosts agent.digitalwerkk.de >/dev/null 2>&1 \
    && ! nslookup agent.digitalwerkk.de >/dev/null 2>&1; then
   log "WARN: agent.digitalwerkk.de does not resolve yet — Caddy cannot get a cert until it does."
 fi
-if ! sudo docker inspect "$CADDY_CTR" --format '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' | grep -q digitalwerk_edge; then
-  log "connecting $CADDY_CTR to digitalwerk_edge"
-  sudo docker network connect digitalwerk_edge "$CADDY_CTR"
+# Reachability: the agent-api container joins pdfwandler_edge itself (see
+# compose.yml), so Caddy — always on pdfwandler_edge — can resolve it. No
+# `docker network connect` needed; warn if the container isn't up yet.
+if ! sudo docker exec "$CADDY_CTR" sh -c 'wget -q -T3 -O- http://digitalwerk-agent-api-1:8080/ >/dev/null 2>&1'; then
+  log "WARN: $CADDY_CTR cannot reach digitalwerk-agent-api-1:8080 yet — is the digitalwerk stack up (docker compose -f deploy/digitalwerk/compose.yml up -d)?"
 fi
 
 # --- already applied? ---
