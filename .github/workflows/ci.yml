@@ -1,8 +1,10 @@
 name: CI
 
 on:
+  # PRs to main validate the branch; a push to main validates the merge
+  # result. Feature-branch pushes are covered by the PR run (no double run).
   push:
-    branches: [main, "feat/**"]
+    branches: [main]
   pull_request:
     branches: [main]
 
