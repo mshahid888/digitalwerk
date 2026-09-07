@@ -145,15 +145,18 @@ export default function Page() {
                 The legal bases will be finalised during the legal review.
               </p>
               <p>
-                <strong>Retention:</strong> the data required for lead
-                handling (contact details, company information, inquiry,
-                conversation summary, internal classification, timestamps) is
-                kept for as long as necessary for processing and the
-                subsequent business relationship, and is then deleted or
-                blocked. Full conversation transcripts (raw transcripts) — if
-                stored at all, for operations and debugging — are
-                automatically deleted after at most 30 days. The permanent
-                lead record is not affected.
+                <strong>Retention:</strong> the full conversation transcript
+                (raw transcript) is stored server-side and automatically
+                deleted after at most 30 days. The data required for lead
+                handling (contact details, company information, inquiry, a
+                conversation summary that includes a short verbatim excerpt
+                of the most recent messages, internal classification,
+                timestamps) is kept as a permanent lead record for as long as
+                necessary for processing and the subsequent business
+                relationship, and is then deleted or blocked. The specific
+                retention period for the lead record and the extent of the
+                stored conversation excerpts will be finalised during the
+                legal review.
               </p>
               <p>
                 <strong>Recipients / processors:</strong> the server-side

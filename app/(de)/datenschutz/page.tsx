@@ -147,16 +147,19 @@ export default function Page() {
                 rechtlichen Prüfung.
               </p>
               <p>
-                <strong>Speicherdauer:</strong> Die für die Lead-Bearbeitung
-                erforderlichen Angaben (Kontaktdaten, Unternehmensangaben,
-                Anliegen, Zusammenfassung des Gesprächs, interne
-                Einstufung, Zeitstempel) werden so lange gespeichert, wie es
+                <strong>Speicherdauer:</strong> Der vollständige
+                Gesprächsverlauf (Rohtranskript) wird serverseitig
+                gespeichert und nach spätestens 30 Tagen automatisch
+                gelöscht. Für die Lead-Bearbeitung erforderliche Angaben
+                (Kontaktdaten, Unternehmensangaben, Anliegen, eine
+                Gesprächszusammenfassung mit einem kurzen wörtlichen Auszug
+                der letzten Nachrichten, interne Einstufung, Zeitstempel)
+                werden als dauerhafte Lead-Akte so lange gespeichert, wie es
                 für die Bearbeitung und die anschließende Geschäftsbeziehung
                 erforderlich ist, und anschließend gelöscht bzw. gesperrt.
-                Vollständige Gesprächsverläufe (Rohtranskripte) werden – sofern
-                sie für Betrieb und Fehleranalyse überhaupt gespeichert werden
-                – nach spätestens 30 Tagen automatisch gelöscht. Die
-                dauerhafte Lead-Akte bleibt davon unberührt.
+                Die konkrete Aufbewahrungsdauer der Lead-Akte und der Umfang
+                der gespeicherten Gesprächsauszüge werden im Rahmen der
+                rechtlichen Prüfung festgelegt.
               </p>
               <p>
                 <strong>Empfänger / Auftragsverarbeiter:</strong> Die
