@@ -34,9 +34,15 @@ DOW="$(date -u +%u)"   # 1..7, 7 = Sunday
 mkdir -p "$BACKUP_DIR"
 
 DEST="${BACKUP_DIR}/digitalwerk-${TS}.sql.gz"
+STATUS_FILE="${BACKUP_DIR}/.last-run"
 
 log() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $*"; }
 warn() { log "WARN: $*"; }
+# One-line machine-readable status a monitor (or a human) can grep without
+# reading the journal:  `OK|WARN|FAIL <iso-ts> [detail]`.
+status() { printf '%s %s %s\n' "$1" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${2:-}" > "$STATUS_FILE" 2>/dev/null || true; }
+# Any unexpected abort (set -e) records FAIL before exiting.
+trap 'status FAIL "aborted (exit $?)"' ERR
 
 # --- dump (critical: failure exits non-zero) ------------------------------
 log "dump start -> $DEST"
@@ -50,11 +56,13 @@ set -e
 if [ "$rc" -ne 0 ]; then
   rm -f "$DEST"
   log "ERROR: pg_dump failed (exit $rc) — no backup written"
+  status FAIL "pg_dump exit $rc"
   exit 1
 fi
 if ! gzip -t "$DEST" 2>/dev/null || [ ! -s "$DEST" ]; then
   rm -f "$DEST"
   log "ERROR: dump is empty or not valid gzip — discarded"
+  status FAIL "dump empty / not gzip"
   exit 1
 fi
 chmod 600 "$DEST"
@@ -107,7 +115,9 @@ fi
 
 if [ "$FAIL_SOFT" -ne 0 ]; then
   log "backup complete WITH WARNINGS (dump is good; see WARN lines above)"
+  status WARN "dump ok; $(basename "$DEST"); see journal for WARN lines"
 else
   log "backup complete"
+  status OK "$(basename "$DEST")"
 fi
 exit 0

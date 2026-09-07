@@ -114,19 +114,51 @@ persistence there).
 ## Backups
 
 `backup.sh` (systemd `digitalwerk-backup.timer`, 04:15 UTC): nightly
-`pg_dump | gzip`, 7 daily + 4 weekly, into `deploy/digitalwerk/backups/`.
+`pg_dump` from inside the container (no password on the host command line) →
+`gzip`, then a `gzip -t` + non-empty check before the dump is kept. Keeps 7
+daily + 4 weekly in `deploy/digitalwerk/backups/`.
 
-**Local-only is NOT disaster recovery.** Before real lead data:
+Exit semantics: a **failed dump** exits non-zero → `systemctl status
+digitalwerk-backup.service` shows `failed` (and the journal has the reason).
+A good dump with a failed rotation / off-server copy logs `WARN` and still
+exits 0 — the backup exists.
 
-1. Enable **Hetzner Cloud Backups** on the CX23 (Console → Servers → Backups;
-   ~+20% of the server price, ~€1/mo). One click.
-2. Set `BACKUP_RCLONE_REMOTE` in `.env` to an off-server target —
-   Cloudflare R2 (10 GB free + free egress) or Backblaze B2 (first 10 GB
-   free) via `rclone config`, or a Hetzner Storage Box BX11 (€3.20/mo).
-3. Set `BACKUP_HEALTHCHECK_URL` (healthchecks.io free) so a silently failing
-   backup is noticed.
-4. Run `./restore.sh backups/<newest>.sql.gz` — restores into a throwaway
-   DB and prints row counts. Do this quarterly.
+**Monitoring** (no external service): `backups/.last-run` holds a one-line
+`OK|WARN|FAIL <iso-ts> [detail]`. Check it, or the service state:
+
+```bash
+cat /opt/apps/digitalwerk/digitalwerk/deploy/digitalwerk/backups/.last-run
+systemctl --failed | grep -q digitalwerk-backup && echo "BACKUP FAILED"
+```
+
+### Restore
+
+```bash
+cd /opt/apps/digitalwerk/digitalwerk/deploy/digitalwerk
+./restore.sh "backups/$(ls -1t backups/digitalwerk-*.sql.gz | head -1 | xargs basename)"
+```
+
+By default this restores into a **throwaway** database, prints the row
+counts of all four tables, then drops it — a non-destructive integrity
+check. Run it **quarterly**. Real recovery: `./restore.sh <dump> --into-prod`
+(prompts, 5 s to abort; overwrites the live database).
+
+### Off-server copy — REQUIRED before real lead data (external, not done)
+
+Local-only backups protect against corruption / fat-fingers, **not** a disk
+or host loss. Do one of:
+
+1. `BACKUP_RCLONE_REMOTE` in `.env` → an off-server target. Free tiers that
+   need **no card**: Cloudflare R2 (10 GB) or Backblaze B2 (10 GB). Install
+   rclone (`sudo apt-get install -y rclone`), `rclone config` the remote,
+   set `BACKUP_RCLONE_REMOTE=<remote>:digitalwerk-backups`. The nightly run
+   then copies each dump off-server and mirrors the 7-day retention.
+2. `BACKUP_HEALTHCHECK_URL` → a healthchecks.io check URL (free tier, no
+   card) so a silently missing nightly run raises an alert.
+3. Hetzner Cloud Backups on the CX23 (Console → Servers → Backups) — a
+   **paid** add-on (~€1/mo); one click. Whole-server snapshots.
+
+Options 1 and 2 are free; option 3 costs money. None is configured yet.
 
 Install the timers:
 
