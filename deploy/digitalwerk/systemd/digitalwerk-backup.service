@@ -1,0 +1,12 @@
+[Unit]
+Description=DigitalWerk Postgres nightly backup
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=deploy
+ExecStart=/opt/apps/digitalwerk/digitalwerk/deploy/digitalwerk/backup.sh
+# Adjust the path above to wherever the repo is checked out on the server.
+Nice=10
+IOSchedulingClass=idle

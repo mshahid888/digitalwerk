@@ -4,6 +4,7 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { SkipLink } from "./skip-link";
 import { Analytics } from "@/components/analytics/analytics";
+import { ChatWidget } from "@/components/chat/chat-widget";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/schema";
@@ -33,6 +34,7 @@ export function SiteShell({
         {children}
       </main>
       <Footer />
+      <ChatWidget />
       <Analytics />
       <SpeedInsights />
     </>

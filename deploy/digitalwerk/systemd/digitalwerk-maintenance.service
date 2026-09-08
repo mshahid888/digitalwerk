@@ -1,0 +1,13 @@
+[Unit]
+Description=DigitalWerk agent maintenance (retention purge + handoff retry)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=deploy
+# Calls the cron endpoint inside the container over loopback (see
+# maintenance.sh) — works before the public agent.digitalwerkk.de vhost
+# exists. Adjust the path if the repo is checked out elsewhere.
+ExecStart=/opt/apps/digitalwerk/digitalwerk/deploy/digitalwerk/maintenance.sh
+Nice=10
